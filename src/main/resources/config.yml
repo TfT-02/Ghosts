@@ -1,0 +1,31 @@
+#
+#  Ghosts configuration
+#  Last updated on ${project.version}-b${BUILD_NUMBER}
+#
+#####
+
+#
+#  Settings for Ghosts in general
+###
+General:
+    Locale: en_US
+    MOTD_Enabled: true
+    # Amount of time (in minutes) to wait between saves of player information
+    Save_Interval: 10
+    # Allow Ghosts to report on basic anonymous usage
+    Stats_Tracking: true
+    # Allow Ghosts to check if a new version is available
+    Update_Check: true
+    Prefer_Beta: false
+    # Allow Ghosts to inform other plugins of damage being dealt
+    Event_Callback: true
+    # Allow Ghosts to create zip backups for flatfile data on shutdown.
+    Generate_Backups: true
+    Power_Level_Cap: 0
+    # Should Ghosts print out debug messages?
+    Verbose_Logging: false
+    # Should Ghosts over-write configs to update, or make new ones ending in .new?
+    Config_Update_Overwrite: true
+
+Ghosts:
+    Respawn_From_Sky: true
