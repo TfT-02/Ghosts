@@ -3,7 +3,6 @@ package com.me.tft_02.ghosts.listeners;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,6 +27,7 @@ import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.util.BlockUtils;
 import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.Permissions;
@@ -319,26 +319,19 @@ public class EntityListener implements Listener {
                 break;
         }
 
-        String msg = getMessage(event, player);
-        player.sendMessage(msg);
+        sendNotificationMessages(player, event);
     }
 
-    private String getMessage(EntityDeathEvent event, Player player) {
-        int breakTime = (Config.getInstance().levelBasedRemoval ? Math.min(player.getLevel() + 1 * Config.getInstance().levelBasedTime, Config.getInstance().removeTime) : Config.getInstance().removeTime);
-        String msg = "Inv stored. ";
+    private void sendNotificationMessages(Player player, EntityDeathEvent event) {
+        player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Stored"));
+
         if (event.getDrops().size() > 0) {
-            msg += ChatColor.YELLOW + "Overflow: " + ChatColor.WHITE + event.getDrops().size() + " ";
+            player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Overflow", event.getDrops().size()));
         }
-        msg += ChatColor.YELLOW + "BreakTime: " + ChatColor.WHITE + (Config.getInstance().cenotaphRemove ? Misc.convertTime(breakTime) : "Inf") + " ";
-        if (Config.getInstance().removeWhenEmpty || Config.getInstance().keepUntilEmpty) {
-            msg += ChatColor.YELLOW + "BreakOverride: " + ChatColor.WHITE;
-            if (Config.getInstance().removeWhenEmpty)
-                msg += "Break on empty";
-            if (Config.getInstance().removeWhenEmpty && Config.getInstance().keepUntilEmpty)
-                msg += " & ";
-            if (Config.getInstance().keepUntilEmpty)
-                msg += "Keep until empty";
+
+        int breakTime = (Config.getInstance().levelBasedRemoval ? Math.min(player.getLevel() + 1 * Config.getInstance().levelBasedTime, Config.getInstance().removeTime) : Config.getInstance().removeTime);
+        if (!Config.getInstance().keepUntilEmpty || Config.getInstance().cenotaphRemove) {
+            player.sendMessage(LocaleLoader.getString("Tombstone.Time", Misc.convertTime(breakTime)));
         }
-        return msg;
     }
 }
