@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
@@ -117,7 +118,6 @@ public class EntityListener implements Listener {
         }
 
         if (event.getDrops().size() == 0) {
-            Ghosts.p.debug(player.getName() + " Inv empty.");
             return;
         }
 
@@ -133,17 +133,9 @@ public class EntityListener implements Listener {
         Location location = player.getLocation();
         Block block = player.getWorld().getBlockAt(location);
 
-        //        // If we run into something we don't want to destroy, go one up.
-        //        for (int i = 0; i < 5; i++) {
-        //            block = player.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + i, location.getBlockZ());
-        //            if (!BlockUtils.cannotBeReplaced(block.getState())) {
-        //                break;
-        //            }
-        //        }
-
         // If we run into something we don't want to destroy, go one up.
         if (BlockUtils.cannotBeReplaced(block.getState())) {
-            block = player.getWorld().getBlockAt(location.getBlockX(), location.getBlockY() + 1, location.getBlockZ());
+            block = block.getRelative(BlockFace.UP);
         }
 
         //Don't create the chest if it or its sign would be in the void
@@ -250,7 +242,6 @@ public class EntityListener implements Listener {
             removeSignCount -= 1;
 
         // GHOST MANAGER
-
         if (!Ghosts.p.ghostManager.isGhost(player)) {
             Ghosts.p.ghostManager.setGhost(player, true);
             DatabaseManager.playerRespawns.put(player.getName(), true);

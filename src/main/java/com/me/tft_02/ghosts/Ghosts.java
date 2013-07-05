@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +15,7 @@ import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
+import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.runnables.TombRemoveTask;
 import com.me.tft_02.ghosts.util.GhostManager;
 import com.me.tft_02.ghosts.util.LogFilter;
@@ -129,8 +129,8 @@ public class Ghosts extends JavaPlugin {
             }
 
             if (updateAvailable) {
-                this.getLogger().log(Level.INFO, ChatColor.GOLD + "Ghosts is outdated!");
-                this.getLogger().log(Level.INFO, ChatColor.AQUA + "http://dev.bukkit.org/server-mods/ghosts/");
+                this.getLogger().log(Level.INFO, LocaleLoader.getString("UpdateChecker.Outdated"));
+                this.getLogger().log(Level.INFO, LocaleLoader.getString("UpdateChecker.New_Available"));
             }
         }
     }

@@ -12,6 +12,7 @@ import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.util.Permissions;
 import com.me.tft_02.ghosts.util.TombstoneManager;
 
@@ -45,7 +46,7 @@ public class BlockListener implements Listener {
         }
 
         if (Config.getInstance().getPreventDestroy() && !Permissions.breakTombs(player)) {
-            player.sendMessage("You cannot break this tomb..");
+            player.sendMessage(LocaleLoader.getString("Tombstone.Cannot_Break"));
             event.setCancelled(true);
             return;
         }
@@ -54,7 +55,7 @@ public class BlockListener implements Listener {
 
         Player owner = Ghosts.p.getServer().getPlayer(tBlock.getOwner());
         if (owner != null) {
-            owner.sendMessage("Your tomb has been destroyed by " + player.getName() + "!");
+            owner.sendMessage(LocaleLoader.getString("Tombstone.Was_Destroyed", player.getName()));
         }
     }
 }

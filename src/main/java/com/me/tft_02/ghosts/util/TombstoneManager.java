@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.locale.LocaleLoader;
 
 public class TombstoneManager {
 
@@ -22,7 +23,7 @@ public class TombstoneManager {
 
     public static void destroyTomb(TombBlock tombBlock) {
         if (tombBlock.getBlock().getChunk().load() == false) {
-            Ghosts.p.getLogger().severe("Error loading world chunk trying to remove cenotaph at " + tombBlock.getBlock().getX() + "," + tombBlock.getBlock().getY() + "," + tombBlock.getBlock().getZ() + " owned by " + tombBlock.getOwner() + ".");
+            Ghosts.p.getLogger().severe("Error loading world chunk trying to remove tombstone at " + tombBlock.getBlock().getX() + "," + tombBlock.getBlock().getY() + "," + tombBlock.getBlock().getZ() + " owned by " + tombBlock.getOwner() + ".");
             return;
         }
 
@@ -32,9 +33,9 @@ public class TombstoneManager {
 
         removeTomb(tombBlock, true);
 
-        Player p = Ghosts.p.getServer().getPlayer(tombBlock.getOwner());
-        if (p != null) {
-            p.sendMessage("Your cenotaph has broken.");
+        Player player = Ghosts.p.getServer().getPlayer(tombBlock.getOwner());
+        if (player != null) {
+            player.sendMessage(LocaleLoader.getString("Tombstone.Broken"));
         }
     }
 
