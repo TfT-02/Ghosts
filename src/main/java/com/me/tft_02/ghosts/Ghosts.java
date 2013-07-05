@@ -10,6 +10,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
+import com.me.tft_02.ghosts.commands.GhostsCommand;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.listeners.BlockListener;
@@ -48,6 +49,7 @@ public class Ghosts extends JavaPlugin {
         setupFilePaths();
 
         registerEvents();
+        getCommand("ghosts").setExecutor(new GhostsCommand());
 
         ghostManager = new GhostManager(this);
 
