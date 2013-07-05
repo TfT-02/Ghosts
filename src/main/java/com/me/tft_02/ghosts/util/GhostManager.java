@@ -14,6 +14,8 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import com.me.tft_02.ghosts.database.DatabaseManager;
+
 public class GhostManager {
     /**
      * Team of ghosts and people who can see ghosts.
@@ -28,9 +30,6 @@ public class GhostManager {
     // Task that must be cleaned up
     private BukkitTask task;
     private boolean closed;
-
-    // Players that are actually ghosts
-    private Set<String> ghosts = new HashSet<String>();
 
     public GhostManager(Plugin plugin) {
         // Initialize
@@ -63,7 +62,7 @@ public class GhostManager {
                         setGhost(player, isGhost(player));
                     }
                     else {
-                        ghosts.remove(member.getName());
+                        DatabaseManager.ghosts.remove(member.getName());
                         ghostTeam.removePlayer(member);
                     }
                 }
@@ -100,7 +99,7 @@ public class GhostManager {
      * @return TRUE if it is, FALSE otherwise.
      */
     public boolean isGhost(Player player) {
-        return player != null && hasPlayer(player) && ghosts.contains(player.getName());
+        return player != null && hasPlayer(player) && DatabaseManager.ghosts.contains(player.getName());
     }
 
     /**
@@ -125,11 +124,11 @@ public class GhostManager {
         }
 
         if (isGhost) {
-            ghosts.add(player.getName());
+            DatabaseManager.ghosts.add(player.getName());
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 15));
         }
         else if (!isGhost) {
-            ghosts.remove(player.getName());
+            DatabaseManager.ghosts.remove(player.getName());
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
     }
@@ -155,7 +154,7 @@ public class GhostManager {
 
         // Remove all non-ghost players
         for (Iterator<OfflinePlayer> it = players.iterator(); it.hasNext();) {
-            if (!ghosts.contains(it.next().getName())) {
+            if (!DatabaseManager.ghosts.contains(it.next().getName())) {
                 it.remove();
             }
         }

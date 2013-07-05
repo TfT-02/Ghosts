@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -53,9 +52,7 @@ public class Ghosts extends JavaPlugin {
 
         ghostManager = new GhostManager(this);
 
-        for (World world : getServer().getWorlds()) {
-            DatabaseManager.loadTombList(world.getName());
-        }
+        DatabaseManager.loadAllData();
 
         scheduleTasks();
 
@@ -75,9 +72,8 @@ public class Ghosts extends JavaPlugin {
      */
     @Override
     public void onDisable() {
-        for (World world : getServer().getWorlds()) {
-            DatabaseManager.saveTombList(world.getName());
-        }
+        DatabaseManager.saveAllData();
+        
         getServer().getScheduler().cancelTasks(this);
     }
 

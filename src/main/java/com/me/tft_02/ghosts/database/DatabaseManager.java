@@ -6,8 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bukkit.Location;
@@ -28,10 +30,83 @@ public class DatabaseManager {
     public static HashMap<String, ArrayList<TombBlock>> playerTombList = new HashMap<String, ArrayList<TombBlock>>();
     public static HashMap<String, EntityDamageEvent> deathCause = new HashMap<String, EntityDamageEvent>();
 
+    // Players that are actually ghosts
+    public static Set<String> ghosts = new HashSet<String>();
+
     public static HashMap<String, Boolean> playerRespawns = new HashMap<String, Boolean>();
     public static HashMap<String, Location> playerLastDeathLocation = new HashMap<String, Location>();
 
-    public static void loadTombList(String worldName) {
+    public static void loadAllData() {
+        for (World world : Ghosts.p.getServer().getWorlds()) {
+            loadData(world.getName());
+        }
+        loadGhostList();
+    }
+
+    public static void saveAllData() {
+        for (World world : Ghosts.p.getServer().getWorlds()) {
+            saveData(world.getName());
+        }
+        saveGhostList();
+    }
+
+    private static void saveData(String worldName) {
+        saveTombList(worldName);
+    }
+
+    private static void loadData(String worldName) {
+        loadTombList(worldName);
+    }
+
+    private static void loadGhostList() {
+        try {
+            File file = new File(worldsDirectory + "ghosts.db");
+            if (!file.exists()) {
+                return;
+            }
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                String[] split = line.split(":");
+                //player
+                String playerName = split[0];
+
+                if (playerName == null) {
+                    Ghosts.p.debug("Invalid entry in database " + file.getName());
+                    continue;
+                }
+                ghosts.add(playerName);
+            }
+            scanner.close();
+        }
+        catch (IOException e) {
+            Ghosts.p.getLogger().warning("Error loading ghost list: " + e);
+        }
+    }
+
+    private static void saveGhostList() {
+        try {
+            File file = new File(worldsDirectory + "ghosts.db");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            for (Iterator<String> iter = ghosts.iterator(); iter.hasNext();) {
+                String playerName = iter.next();
+
+                StringBuilder builder = new StringBuilder();
+
+                bw.append(playerName);
+                bw.append(":");
+
+                bw.append(builder.toString());
+                bw.newLine();
+            }
+            bw.close();
+        }
+        catch (IOException e) {
+            Ghosts.p.getLogger().warning("Error saving ghost list: " + e);
+        }
+    }
+
+    private static void loadTombList(String worldName) {
         String worldDirectory = worldsDirectory + worldName + File.separator;
 
         try {
@@ -157,7 +232,7 @@ public class DatabaseManager {
         return world.getBlockAt(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
     }
 
-    public HashMap<String, ArrayList<TombBlock>> getCenotaphList() {
+    public HashMap<String, ArrayList<TombBlock>> getTombstoneList() {
         return playerTombList;
     }
 
