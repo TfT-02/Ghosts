@@ -26,8 +26,9 @@ import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
-import com.me.tft_02.ghosts.runnables.ExplosionTrailTask;
-import com.me.tft_02.ghosts.runnables.GroundExplosionTask;
+import com.me.tft_02.ghosts.runnables.ghosts.ExplosionTrailTask;
+import com.me.tft_02.ghosts.runnables.ghosts.GroundExplosionTask;
+import com.me.tft_02.ghosts.runnables.ghosts.IgniteTask;
 import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.Permissions;
 
@@ -150,7 +151,7 @@ public class PlayerListener implements Listener {
         }
 
         if (Config.getInstance().getSetOnFire()) {
-            player.setFireTicks(12 * 20);
+            new IgniteTask(player, 15 * 20).runTask(Ghosts.p);
         }
 
         if (Config.getInstance().getExplosionTrail()) {
