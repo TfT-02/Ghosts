@@ -34,7 +34,6 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getPreferBeta() { return config.getBoolean("General.Prefer_Beta", false); }
     public boolean getVerboseLoggingEnabled() { return config.getBoolean("General.Verbose_Logging", false); }
     public boolean getConfigOverwriteEnabled() { return config.getBoolean("General.Config_Update_Overwrite", true); }
-    
 
     public boolean getPreventDestroy() { return config.getBoolean("Tombstones.Prevent_Destroy", true); }
     public boolean getNoInterfere() { return config.getBoolean("Tombstones.No_Interfere", true); }
@@ -50,8 +49,7 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getDestroyQuickloot() { return config.getBoolean("Removal.Destroy_Quickloot", true); }
     
     //Refactor these to save time
-    public boolean cenotaphRemove = false;
-    public int removeTime = 3600;
+    public int getTombRemoveTime() { return config.getInt("Removal.Tomb_Remove_Time", 3600); }
     public boolean removeWhenEmpty = true;
     public boolean keepUntilEmpty = false;
     public boolean levelBasedRemoval = false;
@@ -67,8 +65,14 @@ public class Config extends AutoUpdateConfigLoader {
         "{time}"
     };
 
+    // Respawning
     public boolean getRespawnFromSky() { return config.getBoolean("Ghosts.Respawn_From_Sky", true); }
+    public boolean getSetOnFire()  { return config.getBoolean("Ghosts.Set_On_Fire", true); }
+    public boolean getExplosionTrail() { return config.getBoolean("Ghosts.Explosion_Trail", false); }
+    public boolean getExplosionImpact() { return config.getBoolean("Ghosts.Explosion_On_Impact", false); }
+    public boolean getThunder() { return config.getBoolean("Ghosts.Respawn_Thunder", true); }
     public int getMinimumRange() { return config.getInt("Ghosts.Respawn_Minimum_Range", 40); }
     public int getMaximumRange() { return config.getInt("Ghosts.Respawn_Maximum_Range", 100); }
     /* @formatter:on */
+
 }

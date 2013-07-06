@@ -29,3 +29,8 @@ General:
 
 Ghosts:
     Respawn_From_Sky: true
+    Explosion_Trail: false
+    Explosion_On_Impact: false
+    Respawn_Thunder: true
+    Respawn_Minimum_Range: 40
+    Respawn_Maximum_Range: 100
