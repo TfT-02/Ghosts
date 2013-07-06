@@ -16,6 +16,7 @@ import com.me.tft_02.ghosts.listeners.EntityListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
+import com.me.tft_02.ghosts.runnables.SaveTimerTask;
 import com.me.tft_02.ghosts.runnables.TombRemoveTask;
 import com.me.tft_02.ghosts.util.LogFilter;
 import com.me.tft_02.ghosts.util.Misc;
@@ -89,7 +90,12 @@ public class Ghosts extends JavaPlugin {
      * Schedules all tasks
      */
     private void scheduleTasks() {
-        // Start removal timer. Run every 5 seconds (20 ticks per second)
+        // Start save timer. Run every 10 minutes (default)
+        if (Config.getInstance().getSaveInterval() > 0) {
+            new SaveTimerTask().runTaskTimer(this, 10 * 60 * Misc.TICK_CONVERSION_FACTOR, 10 * 60 * Misc.TICK_CONVERSION_FACTOR);
+        }
+
+        // Start removal timer. Run every 5 seconds
         if (Config.getInstance().getTombRemoveTime() > 0) {
             new TombRemoveTask().runTaskTimer(this, 5 * Misc.TICK_CONVERSION_FACTOR, 5 * Misc.TICK_CONVERSION_FACTOR);
         }
