@@ -16,26 +16,26 @@ public class TombRemoveTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        long cTime = System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR;
+        long currentTime = System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR;
         for (Iterator<TombBlock> iter = DatabaseManager.tombList.iterator(); iter.hasNext();) {
-            TombBlock tBlock = iter.next();
+            TombBlock tombBlock = iter.next();
 
             //"empty" option checks
             if (Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getRemoveWhenEmpty()) {
-                if (tBlock.getBlock().getState() instanceof Chest) {
+                if (tombBlock.getBlock().getState() instanceof Chest) {
                     boolean isEmpty = true;
 
-                    Chest sChest = (Chest) tBlock.getBlock().getState();
-                    Chest lChest = (tBlock.getLargeBlock() != null) ? (Chest) tBlock.getLargeBlock().getState() : null;
+                    Chest smallChest = (Chest) tombBlock.getBlock().getState();
+                    Chest largeChest = (tombBlock.getLargeBlock() != null) ? (Chest) tombBlock.getLargeBlock().getState() : null;
 
-                    for (ItemStack item : sChest.getInventory().getContents()) {
+                    for (ItemStack item : smallChest.getInventory().getContents()) {
                         if (item != null) {
                             isEmpty = false;
                         }
                         break;
                     }
-                    if (lChest != null && !isEmpty) {
-                        for (ItemStack item : lChest.getInventory().getContents()) {
+                    if (largeChest != null && !isEmpty) {
+                        for (ItemStack item : largeChest.getInventory().getContents()) {
                             if (item != null) {
                                 isEmpty = false;
                             }
@@ -49,7 +49,7 @@ public class TombRemoveTask extends BukkitRunnable {
                     }
                     if (Config.getInstance().getRemoveWhenEmpty()) {
                         if (isEmpty) {
-                            TombstoneManager.destroyTomb(tBlock);
+                            TombstoneManager.destroyTombstone(tombBlock);
                             iter.remove();
                         }
                     }
@@ -59,19 +59,18 @@ public class TombRemoveTask extends BukkitRunnable {
             //Block removal check
             if (Config.getInstance().getTombRemoveTime() > 0) {
                 if (Config.getInstance().getLevelBasedTime() > 0) {
-                    if (cTime > Math.min(tBlock.getTime() + tBlock.getOwnerLevel() * Config.getInstance().getLevelBasedTime(), tBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
-                        TombstoneManager.destroyTomb(tBlock);
+                    if (currentTime > Math.min(tombBlock.getTime() + tombBlock.getOwnerLevel() * Config.getInstance().getLevelBasedTime(), tombBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
+                        TombstoneManager.destroyTombstone(tombBlock);
                         iter.remove();
                     }
                 }
                 else {
-                    if (cTime > (tBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
-                        TombstoneManager.destroyTomb(tBlock);
+                    if (currentTime > (tombBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
+                        TombstoneManager.destroyTombstone(tombBlock);
                         iter.remove();
                     }
                 }
             }
         }
     }
-
 }

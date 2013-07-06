@@ -228,10 +228,13 @@ public class TombstoneManager {
     }
 
     public void destroyTombstone(Location location) {
-        destroyTomb(DatabaseManager.tombBlockList.get(location));
+        destroyTombstone(DatabaseManager.tombBlockList.get(location));
     }
 
-    public static void destroyTomb(TombBlock tombBlock) {
+    /**
+     * Destroy a tombstone
+     */
+    public static void destroyTombstone(TombBlock tombBlock) {
         Block block = tombBlock.getBlock();
 
         if (!block.getChunk().load()) {
@@ -248,11 +251,16 @@ public class TombstoneManager {
         removeTomb(tombBlock, true);
 
         Player player = Ghosts.p.getServer().getPlayer(tombBlock.getOwner());
+        DatabaseManager.ghosts.remove(player.getName());
         if (player != null) {
             player.sendMessage(LocaleLoader.getString("Tombstone.Broken"));
         }
     }
 
+    /**
+     * Destroy a tomb from the tombblock data
+     * Call this when breaking a tomb block
+     */
     public static void removeTomb(TombBlock tombBlock, boolean removeList) {
         if (tombBlock == null) {
             return;

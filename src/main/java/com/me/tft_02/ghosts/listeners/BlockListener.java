@@ -40,8 +40,8 @@ public class BlockListener implements Listener {
             return;
         }
 
-        TombBlock tBlock = DatabaseManager.tombBlockList.get(b.getLocation());
-        if (tBlock == null) {
+        TombBlock tombBlock = DatabaseManager.tombBlockList.get(b.getLocation());
+        if (tombBlock == null) {
             return;
         }
 
@@ -51,9 +51,9 @@ public class BlockListener implements Listener {
             return;
         }
 
-        TombstoneManager.removeTomb(tBlock, true);
+        TombstoneManager.removeTomb(tombBlock, true);
 
-        Player owner = Ghosts.p.getServer().getPlayer(tBlock.getOwner());
+        Player owner = Ghosts.p.getServer().getPlayer(tombBlock.getOwner());
         if (owner != null) {
             owner.sendMessage(LocaleLoader.getString("Tombstone.Was_Destroyed", player.getName()));
         }

@@ -16,7 +16,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
@@ -28,7 +27,6 @@ public class DatabaseManager {
     public static ConcurrentLinkedQueue<TombBlock> tombList = new ConcurrentLinkedQueue<TombBlock>();
     public static HashMap<Location, TombBlock> tombBlockList = new HashMap<Location, TombBlock>();
     public static HashMap<String, ArrayList<TombBlock>> playerTombList = new HashMap<String, ArrayList<TombBlock>>();
-    public static HashMap<String, EntityDamageEvent> deathCause = new HashMap<String, EntityDamageEvent>();
 
     // Players that are actually ghosts
     public static Set<String> ghosts = new HashSet<String>();
@@ -48,6 +46,7 @@ public class DatabaseManager {
             saveData(world.getName());
         }
         saveGhostList();
+        Ghosts.p.debug("Saved all data.");
     }
 
     private static void saveData(String worldName) {
