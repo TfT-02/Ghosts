@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -250,10 +251,11 @@ public class TombstoneManager {
 
         removeTomb(tombBlock, true);
 
-        Player player = Ghosts.p.getServer().getPlayer(tombBlock.getOwner());
-        DatabaseManager.ghosts.remove(player.getName());
-        if (player != null) {
-            player.sendMessage(LocaleLoader.getString("Tombstone.Broken"));
+        OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwner());
+        DatabaseManager.ghosts.remove(offlinePlayer.getName());
+
+        if (offlinePlayer.isOnline()) {
+            offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Tombstone.Broken"));
         }
     }
 
