@@ -136,7 +136,7 @@ public class DatabaseManager {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
                 String[] split = line.split(":");
-                //block:lblock:sign:owner:level:time
+                //block:largeblock:sign:owner:level:time
                 Block block = readBlock(split[0]);
                 Block largeBlock = readBlock(split[1]);
                 Block signBlock = readBlock(split[2]);
@@ -159,12 +159,12 @@ public class DatabaseManager {
                     tombBlockList.put(signBlock.getLocation(), tombBlock);
                 }
 
-                ArrayList<TombBlock> pList = playerTombList.get(owner);
-                if (pList == null) {
-                    pList = new ArrayList<TombBlock>();
-                    playerTombList.put(owner, pList);
+                ArrayList<TombBlock> playerList = playerTombList.get(owner);
+                if (playerList == null) {
+                    playerList = new ArrayList<TombBlock>();
+                    playerTombList.put(owner, playerList);
                 }
-                pList.add(tombBlock);
+                playerList.add(tombBlock);
             }
             scanner.close();
         }

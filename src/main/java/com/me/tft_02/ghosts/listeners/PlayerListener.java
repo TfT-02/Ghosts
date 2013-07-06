@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -62,6 +63,7 @@ public class PlayerListener implements Listener {
         }
 
         if (!tombBlock.getOwner().equals(player.getName())) {
+            event.setCancelled(true);
             Ghosts.p.debug(player.getName() + " is not the owner!");
             return;
         }
@@ -107,16 +109,22 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        Ghosts.p.ghostManager.removePlayer(player);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        if (!Ghosts.p.ghostManager.isGhost(player)) {
-            Ghosts.p.ghostManager.setGhost(player, false);
+        if (!DatabaseManager.playerRespawns.containsKey(player.getName())) {
             return;
         }
 
-        if (!DatabaseManager.playerRespawns.containsKey(player.getName())) {
+        if (!Ghosts.p.ghostManager.isGhost(player)) {
+            Ghosts.p.ghostManager.setGhost(player, false);
             return;
         }
 
@@ -133,12 +141,16 @@ public class PlayerListener implements Listener {
         event.setRespawnLocation(respawnLocation);
         DatabaseManager.playerRespawns.put(player.getName(), false);
 
-        if (Config.getInstance().getSetOnFire()) {
-            player.setFireTicks(12 * 20);
-        }
-
         if (Config.getInstance().getThunder()) {
             player.getWorld().playSound(new Location(player.getWorld(), respawnLocation.getX(), 100, respawnLocation.getZ()), Sound.AMBIENCE_THUNDER, 1F, 1F);
+        }
+
+        if (!Config.getInstance().getRespawnFromSky()) {
+            return;
+        }
+
+        if (Config.getInstance().getSetOnFire()) {
+            player.setFireTicks(12 * 20);
         }
 
         if (Config.getInstance().getExplosionTrail()) {
@@ -153,6 +165,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
-        player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 1F, 1F);
+
+        if (Ghosts.p.ghostManager.isGhost(player)) {
+            player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 1F, 1F);
+        }
     }
 }

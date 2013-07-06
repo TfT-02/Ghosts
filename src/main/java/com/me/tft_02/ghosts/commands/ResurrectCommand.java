@@ -7,10 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.me.tft_02.ghosts.Ghosts;
-import com.me.tft_02.ghosts.database.DatabaseManager;
-import com.me.tft_02.ghosts.datatypes.TombBlock;
-import com.me.tft_02.ghosts.locale.LocaleLoader;
-import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.CommandUtils;
 import com.me.tft_02.ghosts.util.Permissions;
 
@@ -40,11 +37,7 @@ public class ResurrectCommand implements CommandExecutor {
             return false;
         }
 
-        for (TombBlock tombBlock : DatabaseManager.getTombstoneList().get(player.getName())) {
-            TombstoneManager.destroyTombstone(tombBlock);
-        }
-
-        player.sendMessage(LocaleLoader.getString("Commands.Resurrect"));
+        PlayerManager.resurrect(player);
         return true;
     }
 
@@ -54,16 +47,7 @@ public class ResurrectCommand implements CommandExecutor {
         }
 
         OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(args[0]);
-
-        for (TombBlock tombBlock : DatabaseManager.getTombstoneList().get(offlinePlayer.getName())) {
-            TombstoneManager.destroyTombstone(tombBlock);
-        }
-
-        if (offlinePlayer.isOnline()) {
-            offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect"));
-        }
-
-        sender.sendMessage(LocaleLoader.getString("Commands.ResurrectOthers", offlinePlayer.getName()));
+        PlayerManager.resurrect(offlinePlayer);
         return true;
     }
 }

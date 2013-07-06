@@ -20,6 +20,7 @@ import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
+import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.BlockUtils;
 import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.Permissions;
@@ -228,14 +229,30 @@ public class TombstoneManager {
         }
     }
 
+    public boolean destroyAllTombstones(OfflinePlayer offlinePlayer) {
+        ArrayList<TombBlock> tombstoneList = DatabaseManager.getTombstoneList().get(offlinePlayer.getName());
+        if (tombstoneList.isEmpty()) {
+            return false;
+        }
+
+        for (TombBlock tombBlock : tombstoneList) {
+            TombstoneManager.destroyTombstone(tombBlock);
+        }
+        return true;
+    }
+
     public void destroyTombstone(Location location) {
         destroyTombstone(DatabaseManager.tombBlockList.get(location));
+    }
+
+    public static void destroyTombstone(TombBlock tombBlock) {
+        destroyTombstone(tombBlock, false);
     }
 
     /**
      * Destroy a tombstone
      */
-    public static void destroyTombstone(TombBlock tombBlock) {
+    public static void destroyTombstone(TombBlock tombBlock, boolean notify) {
         Block block = tombBlock.getBlock();
 
         if (!block.getChunk().load()) {
@@ -251,9 +268,11 @@ public class TombstoneManager {
 
         removeTomb(tombBlock, true);
 
-        OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwner());
-        DatabaseManager.ghosts.remove(offlinePlayer.getName());
+        if (!notify) {
+            return;
+        }
 
+        OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwner());
         if (offlinePlayer.isOnline()) {
             offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Tombstone.Broken"));
         }
@@ -278,7 +297,11 @@ public class TombstoneManager {
         if (tList != null) {
             tList.remove(tombBlock);
             if (tList.size() == 0) {
+                // Player has no other tombs anymore
                 DatabaseManager.playerTombList.remove(tombBlock.getOwner());
+
+                OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwner());
+                PlayerManager.resurrect(offlinePlayer);
             }
         }
 

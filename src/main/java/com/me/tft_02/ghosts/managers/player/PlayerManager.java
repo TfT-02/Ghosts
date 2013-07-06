@@ -1,6 +1,7 @@
 package com.me.tft_02.ghosts.managers.player;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -8,10 +9,23 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.config.Config;
+import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 
 public class PlayerManager {
+
+    public static boolean resurrect(OfflinePlayer offlinePlayer) {
+        if (!DatabaseManager.ghosts.remove(offlinePlayer.getName())) {
+            return false;
+        }
+
+        if (offlinePlayer.isOnline()) {
+            offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect"));
+        }
+        return true;
+    }
 
     public static void quickLoot(PlayerInteractEvent event, Player player, TombBlock tombBlock) {
         Chest smallChest = (Chest) tombBlock.getBlock().getState();

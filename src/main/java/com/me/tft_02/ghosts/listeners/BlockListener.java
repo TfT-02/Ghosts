@@ -20,7 +20,7 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Block b = event.getBlock();
+        Block block = event.getBlock();
         Player player = event.getPlayer();
 
         if (Ghosts.p.ghostManager.isGhost(player)) {
@@ -28,19 +28,19 @@ public class BlockListener implements Listener {
             return;
         }
 
-        if (b.getType() == Material.WALL_SIGN) {
-            org.bukkit.material.Sign signData = (org.bukkit.material.Sign) b.getState().getData();
-            TombBlock tBlock = DatabaseManager.tombBlockList.get(b.getRelative(signData.getAttachedFace()).getLocation());
+        if (block.getType() == Material.WALL_SIGN) {
+            org.bukkit.material.Sign signData = (org.bukkit.material.Sign) block.getState().getData();
+            TombBlock tBlock = DatabaseManager.tombBlockList.get(block.getRelative(signData.getAttachedFace()).getLocation());
             if (tBlock == null) {
                 return;
             }
         }
 
-        if (b.getType() != Material.CHEST && b.getType() != Material.SIGN_POST) {
+        if (block.getType() != Material.CHEST && block.getType() != Material.SIGN_POST) {
             return;
         }
 
-        TombBlock tombBlock = DatabaseManager.tombBlockList.get(b.getLocation());
+        TombBlock tombBlock = DatabaseManager.tombBlockList.get(block.getLocation());
         if (tombBlock == null) {
             return;
         }

@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
 import com.me.tft_02.ghosts.commands.GhostsCommand;
+import com.me.tft_02.ghosts.commands.ResurrectCommand;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.listeners.BlockListener;
@@ -50,7 +51,7 @@ public class Ghosts extends JavaPlugin {
 
         registerEvents();
         getCommand("ghosts").setExecutor(new GhostsCommand());
-        getCommand("resurrect").setExecutor(new GhostsCommand());
+        getCommand("resurrect").setExecutor(new ResurrectCommand());
 
         ghostManager = new GhostManager(this);
 

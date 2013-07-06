@@ -79,6 +79,8 @@ permissions:
     ghosts.sign:
          description: Allows access to use signs.
     ghosts.freechest:
+         default: false
          description: Allows access to use free chests.
     ghosts.freesign:
+         default: false
          description: Allows access to use free signs.

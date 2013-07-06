@@ -50,6 +50,7 @@ Respawn:
     # Respawn ghost players from the sky
     From_Sky: true
     # Respawn effect when falling from the sky (Must have Respawn.From_Sky enabled)
+    Set_On_Fire: true
     Explosion_Trail: false
     Explosion_On_Impact: false
 
