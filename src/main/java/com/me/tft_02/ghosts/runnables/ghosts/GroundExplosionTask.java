@@ -1,4 +1,4 @@
-package com.me.tft_02.ghosts.runnables;
+package com.me.tft_02.ghosts.runnables.ghosts;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
