@@ -11,6 +11,9 @@ commands:
     ghosts:
         description: Usage /ghosts
         permission-message: You don't have <permission>
+    resurrect:
+        description: Usage /resurrect
+        permission-message: You don't have <permission>
 
 permissions:
     ghosts.*:
@@ -44,7 +47,7 @@ permissions:
     ghosts.commands.defaultsop:
         description: Implies all default op ghosts.commands permissions.
         children:
-            ghosts.commands.resurrect.other: true
+            ghosts.commands.resurrect.others: true
     ghosts.commands.general:
          default: true
          description: Allows access to the general command

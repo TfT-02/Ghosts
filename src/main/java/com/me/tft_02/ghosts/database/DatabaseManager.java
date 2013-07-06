@@ -231,7 +231,7 @@ public class DatabaseManager {
         return world.getBlockAt(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
     }
 
-    public HashMap<String, ArrayList<TombBlock>> getTombstoneList() {
+    public static HashMap<String, ArrayList<TombBlock>> getTombstoneList() {
         return playerTombList;
     }
 

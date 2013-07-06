@@ -50,6 +50,7 @@ public class Ghosts extends JavaPlugin {
 
         registerEvents();
         getCommand("ghosts").setExecutor(new GhostsCommand());
+        getCommand("resurrect").setExecutor(new GhostsCommand());
 
         ghostManager = new GhostManager(this);
 

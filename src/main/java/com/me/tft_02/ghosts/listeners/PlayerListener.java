@@ -94,10 +94,6 @@ public class PlayerListener implements Listener {
     private void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Ghosts.p.ghostManager.addPlayer(player);
-
-        if (Ghosts.p.ghostManager.isGhost(player)) {
-            Ghosts.p.ghostManager.setGhost(player, false);
-        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

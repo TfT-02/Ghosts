@@ -31,4 +31,12 @@ public class Permissions {
     public static boolean freesign(Permissible permissible) {
         return permissible.hasPermission("ghosts.freesign");
     }
+
+    public static boolean ressurect(Permissible permissible) {
+        return permissible.hasPermission("ghosts.commands.ressurect");
+    }
+
+    public static boolean ressurectOthers(Permissible permissible) {
+        return permissible.hasPermission("ghosts.commands.ressurect.others");
+    }
 }
