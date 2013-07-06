@@ -21,7 +21,7 @@ public class TombRemoveTask extends BukkitRunnable {
             TombBlock tBlock = iter.next();
 
             //"empty" option checks
-            if (Config.getInstance().keepUntilEmpty || Config.getInstance().removeWhenEmpty) {
+            if (Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getRemoveWhenEmpty()) {
                 if (tBlock.getBlock().getState() instanceof Chest) {
                     boolean isEmpty = true;
 
@@ -36,16 +36,18 @@ public class TombRemoveTask extends BukkitRunnable {
                     }
                     if (lChest != null && !isEmpty) {
                         for (ItemStack item : lChest.getInventory().getContents()) {
-                            if (item != null)
+                            if (item != null) {
                                 isEmpty = false;
+                            }
                             break;
                         }
                     }
-                    if (Config.getInstance().keepUntilEmpty) {
-                        if (!isEmpty)
+                    if (Config.getInstance().getKeepUntilEmpty()) {
+                        if (!isEmpty) {
                             continue;
+                        }
                     }
-                    if (Config.getInstance().removeWhenEmpty) {
+                    if (Config.getInstance().getRemoveWhenEmpty()) {
                         if (isEmpty) {
                             TombstoneManager.destroyTomb(tBlock);
                             iter.remove();
@@ -56,8 +58,8 @@ public class TombRemoveTask extends BukkitRunnable {
 
             //Block removal check
             if (Config.getInstance().getTombRemoveTime() > 0) {
-                if (Config.getInstance().levelBasedRemoval) {
-                    if (cTime > Math.min(tBlock.getTime() + tBlock.getOwnerLevel() * Config.getInstance().levelBasedTime, tBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
+                if (Config.getInstance().getLevelBasedTime() > 0) {
+                    if (cTime > Math.min(tBlock.getTime() + tBlock.getOwnerLevel() * Config.getInstance().getLevelBasedTime(), tBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
                         TombstoneManager.destroyTomb(tBlock);
                         iter.remove();
                     }

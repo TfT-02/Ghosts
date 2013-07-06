@@ -26,20 +26,16 @@ import com.me.tft_02.ghosts.util.Permissions;
 public class TombstoneManager {
 
     public static boolean createTombstone(PlayerDeathEvent event) {
-        // Get the current player location.
         Player player = event.getEntity();
         Location location = player.getLocation();
         Block block = player.getWorld().getBlockAt(location);
 
-        // If we run into something we don't want to destroy, go one up.
         if (BlockUtils.cannotBeReplaced(block.getState())) {
             block = block.getRelative(BlockFace.UP);
         }
 
-        //Don't create the chest if it or its sign would be in the void
-        //TODO Why would anyone disable this?
         if (Config.getInstance().getVoidCheck() && ((block.getY() > player.getWorld().getMaxHeight() - 1) || (block.getY() > player.getWorld().getMaxHeight()) || player.getLocation().getY() < 1)) {
-            Ghosts.p.debug("Chest would be in the Void. Inv dropped.");
+            Ghosts.p.debug("Chest would be in the Void. Inventory dropped.");
             return false;
         }
 
@@ -59,21 +55,20 @@ public class TombstoneManager {
         }
 
         if (playerChestCount == 0 && !Permissions.freechest(player)) {
-            Ghosts.p.debug("No chest! Inv dropped.");
+            Ghosts.p.debug("No chest! Inventory dropped.");
             return false;
         }
 
         // Check if we can replace the block.
         block = BlockUtils.findPlace(block, false);
         if (block == null) {
-            Ghosts.p.debug("No room to place chest. Inv dropped.");
+            Ghosts.p.debug("No room to place chest. Inventory dropped.");
             return false;
         }
 
         // Check if there is a nearby chest
-        //TODO Why would anyone disable this?
         if (Config.getInstance().getNoInterfere() && BlockUtils.checkChest(block, Material.CHEST)) {
-            Ghosts.p.debug("Existing chest interfering with chest placement. Inv dropped.");
+            Ghosts.p.debug("Existing chest interfering with chest placement. Inventory dropped.");
             return false;
         }
 
@@ -81,30 +76,30 @@ public class TombstoneManager {
         int removeSignCount = 0;
 
         // Do the check for a large chest block here so we can check for interference
-        Block lBlock = BlockUtils.findLarge(block);
+        Block largeBlock = BlockUtils.findLarge(block);
 
         // Set the current block to a chest, init some variables for later use.
         block.setType(Material.CHEST);
-        // We're running into issues with 1.3 where we can't cast to a Chest :(
         BlockState state = block.getState();
         if (!(state instanceof Chest)) {
-            Ghosts.p.debug("Could not access chest. Inv dropped.");
+            Ghosts.p.debug("Could not access chest. Inventory dropped.");
             return false;
         }
-        Chest sChest = (Chest) state;
+
+        Chest smallChest = (Chest) state;
         Chest largeChest = null;
         int slot = 0;
-        int maxSlot = sChest.getInventory().getSize();
+        int maxSlot = smallChest.getInventory().getSize();
 
         // Check if they need a large chest.
         if (event.getDrops().size() > maxSlot) {
-            // If they are allowed spawn a large chest to catch their entire inventory.
-            if (lBlock != null && Permissions.largechest(player)) {
+            // If they are allowed, spawn a large chest to catch their entire inventory.
+            if (largeBlock != null && Permissions.largechest(player)) {
                 removeChestCount = 2;
                 // Check if the player has enough chests
                 if (playerChestCount >= removeChestCount || Permissions.freechest(player)) {
-                    lBlock.setType(Material.CHEST);
-                    largeChest = (Chest) lBlock.getState();
+                    largeBlock.setType(Material.CHEST);
+                    largeChest = (Chest) largeBlock.getState();
                     maxSlot = maxSlot * 2;
                 }
                 else {
@@ -122,7 +117,7 @@ public class TombstoneManager {
         Block signBlock = null;
         if (Config.getInstance().getUseTombstoneSign() && Permissions.sign(player) && (playerSignCount > 0 || Permissions.freesign(player))) {
             // Find a place to put the sign, then place the sign.
-            signBlock = sChest.getWorld().getBlockAt(sChest.getX(), sChest.getY() + 1, sChest.getZ());
+            signBlock = smallChest.getWorld().getBlockAt(smallChest.getX(), smallChest.getY() + 1, smallChest.getZ());
             if (BlockUtils.canBeReplaced(signBlock.getState())) {
                 BlockUtils.createSign(signBlock, player);
                 removeSignCount += 1;
@@ -140,17 +135,19 @@ public class TombstoneManager {
             removeSignCount -= 1;
 
         // Create a TombBlock for this tombstone
-        TombBlock tombBlock = new TombBlock(sChest.getBlock(), (largeChest != null) ? largeChest.getBlock() : null, signBlock, player.getName(), player.getLevel() + 1, (System.currentTimeMillis() / 1000));
+        TombBlock tombBlock = new TombBlock(smallChest.getBlock(), (largeChest != null) ? largeChest.getBlock() : null, signBlock, player.getName(), player.getLevel() + 1, (System.currentTimeMillis() / 1000));
 
         // Add tombstone to list
         DatabaseManager.tombList.offer(tombBlock);
 
         // Add tombstone blocks to tombBlockList
         DatabaseManager.tombBlockList.put(tombBlock.getBlock().getLocation(), tombBlock);
-        if (tombBlock.getLargeBlock() != null)
+        if (tombBlock.getLargeBlock() != null) {
             DatabaseManager.tombBlockList.put(tombBlock.getLargeBlock().getLocation(), tombBlock);
-        if (tombBlock.getSign() != null)
+        }
+        if (tombBlock.getSign() != null) {
             DatabaseManager.tombBlockList.put(tombBlock.getSign().getLocation(), tombBlock);
+        }
 
         // Add tombstone to player lookup list
         ArrayList<TombBlock> pList = DatabaseManager.playerTombList.get(player.getName());
@@ -165,8 +162,9 @@ public class TombstoneManager {
         // Next get the players inventory using the getDrops() method.
         for (Iterator<ItemStack> iter = event.getDrops().listIterator(); iter.hasNext();) {
             ItemStack item = iter.next();
-            if (item == null)
+            if (item == null) {
                 continue;
+            }
             // Take the chest(s)
             if (removeChestCount > 0 && item.getType() == Material.CHEST) {
                 if (item.getAmount() >= removeChestCount) {
@@ -195,19 +193,21 @@ public class TombstoneManager {
 
             // Add items to chest if not full.
             if (slot < maxSlot) {
-                if (slot >= sChest.getInventory().getSize()) {
-                    if (largeChest == null)
+                if (slot >= smallChest.getInventory().getSize()) {
+                    if (largeChest == null) {
                         continue;
-                    largeChest.getInventory().setItem(slot % sChest.getInventory().getSize(), item);
+                    }
+                    largeChest.getInventory().setItem(slot % smallChest.getInventory().getSize(), item);
                 }
                 else {
-                    sChest.getInventory().setItem(slot, item);
+                    smallChest.getInventory().setItem(slot, item);
                 }
                 iter.remove();
                 slot++;
             }
-            else if (removeChestCount == 0)
+            else if (removeChestCount == 0) {
                 break;
+            }
         }
 
         sendNotificationMessages(player, event);
@@ -221,8 +221,8 @@ public class TombstoneManager {
             player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Overflow", event.getDrops().size()));
         }
 
-        int breakTime = (Config.getInstance().levelBasedRemoval ? Math.min(player.getLevel() + 1 * Config.getInstance().levelBasedTime, Config.getInstance().getTombRemoveTime()) : Config.getInstance().getTombRemoveTime());
-        if (!Config.getInstance().keepUntilEmpty || Config.getInstance().getTombRemoveTime() > 0) {
+        int breakTime = ((Config.getInstance().getLevelBasedTime() > 0) ? Math.min(player.getLevel() + 1 * Config.getInstance().getLevelBasedTime(), Config.getInstance().getTombRemoveTime()) : Config.getInstance().getTombRemoveTime());
+        if (!Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getTombRemoveTime() > 0) {
             player.sendMessage(LocaleLoader.getString("Tombstone.Time", Misc.convertTime(breakTime)));
         }
     }
