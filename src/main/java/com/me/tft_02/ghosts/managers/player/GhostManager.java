@@ -1,4 +1,4 @@
-package com.me.tft_02.ghosts.util;
+package com.me.tft_02.ghosts.managers.player;
 
 import java.util.HashSet;
 import java.util.Iterator;

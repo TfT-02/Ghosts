@@ -9,8 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.util.Misc;
-import com.me.tft_02.ghosts.util.TombstoneManager;
 
 public class TombRemoveTask extends BukkitRunnable {
 
@@ -55,15 +55,15 @@ public class TombRemoveTask extends BukkitRunnable {
             }
 
             //Block removal check
-            if (Config.getInstance().cenotaphRemove) {
+            if (Config.getInstance().getTombRemoveTime() > 0) {
                 if (Config.getInstance().levelBasedRemoval) {
-                    if (cTime > Math.min(tBlock.getTime() + tBlock.getOwnerLevel() * Config.getInstance().levelBasedTime, tBlock.getTime() + Config.getInstance().removeTime)) {
+                    if (cTime > Math.min(tBlock.getTime() + tBlock.getOwnerLevel() * Config.getInstance().levelBasedTime, tBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
                         TombstoneManager.destroyTomb(tBlock);
                         iter.remove();
                     }
                 }
                 else {
-                    if (cTime > (tBlock.getTime() + Config.getInstance().removeTime)) {
+                    if (cTime > (tBlock.getTime() + Config.getInstance().getTombRemoveTime())) {
                         TombstoneManager.destroyTomb(tBlock);
                         iter.remove();
                     }

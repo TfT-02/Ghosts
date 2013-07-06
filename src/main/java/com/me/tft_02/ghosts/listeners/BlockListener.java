@@ -13,8 +13,8 @@ import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
+import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.util.Permissions;
-import com.me.tft_02.ghosts.util.TombstoneManager;
 
 public class BlockListener implements Listener {
 

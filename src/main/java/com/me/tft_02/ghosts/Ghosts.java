@@ -15,8 +15,8 @@ import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
+import com.me.tft_02.ghosts.managers.player.GhostManager;
 import com.me.tft_02.ghosts.runnables.TombRemoveTask;
-import com.me.tft_02.ghosts.util.GhostManager;
 import com.me.tft_02.ghosts.util.LogFilter;
 import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.UpdateChecker;
@@ -73,7 +73,7 @@ public class Ghosts extends JavaPlugin {
     @Override
     public void onDisable() {
         DatabaseManager.saveAllData();
-        
+
         getServer().getScheduler().cancelTasks(this);
     }
 
@@ -90,7 +90,7 @@ public class Ghosts extends JavaPlugin {
      */
     private void scheduleTasks() {
         // Start removal timer. Run every 5 seconds (20 ticks per second)
-        if (Config.getInstance().cenotaphRemove) {
+        if (Config.getInstance().getTombRemoveTime() > 0) {
             new TombRemoveTask().runTaskTimer(this, 5 * Misc.TICK_CONVERSION_FACTOR, 5 * Misc.TICK_CONVERSION_FACTOR);
         }
     }
