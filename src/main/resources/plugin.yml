@@ -1,10 +1,81 @@
 name: Ghosts
+version: ${project.version}-b${BUILD_NUMBER}
+description: >
+  Death is only the beginning! Respawn as a ghost and try to retrieve your lost items.
+
 author: TfT_02
 main: com.me.tft_02.ghosts.Ghosts
-description: Death is only the beginning!
-dev-url: http://dev.bukkit.org/server-mods/ghosts/
-version: ${project.version}-b${BUILD_NUMBER}
+website: http://dev.bukkit.org/server-mods/ghosts/
+
 commands:
-   ghosts:
-      description: Usage /ghosts
-      permission-message: You don't have <permission>
+    ghosts:
+        description: Usage /ghosts
+        permission-message: You don't have <permission>
+
+permissions:
+    ghosts.*:
+        default: false
+        description: Implies all ghosts permissions.
+        children:
+            ghosts.all: true
+    ghosts.all:
+        default: false
+        description: Implies all ghosts permissions.
+        children:
+            ghosts.commands.all: true
+            ghosts.defaults: true
+            ghosts.defaultsop: true
+    ghosts.commands.*:
+        default: false
+        description: Implies all ghosts.commands permissions.
+        children:
+            ghosts.commands.all: true
+    ghosts.commands.all:
+        default: false
+        description: Implies all ghosts.commands permissions.
+        children:
+            ghosts.commands.defaults: true
+            ghosts.commands.defaultsop: true
+    ghosts.commands.defaults:
+        description: Implies all default ghosts.commands permissions.
+        children:
+            ghosts.commands.general: true
+            ghosts.commands.resurrect: true
+    ghosts.commands.defaultsop:
+        description: Implies all default op ghosts.commands permissions.
+        children:
+            ghosts.commands.resurrect.other: true
+    ghosts.commands.general:
+         default: true
+         description: Allows access to the general command
+    ghosts.commands.resurrect:
+         default: true
+         description: Allows access to the resurrect command
+    ghosts.defaults:
+        default: true
+        description: Implies all default ghosts permissions.
+        children:
+            ghosts.ghost: true
+            ghosts.quickloot: true
+            ghosts.largechest: true
+            ghosts.sign: true
+            ghosts.commands.defaults: true
+    ghosts.defaultsop:
+        description: Implies all default op ghosts permissions.
+        children:
+            ghosts.commands.defaultsop: true
+            ghosts.breakTombs: true
+    ghosts.ghost:
+         description: Allows access to respawning as a ghost.
+    ghosts.breakTombs:
+         description: Allows access to break tombs.
+    ghosts.quickloot:
+         description: Allows access to use quickloot.
+    ghosts.largechest:
+         description: Allows access to use large chests.
+    ghosts.sign:
+         description: Allows access to use signs.
+    ghosts.freechest:
+         description: Allows access to use free chests.
+    ghosts.freesign:
+         description: Allows access to use free signs.

@@ -9,28 +9,50 @@
 ###
 General:
     Locale: en_US
-    MOTD_Enabled: true
+
     # Amount of time (in minutes) to wait between saves of player information
     Save_Interval: 10
+
     # Allow Ghosts to report on basic anonymous usage
     Stats_Tracking: true
+
     # Allow Ghosts to check if a new version is available
     Update_Check: true
     Prefer_Beta: false
-    # Allow Ghosts to inform other plugins of damage being dealt
-    Event_Callback: true
-    # Allow Ghosts to create zip backups for flatfile data on shutdown.
-    Generate_Backups: true
-    Power_Level_Cap: 0
+
     # Should Ghosts print out debug messages?
     Verbose_Logging: false
+
     # Should Ghosts over-write configs to update, or make new ones ending in .new?
     Config_Update_Overwrite: true
 
-Ghosts:
-    Respawn_From_Sky: true
+Tombstones:
+    Remove:
+        # Remove tombstones after x seconds
+        Time: 3600
+
+        # Set tombstone removal time based on player level, with the above Time setting as the maximum cap.
+        # To enable, set this to something greater than 0. Level based time is calculated by multiplying the
+        # player's level with Level_Based_Time.
+        Level_Based_Time: 0
+
+        When_Empty: true
+        Keep_Until_Empty: false
+
+Respawn:
+    # Player will respawn at a random location near their deathpoint
+    Minimum_Range: 40
+    Maximum_Range: 100
+
+    # Play thunder sound effect when a player respawns as a ghost
+    Thunder: true
+
+    # Respawn ghost players from the sky
+    From_Sky: true
+    # Respawn effect when falling from the sky (Must have Respawn.From_Sky enabled)
     Explosion_Trail: false
     Explosion_On_Impact: false
-    Respawn_Thunder: true
-    Respawn_Minimum_Range: 40
-    Respawn_Maximum_Range: 100
+
+Misc:
+    Date_Format: MM/dd/yyyy
+    Time_Format: hh:mm a

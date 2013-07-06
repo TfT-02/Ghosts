@@ -1,6 +1,5 @@
 package com.me.tft_02.ghosts.util;
 
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 
 public class Permissions {
@@ -25,13 +24,11 @@ public class Permissions {
         return permissible.hasPermission("ghosts.breakTombs");
     }
 
-    public static boolean sign(Player player) {
-        // TODO Auto-generated method stub
-        return false;
+    public static boolean sign(Permissible permissible) {
+        return permissible.hasPermission("ghosts.sign");
     }
 
-    public static boolean freesign(Player player) {
-        // TODO Auto-generated method stub
-        return false;
+    public static boolean freesign(Permissible permissible) {
+        return permissible.hasPermission("ghosts.freesign");
     }
 }
