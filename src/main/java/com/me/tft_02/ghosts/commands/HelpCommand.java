@@ -39,22 +39,31 @@ public class HelpCommand implements CommandExecutor {
         sender.sendMessage(LocaleLoader.getString("Help.Page_Header", page, maxPages));
         switch (page) {
             case 0:
-                sender.sendMessage(LocaleLoader.getString("Help.Page_0.Line_0"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_0.Line_1"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_0.Line_2"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_0.Line_3"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_0.Line_4"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_0"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_1"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_2"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_3"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_4"));
 
             case 1:
-                sender.sendMessage(LocaleLoader.getString("Help.Page_1.Line_0"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_1.Line_1"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_1.Line_2"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_1.Line_3"));
-                sender.sendMessage(LocaleLoader.getString("Help.Page_1.Line_4"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_0"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_1"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_2"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_3"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_4"));
             default:
                 if (nextPage <= maxPages) {
                     sender.sendMessage(LocaleLoader.getString("Help.Page_Ending", "/ghosts help", nextPage));
                 }
+        }
+    }
+
+    /**
+     * Send a string, but only if .length > 0
+     * */
+    private void sendHelpPage(CommandSender sender, String string) {
+        if (string.length() > 0) {
+            sender.sendMessage(string);
         }
     }
 }
