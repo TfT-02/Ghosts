@@ -2,6 +2,7 @@ package com.me.tft_02.ghosts.runnables;
 
 import java.util.Iterator;
 
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,20 +23,21 @@ public class TombRemoveTask extends BukkitRunnable {
 
             //"empty" option checks
             if (Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getRemoveWhenEmpty()) {
-                if (tombBlock.getBlock().getState() instanceof Chest) {
+                BlockState blockState = tombBlock.getBlock().getState();
+                if (blockState instanceof Chest) {
                     boolean isEmpty = true;
 
-                    Chest smallChest = (Chest) tombBlock.getBlock().getState();
+                    Chest smallChest = (Chest) blockState;
                     Chest largeChest = (tombBlock.getLargeBlock() != null) ? (Chest) tombBlock.getLargeBlock().getState() : null;
 
-                    for (ItemStack item : smallChest.getInventory().getContents()) {
+                    for (ItemStack item : smallChest.getBlockInventory().getContents()) {
                         if (item != null) {
                             isEmpty = false;
                         }
                         break;
                     }
                     if (largeChest != null && !isEmpty) {
-                        for (ItemStack item : largeChest.getInventory().getContents()) {
+                        for (ItemStack item : largeChest.getBlockInventory().getContents()) {
                             if (item != null) {
                                 isEmpty = false;
                             }
