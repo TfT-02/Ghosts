@@ -65,6 +65,7 @@ permissions:
             ghosts.quickloot: true
             ghosts.largechest: true
             ghosts.sign: true
+            ghosts.doublejump: true
             ghosts.commands.defaults: true
     ghosts.defaultsop:
         description: Implies all default op ghosts permissions.

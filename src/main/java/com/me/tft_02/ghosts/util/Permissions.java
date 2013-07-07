@@ -8,6 +8,10 @@ public class Permissions {
         return permissible.hasPermission("ghosts.ghost");
     }
 
+    public static boolean doubleJump(Permissible permissible) {
+        return permissible.hasPermission("ghosts.doublejump");
+    }
+
     public static boolean quickLoot(Permissible permissible) {
         return permissible.hasPermission("ghosts.quickloot");
     }

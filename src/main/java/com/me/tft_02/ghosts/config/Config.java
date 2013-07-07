@@ -44,10 +44,10 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getUseTombstoneSign() { return config.getBoolean("Tombstones.Place_Sign", true); }
 
     public String signMessage[] = new String[] {
-        "{name}",
-        "RIP",
-        "{date}",
-        "{time}"
+            "{name}",
+            "RIP",
+            "{date}",
+            "{time}"
     };
 
     // Remove Settings
@@ -68,6 +68,9 @@ public class Config extends AutoUpdateConfigLoader {
     /* MISC SETTINGS */
     public String getDateFormat() { return config.getString("Misc.Date_Format", "MM/dd/yyyy"); }
     public String getTimeFormat() { return config.getString("Misc.Time_Format", "hh:mm a"); }
-    /* @formatter:on */
 
+    public boolean getGhostJumpEnabled() { return config.getBoolean("Ghost.Double_Jump.Enabled", true); }
+    public boolean getGhostJumpSound() { return config.getBoolean("Ghost.Double_Jump.Sound", true); }
+    public boolean getGhostJumpEffect() { return config.getBoolean("Ghost.Double_Jump.Effect", true); }
+    /* @formatter:on */
 }

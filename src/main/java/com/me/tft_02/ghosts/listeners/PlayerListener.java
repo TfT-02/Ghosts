@@ -15,9 +15,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
 import com.me.tft_02.ghosts.Ghosts;
@@ -97,6 +99,10 @@ public class PlayerListener implements Listener {
     private void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Ghosts.p.ghostManager.addPlayer(player);
+
+        if (Ghosts.p.ghostManager.isGhost(player)) {
+            PlayerManager.enableDoubleJump(player);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -142,6 +148,8 @@ public class PlayerListener implements Listener {
         event.setRespawnLocation(respawnLocation);
         DatabaseManager.playerRespawns.put(player.getName(), false);
 
+        PlayerManager.enableDoubleJump(player);
+
         if (Config.getInstance().getThunder()) {
             player.getWorld().playSound(new Location(player.getWorld(), respawnLocation.getX(), 100, respawnLocation.getZ()), Sound.AMBIENCE_THUNDER, 1F, 1F);
         }
@@ -151,7 +159,7 @@ public class PlayerListener implements Listener {
         }
 
         if (Config.getInstance().getSetOnFire()) {
-            new IgniteTask(player, 15 * 20).runTask(Ghosts.p);
+            new IgniteTask(player, 12 * 20).runTask(Ghosts.p);
         }
 
         if (Config.getInstance().getExplosionTrail()) {
@@ -170,5 +178,33 @@ public class PlayerListener implements Listener {
         if (Ghosts.p.ghostManager.isGhost(player)) {
             player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 1F, 1F);
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
+        PlayerManager.doubleJump(event);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerMove(PlayerMoveEvent event) {
+        Location from = event.getFrom();
+        Location to = event.getTo();
+
+        int fromX = (int) from.getX();
+        int fromY = (int) from.getY();
+        int fromZ = (int) from.getZ();
+        int toX = (int) to.getX();
+        int toY = (int) to.getY();
+        int toZ = (int) to.getZ();
+
+        if (fromX == toX && fromZ == toZ && fromY == toY) {
+            return;
+        }
+
+        if (!Config.getInstance().getGhostJumpEnabled()) {
+            return;
+        }
+
+        PlayerManager.move(event);
     }
 }
