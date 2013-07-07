@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.me.tft_02.ghosts.Ghosts;
+import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.CommandUtils;
 import com.me.tft_02.ghosts.util.Permissions;
@@ -27,8 +28,9 @@ public class ResurrectCommand implements CommandExecutor {
     }
 
     private boolean resurrect(CommandSender sender) {
-        if (CommandUtils.noConsoleUsage(sender)) {
-            return true;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(LocaleLoader.getString("Commands.Usage.1", "/resurrect", "[player]"));
+            return false;
         }
 
         Player player = (Player) sender;
@@ -37,8 +39,12 @@ public class ResurrectCommand implements CommandExecutor {
             return false;
         }
 
-        PlayerManager.resurrect(player);
-        return true;
+        if (PlayerManager.resurrect(player)) {
+            return true;
+        }
+
+        sender.sendMessage(LocaleLoader.getString("Commands.Usage.1", "/resurrect", "[player]"));
+        return false;
     }
 
     private boolean resurrectOthers(CommandSender sender, String[] args) {
@@ -47,7 +53,10 @@ public class ResurrectCommand implements CommandExecutor {
         }
 
         OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(args[0]);
-        PlayerManager.resurrect(offlinePlayer);
+        if (CommandUtils.checkPlayerExistence(sender, offlinePlayer.getName())) {
+            PlayerManager.resurrect(offlinePlayer);
+        }
+
         return true;
     }
 }

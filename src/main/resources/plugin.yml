@@ -54,6 +54,9 @@ permissions:
     ghosts.commands.resurrect:
          default: true
          description: Allows access to the resurrect command
+    ghosts.commands.resurrect.others:
+         default: false
+         description: Allows access to the resurrect command on other players
     ghosts.defaults:
         default: true
         description: Implies all default ghosts permissions.
