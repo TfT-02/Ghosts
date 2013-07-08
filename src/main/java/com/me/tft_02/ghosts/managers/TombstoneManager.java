@@ -19,7 +19,7 @@ import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
-import com.me.tft_02.ghosts.events.tomb.CreateTombEvent;
+import com.me.tft_02.ghosts.events.tomb.TombCreateEvent;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.BlockUtils;
@@ -33,10 +33,10 @@ public class TombstoneManager {
         Location location = player.getLocation();
         Block block = player.getWorld().getBlockAt(location);
 
-        CreateTombEvent createTombEvent = new CreateTombEvent(player, block);
-        Ghosts.p.getServer().getPluginManager().callEvent(createTombEvent);
+        TombCreateEvent tombCreateEvent = new TombCreateEvent(player, block);
+        Ghosts.p.getServer().getPluginManager().callEvent(tombCreateEvent);
 
-        if (createTombEvent.isCancelled()) {
+        if (tombCreateEvent.isCancelled()) {
             return false;
         }
 
