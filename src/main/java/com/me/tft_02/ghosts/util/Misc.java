@@ -85,17 +85,21 @@ public class Misc {
         }
     }
 
-    public static String convertTime(int seconds) {
-        String formatted = Integer.toString(seconds);
-        if (seconds >= 86400) {
-            formatted = String.format("%dd %d:%02d:%02d", seconds / 86400, (seconds % 86400) / 3600, (seconds % 3600) / 60, seconds % 60);
+    public static String getPrettyTime(int seconds) {
+        int hours = seconds / 3600;
+        int remainder = seconds - hours * 3600;
+        int mins = remainder / 60;
+        remainder = remainder - mins * 60;
+        int secs = remainder;
+
+        if (mins == 0 && hours == 0) {
+            return secs + "s";
         }
-        else if (seconds >= 3600) {
-            formatted = String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60));
+        if (hours == 0) {
+            return mins + "m " + secs + "s";
         }
-        else if (seconds > 60) {
-            formatted = String.format("%02d:%02d", seconds / 60, seconds % 60);
+        else {
+            return hours + "h " + mins + "m " + secs + "s";
         }
-        return formatted;
     }
 }

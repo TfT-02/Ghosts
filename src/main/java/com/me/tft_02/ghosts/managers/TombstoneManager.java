@@ -19,6 +19,7 @@ import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.events.tomb.CreateTombEvent;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.BlockUtils;
@@ -31,6 +32,13 @@ public class TombstoneManager {
         Player player = event.getEntity();
         Location location = player.getLocation();
         Block block = player.getWorld().getBlockAt(location);
+
+        CreateTombEvent createTombEvent = new CreateTombEvent(player, block);
+        Ghosts.p.getServer().getPluginManager().callEvent(createTombEvent);
+
+        if (createTombEvent.isCancelled()) {
+            return false;
+        }
 
         if (BlockUtils.cannotBeReplaced(block.getState())) {
             block = block.getRelative(BlockFace.UP);
@@ -225,7 +233,7 @@ public class TombstoneManager {
 
         int breakTime = ((Config.getInstance().getLevelBasedTime() > 0) ? Math.min(player.getLevel() + 1 * Config.getInstance().getLevelBasedTime(), Config.getInstance().getTombRemoveTime()) : Config.getInstance().getTombRemoveTime());
         if (!Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getTombRemoveTime() > 0) {
-            player.sendMessage(LocaleLoader.getString("Tombstone.Time", Misc.convertTime(breakTime)));
+            player.sendMessage(LocaleLoader.getString("Tombstone.Time", Misc.getPrettyTime(breakTime)));
         }
     }
 
