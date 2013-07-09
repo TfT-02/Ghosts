@@ -6,6 +6,7 @@ description: >
 author: TfT_02
 main: com.me.tft_02.ghosts.Ghosts
 website: http://dev.bukkit.org/server-mods/ghosts/
+softdepend: [Multiverse-Core]
 
 commands:
     ghosts:
