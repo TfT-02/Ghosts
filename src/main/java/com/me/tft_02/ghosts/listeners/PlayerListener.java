@@ -36,7 +36,7 @@ import com.me.tft_02.ghosts.util.Permissions;
 
 public class PlayerListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -72,6 +72,7 @@ public class PlayerListener implements Listener {
         }
 
         // I think quickloot is succes here
+        event.setCancelled(false); //TODO Add config option; override ?
         Ghosts.p.ghostManager.setGhost(player, false);
         PlayerManager.quickLoot(event, player, tombBlock);
     }
