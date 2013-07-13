@@ -101,9 +101,9 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         Ghosts.p.ghostManager.addPlayer(player);
 
-        if (Ghosts.p.ghostManager.isGhost(player)) {
-            PlayerManager.enableDoubleJump(player);
-        }
+//        if (Ghosts.p.ghostManager.isGhost(player)) {
+//            PlayerManager.enableDoubleJump(player);
+//        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -133,7 +133,7 @@ public class PlayerListener implements Listener {
 
         if (!Ghosts.p.ghostManager.isGhost(player)) {
             Ghosts.p.ghostManager.setGhost(player, false);
-            PlayerManager.disableDoubleJump(player);
+//            PlayerManager.disableDoubleJump(player);
             return;
         }
 
@@ -150,7 +150,7 @@ public class PlayerListener implements Listener {
         event.setRespawnLocation(respawnLocation);
         DatabaseManager.playerRespawns.put(player.getName(), false);
 
-        PlayerManager.enableDoubleJump(player);
+//        PlayerManager.enableDoubleJump(player);
 
         if (Config.getInstance().getThunder()) {
             player.getWorld().playSound(new Location(player.getWorld(), respawnLocation.getX(), 100, respawnLocation.getZ()), Sound.AMBIENCE_THUNDER, 1F, 1F);
@@ -182,31 +182,31 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
-        PlayerManager.doubleJump(event);
-    }
+//    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+//    public void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
+//        PlayerManager.doubleJump(event);
+//    }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerMove(PlayerMoveEvent event) {
-        Location from = event.getFrom();
-        Location to = event.getTo();
-
-        int fromX = (int) from.getX();
-        int fromY = (int) from.getY();
-        int fromZ = (int) from.getZ();
-        int toX = (int) to.getX();
-        int toY = (int) to.getY();
-        int toZ = (int) to.getZ();
-
-        if (fromX == toX && fromZ == toZ && fromY == toY) {
-            return;
-        }
-
-        if (!Config.getInstance().getGhostJumpEnabled()) {
-            return;
-        }
-
-        PlayerManager.move(event);
-    }
+//    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+//    public void onPlayerMove(PlayerMoveEvent event) {
+//        Location from = event.getFrom();
+//        Location to = event.getTo();
+//
+//        int fromX = (int) from.getX();
+//        int fromY = (int) from.getY();
+//        int fromZ = (int) from.getZ();
+//        int toX = (int) to.getX();
+//        int toY = (int) to.getY();
+//        int toZ = (int) to.getZ();
+//
+//        if (fromX == toX && fromZ == toZ && fromY == toY) {
+//            return;
+//        }
+//
+//        if (!Config.getInstance().getGhostJumpEnabled()) {
+//            return;
+//        }
+//
+//        PlayerManager.move(event);
+//    }
 }
