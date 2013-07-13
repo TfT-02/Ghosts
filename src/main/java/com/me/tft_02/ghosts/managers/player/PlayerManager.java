@@ -1,6 +1,7 @@
 package com.me.tft_02.ghosts.managers.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Effect;
@@ -27,11 +28,13 @@ import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.Permissions;
 
 public class PlayerManager {
 
     private static List<String> hasJumped = new ArrayList<String>();
+    private static HashMap<String, Integer> lastSpook = new HashMap<String, Integer>();
 
     public static boolean resurrect(OfflinePlayer offlinePlayer) {
         if (!DatabaseManager.ghosts.remove(offlinePlayer.getName())) {
@@ -106,6 +109,10 @@ public class PlayerManager {
 
         if (!Permissions.doubleJump(player)) {
             Ghosts.p.debug("No permission");
+            return;
+        }
+
+        if (!Ghosts.p.ghostManager.isGhost(player)) {
             return;
         }
 
@@ -185,5 +192,22 @@ public class PlayerManager {
 
         player.setAllowFlight(true);
         player.setFlying(false);
+    }
+
+    public static void disableDoubleJump(Player player) {
+        setFlight(player, false);
+    }
+
+    public static void spook(Player player) {
+        int cooldown = 60;
+        long deactivatedTimeStamp = 0;
+        if (lastSpook.containsKey(player.getName())) {
+            deactivatedTimeStamp = lastSpook.get(player.getName());
+        }
+
+        if (Misc.cooldownOver(deactivatedTimeStamp, cooldown)) {
+            player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 1F, 1F);
+            lastSpook.put(player.getName(), (int) (System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR));
+        }
     }
 }

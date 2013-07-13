@@ -46,7 +46,6 @@ public class DatabaseManager {
             saveData(world.getName());
         }
         saveGhostList();
-        Ghosts.p.debug("Saved all data.");
     }
 
     private static void saveData(String worldName) {

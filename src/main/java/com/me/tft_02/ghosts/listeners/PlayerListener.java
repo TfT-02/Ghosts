@@ -133,6 +133,7 @@ public class PlayerListener implements Listener {
 
         if (!Ghosts.p.ghostManager.isGhost(player)) {
             Ghosts.p.ghostManager.setGhost(player, false);
+            PlayerManager.disableDoubleJump(player);
             return;
         }
 
@@ -177,7 +178,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
 
         if (Ghosts.p.ghostManager.isGhost(player)) {
-            player.playSound(player.getLocation(), Sound.AMBIENCE_CAVE, 1F, 1F);
+            PlayerManager.spook(player);
         }
     }
 

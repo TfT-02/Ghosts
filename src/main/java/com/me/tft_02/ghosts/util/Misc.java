@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-
+import org.bukkit.entity.Player;
 import com.me.tft_02.ghosts.config.Config;
 
 public class Misc {
@@ -101,5 +101,20 @@ public class Misc {
         else {
             return hours + "h " + mins + "m " + secs + "s";
         }
+    }
+
+    /**
+     * Calculate the time remaining until the cooldown expires.
+     *
+     * @param deactivatedTimeStamp Time of deactivation
+     * @param cooldown The length of the cooldown
+     * @return the number of seconds remaining before the cooldown expires
+     */
+    public static int calculateTimeLeft(long deactivatedTimeStamp, int cooldown, Player player) {
+        return (int) (((deactivatedTimeStamp + cooldown) * TIME_CONVERSION_FACTOR) - (System.currentTimeMillis() / TIME_CONVERSION_FACTOR));
+    }
+
+    public static boolean cooldownOver(long deactivatedTimeStamp, int cooldown) {
+        return (((System.currentTimeMillis() / TIME_CONVERSION_FACTOR) + cooldown) < deactivatedTimeStamp);
     }
 }
