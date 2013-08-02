@@ -3,8 +3,11 @@ package com.me.tft_02.ghosts.util;
 import java.util.Random;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.Player;
+
 import com.me.tft_02.ghosts.config.Config;
 
 public class Misc {
@@ -30,6 +33,15 @@ public class Misc {
         blockZ = (random.nextBoolean()) ? blockZ + (distance) : blockZ - (distance);
 
         int blockY = (Config.getInstance().getRespawnFromSky()) ? world.getMaxHeight() : world.getHighestBlockYAt(blockX, blockZ);
+
+        if (world.getEnvironment() == Environment.NETHER) {
+            for (int i = 0; i < world.getMaxHeight(); i++) {
+                if (world.getBlockAt(blockX, i, blockZ).getType() == Material.AIR) {
+                    blockY = i;
+                    break;
+                }
+            }
+        }
 
         return new Location(world, blockX, blockY, blockZ);
     }
