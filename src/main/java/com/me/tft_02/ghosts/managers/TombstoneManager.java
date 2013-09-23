@@ -231,7 +231,7 @@ public class TombstoneManager {
             player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Overflow", event.getDrops().size()));
         }
 
-        int breakTime = ((Config.getInstance().getLevelBasedTime() > 0) ? Math.min(player.getLevel() + 1 * Config.getInstance().getLevelBasedTime(), Config.getInstance().getTombRemoveTime()) : Config.getInstance().getTombRemoveTime());
+        int breakTime = ((Config.getInstance().getLevelBasedTime() > 0) ? Math.min((player.getLevel() + 1) * Config.getInstance().getLevelBasedTime(), Config.getInstance().getTombRemoveTime()) : Config.getInstance().getTombRemoveTime());
         if (!Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getTombRemoveTime() > 0) {
             player.sendMessage(LocaleLoader.getString("Tombstone.Time", Misc.getPrettyTime(breakTime)));
         }

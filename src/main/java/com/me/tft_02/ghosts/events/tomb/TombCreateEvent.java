@@ -17,16 +17,10 @@ public class TombCreateEvent extends PlayerEvent implements Cancellable {
         this.cancelled = false;
     }
 
-    /**
-     * @return The itemStack being soulbound
-     */
     public Block getBlock() {
         return block;
     }
 
-    /**
-     * @return Set the itemStack being soulbound
-     */
     public void setBlock(Block block) {
         this.block = block;
     }
