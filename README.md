@@ -7,6 +7,9 @@ a tombstone at the death location (a chest with his stuff stored in it).
 The player will respawn at a random location near his death point and must find his tombstone
 in order to retrieve his stuff. If he does not succeed to find his tombstone in time it will get destroyed.
 
+### Dev builds
+The latest development builds are available [here](http://jenkins.genesis-mc.com/view/TfT_02/job/Ghosts/).
+
 How does it work?
 ----------------
 
