@@ -39,18 +39,25 @@ public class HelpCommand implements CommandExecutor {
         sender.sendMessage(LocaleLoader.getString("Help.Page_Header", page, maxPages));
         switch (page) {
             case 0:
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_0"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_1"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_2"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_3"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_0.Line_4"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_0"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_1"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_2"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_3"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_4"));
 
             case 1:
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_0"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_1"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_2"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_3"));
-                sendHelpPage(sender, LocaleLoader.getString("Help.Page_1.Line_4"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_0"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_1"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_2"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_3"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_4"));
+
+            case 2:
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_0"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_1"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_2"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_3"));
+                sendHelpPage(sender, LocaleLoader.getString("Help.Page_" + page + ".Line_4"));
             default:
                 if (nextPage <= maxPages) {
                     sender.sendMessage(LocaleLoader.getString("Help.Page_Ending", "/ghosts help", nextPage));
