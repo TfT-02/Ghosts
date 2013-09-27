@@ -45,7 +45,9 @@ public abstract class ConfigLoader {
     protected abstract void loadKeys();
 
     protected void createFile() {
-        configFile.getParentFile().mkdirs();
+        if (!configFile.getParentFile().mkdirs()) {
+            plugin.getLogger().severe("Could not create folder at " + configFile.getParentFile());
+        }
 
         InputStream inputStream = plugin.getResource(fileName);
 
