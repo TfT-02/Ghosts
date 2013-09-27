@@ -33,15 +33,15 @@ public class TombRemoveTask extends BukkitRunnable {
                     for (ItemStack item : smallChest.getBlockInventory().getContents()) {
                         if (item != null) {
                             isEmpty = false;
+                            break;
                         }
-                        break;
                     }
                     if (largeChest != null && !isEmpty) {
                         for (ItemStack item : largeChest.getBlockInventory().getContents()) {
                             if (item != null) {
                                 isEmpty = false;
+                                break;
                             }
-                            break;
                         }
                     }
                     if (Config.getInstance().getKeepUntilEmpty()) {
