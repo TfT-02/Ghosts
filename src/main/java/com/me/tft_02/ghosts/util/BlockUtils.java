@@ -3,6 +3,7 @@ package com.me.tft_02.ghosts.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -12,9 +13,20 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.me.tft_02.ghosts.config.Config;
+import com.me.tft_02.ghosts.database.DatabaseManager;
 
 public class BlockUtils {
     private BlockUtils() {}
+
+    /**
+     * Check if a given block is a Tombstone
+     *
+     * @param location The {@link Location} of the block to check
+     * @return true if the block is a tombstone, false otherwise
+     */
+    public static boolean isTombStone(Location location) {
+        return DatabaseManager.tombBlockList.get(location) != null;
+    }
 
     /**
      * Check if a given block cannot be replaced

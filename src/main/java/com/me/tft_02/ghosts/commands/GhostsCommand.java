@@ -13,20 +13,17 @@ public class GhostsCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("ghosts")) {
-            switch (args.length) {
-                case 1:
-                    if (args[0].equalsIgnoreCase("help")) {
-                        return helpCommand.onCommand(sender, command, label, args);
-                    }
-                    else if (args[0].equalsIgnoreCase("reload")) {
-                        return reloadCommand.onCommand(sender, command, label, args);
-                    }
-                default:
-                    return printPluginInfo(sender);
-            }
+        switch (args.length) {
+            case 1:
+                if (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?")) {
+                    return helpCommand.onCommand(sender, command, label, args);
+                }
+                else if (args[0].equalsIgnoreCase("reload")) {
+                    return reloadCommand.onCommand(sender, command, label, args);
+                }
+            default:
+                return printPluginInfo(sender);
         }
-        return false;
     }
 
     private boolean printPluginInfo(CommandSender sender) {

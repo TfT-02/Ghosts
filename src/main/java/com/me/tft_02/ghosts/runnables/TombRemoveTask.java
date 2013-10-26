@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -24,18 +25,22 @@ public class TombRemoveTask extends BukkitRunnable {
             //"empty" option checks
             if (Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getRemoveWhenEmpty()) {
                 BlockState blockState = tombBlock.getBlock().getState();
+
                 if (blockState instanceof Chest) {
                     boolean isEmpty = true;
 
                     Chest smallChest = (Chest) blockState;
                     Chest largeChest = (tombBlock.getLargeBlock() != null) ? (Chest) tombBlock.getLargeBlock().getState() : null;
 
-                    for (ItemStack item : smallChest.getBlockInventory().getContents()) {
+                    Inventory blockInventory = smallChest.getBlockInventory();
+
+                    for (ItemStack item : blockInventory.getContents()) {
                         if (item != null) {
                             isEmpty = false;
                             break;
                         }
                     }
+
                     if (largeChest != null && !isEmpty) {
                         for (ItemStack item : largeChest.getBlockInventory().getContents()) {
                             if (item != null) {
@@ -44,17 +49,23 @@ public class TombRemoveTask extends BukkitRunnable {
                             }
                         }
                     }
+
                     if (Config.getInstance().getKeepUntilEmpty()) {
                         if (!isEmpty) {
                             continue;
                         }
                     }
+
                     if (Config.getInstance().getRemoveWhenEmpty()) {
                         if (isEmpty) {
                             TombstoneManager.destroyTombstone(tombBlock);
                             iter.remove();
                         }
                     }
+                }
+                else {
+                    TombstoneManager.destroyTombstone(tombBlock);
+                    iter.remove();
                 }
             }
 

@@ -14,6 +14,7 @@ import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.util.BlockUtils;
 import com.me.tft_02.ghosts.util.Permissions;
 
 public class BlockListener implements Listener {
@@ -23,7 +24,7 @@ public class BlockListener implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        if (Ghosts.p.ghostManager.isGhost(player)) {
+        if (!BlockUtils.isTombStone(block.getLocation()) && Ghosts.p.ghostManager.isGhost(player)) {
             event.setCancelled(true);
             return;
         }
@@ -40,16 +41,13 @@ public class BlockListener implements Listener {
             return;
         }
 
-        TombBlock tombBlock = DatabaseManager.tombBlockList.get(block.getLocation());
-        if (tombBlock == null) {
-            return;
-        }
-
         if (Config.getInstance().getPreventDestroy() && !Permissions.breakTombs(player)) {
             player.sendMessage(LocaleLoader.getString("Tombstone.Cannot_Break"));
             event.setCancelled(true);
             return;
         }
+
+        TombBlock tombBlock = DatabaseManager.tombBlockList.get(block.getLocation());
 
         TombstoneManager.removeTomb(tombBlock, true);
 

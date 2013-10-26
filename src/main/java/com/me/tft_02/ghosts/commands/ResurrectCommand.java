@@ -16,15 +16,12 @@ public class ResurrectCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("resurrect")) {
-            switch (args.length) {
-                case 1:
-                    return resurrectOthers(sender, args);
-                default:
-                    return resurrect(sender);
-            }
+        switch (args.length) {
+            case 1:
+                return resurrectOthers(sender, args);
+            default:
+                return resurrect(sender);
         }
-        return false;
     }
 
     private boolean resurrect(CommandSender sender) {
