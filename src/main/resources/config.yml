@@ -55,10 +55,6 @@ Respawn:
     Explosion_On_Impact: false
 
 Ghost:
-    Double_Jump:
-        Enabled: true
-        Sound: true
-        Effect: true
 
 Misc:
     Date_Format: MM/dd/yyyy

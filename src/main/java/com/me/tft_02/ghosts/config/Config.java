@@ -69,8 +69,5 @@ public class Config extends AutoUpdateConfigLoader {
     public String getDateFormat() { return config.getString("Misc.Date_Format", "MM/dd/yyyy"); }
     public String getTimeFormat() { return config.getString("Misc.Time_Format", "hh:mm a"); }
 
-    public boolean getGhostJumpEnabled() { return config.getBoolean("Ghost.Double_Jump.Enabled", true); }
-    public boolean getGhostJumpSound() { return config.getBoolean("Ghost.Double_Jump.Sound", true); }
-    public boolean getGhostJumpEffect() { return config.getBoolean("Ghost.Double_Jump.Effect", true); }
     /* @formatter:on */
 }
