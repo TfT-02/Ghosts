@@ -55,6 +55,8 @@ Respawn:
     Explosion_On_Impact: false
 
 Ghost:
+    Potion_Effects:
+        - SWIFTNESS
 
 Misc:
     Date_Format: MM/dd/yyyy

@@ -102,4 +102,13 @@ public class PlayerManager {
             lastSpook.put(player.getName(), (int) (System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR));
         }
     }
+
+    public static void applyPotionEffects(Player player) {
+//        Collection<PotionEffect> potionEffects = player.getActivePotionEffects();
+//
+//        PotionEffect potionEffect = new PotionEffect(PotionEffectType.SPEED, duration, amplifier, ambient);
+//        player.addPotionEffect(potionEffect);
+//
+//        player.addPotionEffects(potionEffects);
+    }
 }
