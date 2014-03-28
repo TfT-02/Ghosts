@@ -26,7 +26,7 @@ import org.mcstats.Metrics;
 public class Ghosts extends JavaPlugin {
 
     /* Managers */
-    public GhostManager ghostManager;
+    private GhostManager ghostManager;
 
     /* File Paths */
     private static String mainDirectory;
@@ -143,5 +143,9 @@ public class Ghosts extends JavaPlugin {
         this.updateAvailable = true;
         getLogger().info(LocaleLoader.getString("UpdateChecker.Outdated"));
         getLogger().info(LocaleLoader.getString("UpdateChecker.New_Available"));
+    }
+
+    public GhostManager getGhostManager() {
+        return ghostManager;
     }
 }

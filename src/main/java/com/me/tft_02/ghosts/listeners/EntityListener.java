@@ -35,7 +35,7 @@ public class EntityListener implements Listener {
         if (livingEntity instanceof Player) {
             Player player = (Player) entity;
 
-            if (Ghosts.p.ghostManager.isGhost(player)) {
+            if (Ghosts.p.getGhostManager().isGhost(player)) {
                 event.setCancelled(true);
             }
         }
@@ -48,7 +48,7 @@ public class EntityListener implements Listener {
         if (entity instanceof Player) {
             Player player = (Player) entity;
 
-            if (Ghosts.p.ghostManager.isGhost(player)) {
+            if (Ghosts.p.getGhostManager().isGhost(player)) {
                 event.setCancelled(true);
             }
         }
@@ -61,7 +61,7 @@ public class EntityListener implements Listener {
         if (livingEntity instanceof Player) {
             Player player = (Player) livingEntity;
 
-            if (Ghosts.p.ghostManager.isGhost(player)) {
+            if (Ghosts.p.getGhostManager().isGhost(player)) {
                 event.setCancelled(true);
             }
         }
@@ -87,7 +87,7 @@ public class EntityListener implements Listener {
                 Player target = (Player) entity;
 
                 if (player != target) {
-                    if (Ghosts.p.ghostManager.isGhost(player)) {
+                    if (Ghosts.p.getGhostManager().isGhost(player)) {
                         event.setIntensity(target, 0);
                     }
                 }
@@ -120,8 +120,8 @@ public class EntityListener implements Listener {
         }
 
         // GHOST MANAGER
-        if (!Ghosts.p.ghostManager.isGhost(player)) {
-            Ghosts.p.ghostManager.setGhost(player, true);
+        if (!Ghosts.p.getGhostManager().isGhost(player)) {
+            Ghosts.p.getGhostManager().setGhost(player, true);
             DatabaseManager.playerRespawns.put(player.getName(), true);
             DatabaseManager.playerLastDeathLocation.put(player.getName(), player.getLocation());
         }

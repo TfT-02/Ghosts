@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
 
         // I think quickloot is succes here
         event.setCancelled(false); //TODO Add config option; override ?
-        Ghosts.p.ghostManager.setGhost(player, false);
+        Ghosts.p.getGhostManager().setGhost(player, false);
         PlayerManager.quickLoot(event, player, tombBlock);
     }
 
@@ -87,7 +87,7 @@ public class PlayerListener implements Listener {
         if (entity instanceof Player) {
             Player target = (Player) entity;
 
-            if (Ghosts.p.ghostManager.isGhost(player) || Ghosts.p.ghostManager.isGhost(target)) {
+            if (Ghosts.p.getGhostManager().isGhost(player) || Ghosts.p.getGhostManager().isGhost(target)) {
                 event.setCancelled(true);
             }
         }
@@ -96,9 +96,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Ghosts.p.ghostManager.addPlayer(player);
+        Ghosts.p.getGhostManager().addPlayer(player);
 
-        //        if (Ghosts.p.ghostManager.isGhost(player)) {
+        //        if (Ghosts.p.getGhostManager().isGhost(player)) {
         //            PlayerManager.enableDoubleJump(player);
         //        }
     }
@@ -108,7 +108,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         Item item = event.getItem();
 
-        if (Ghosts.p.ghostManager.isGhost(player)) {
+        if (Ghosts.p.getGhostManager().isGhost(player)) {
             item.setPickupDelay(60);
             event.setCancelled(true);
         }
@@ -117,7 +117,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Ghosts.p.ghostManager.removePlayer(player);
+        Ghosts.p.getGhostManager().removePlayer(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -128,8 +128,8 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!Ghosts.p.ghostManager.isGhost(player)) {
-            Ghosts.p.ghostManager.setGhost(player, false);
+        if (!Ghosts.p.getGhostManager().isGhost(player)) {
+            Ghosts.p.getGhostManager().setGhost(player, false);
             //            PlayerManager.disableDoubleJump(player);
             return;
         }
@@ -174,7 +174,7 @@ public class PlayerListener implements Listener {
     private void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
-        if (Ghosts.p.ghostManager.isGhost(player)) {
+        if (Ghosts.p.getGhostManager().isGhost(player)) {
             PlayerManager.spook(player);
         }
     }

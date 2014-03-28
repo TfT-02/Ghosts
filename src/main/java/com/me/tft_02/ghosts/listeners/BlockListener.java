@@ -25,7 +25,7 @@ public class BlockListener implements Listener {
         Player player = event.getPlayer();
 
         if (!BlockUtils.isTombStone(block.getLocation())) {
-            if (Ghosts.p.ghostManager.isGhost(player)) {
+            if (Ghosts.p.getGhostManager().isGhost(player)) {
                 event.setCancelled(true);
             }
             return;
