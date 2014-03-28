@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.database.DatabaseManager;
@@ -73,7 +74,7 @@ public class EntityListener implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPotionSplash(PotionSplashEvent event) {
-        LivingEntity shooter = event.getPotion().getShooter();
+        ProjectileSource shooter = event.getPotion().getShooter();
 
         if (!(shooter instanceof Player)) {
             return;
