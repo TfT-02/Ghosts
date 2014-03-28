@@ -2,11 +2,9 @@ package com.me.tft_02.ghosts;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
 import com.me.tft_02.ghosts.commands.GhostsCommand;
 import com.me.tft_02.ghosts.commands.ResurrectCommand;
@@ -21,7 +19,9 @@ import com.me.tft_02.ghosts.runnables.SaveTimerTask;
 import com.me.tft_02.ghosts.runnables.TombRemoveTask;
 import com.me.tft_02.ghosts.util.LogFilter;
 import com.me.tft_02.ghosts.util.Misc;
-import com.me.tft_02.ghosts.util.UpdateChecker;
+
+import net.gravitydevelopment.updater.ghosts.Updater;
+import org.mcstats.Metrics;
 
 public class Ghosts extends JavaPlugin {
 
@@ -124,18 +124,24 @@ public class Ghosts extends JavaPlugin {
     }
 
     private void checkForUpdates() {
-        if (Config.getInstance().getUpdateCheckEnabled()) {
-            try {
-                updateAvailable = UpdateChecker.updateAvailable();
-            }
-            catch (Exception e) {
-                updateAvailable = false;
-            }
-
-            if (updateAvailable) {
-                this.getLogger().log(Level.INFO, LocaleLoader.getString("UpdateChecker.Outdated"));
-                this.getLogger().log(Level.INFO, LocaleLoader.getString("UpdateChecker.New_Available"));
-            }
+        if (!Config.getInstance().getUpdateCheckEnabled()) {
+            return;
         }
+
+        Updater updater = new Updater(this, 60787, ghosts, Updater.UpdateType.NO_DOWNLOAD, false);
+
+        if (updater.getResult() != Updater.UpdateResult.UPDATE_AVAILABLE) {
+            this.updateAvailable = false;
+            return;
+        }
+
+        if (updater.getLatestType().equals("beta") && !Config.getInstance().getPreferBeta()) {
+            this.updateAvailable = false;
+            return;
+        }
+
+        this.updateAvailable = true;
+        getLogger().info(LocaleLoader.getString("UpdateChecker.Outdated"));
+        getLogger().info(LocaleLoader.getString("UpdateChecker.New_Available"));
     }
 }

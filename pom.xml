@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.me.tft_02.ghosts</groupId>
 	<artifactId>Ghosts</artifactId>
-	<version>0.0.1-dev</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>Ghosts</name>
 	<url>https://github.com/TfT-02/Ghosts</url>
 	<issueManagement>
@@ -97,7 +97,7 @@
     <distributionManagement>
         <repository>
             <id>Ghosts-repo</id>
-            <url>http://jenkins.genesis-mc.com/plugin/repository/project/Ghosts/</url>
+            <url>file:///var/lib/jenkins/repo</url>
         </repository>
     </distributionManagement>
 	<properties>
