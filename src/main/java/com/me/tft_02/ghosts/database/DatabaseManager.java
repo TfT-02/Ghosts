@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.bukkit.Location;
@@ -26,13 +26,13 @@ public class DatabaseManager {
 
     public static ConcurrentLinkedQueue<TombBlock> tombList = new ConcurrentLinkedQueue<TombBlock>();
     public static HashMap<Location, TombBlock> tombBlockList = new HashMap<Location, TombBlock>();
-    public static HashMap<String, ArrayList<TombBlock>> playerTombList = new HashMap<String, ArrayList<TombBlock>>();
+    public static HashMap<UUID, ArrayList<TombBlock>> playerTombList = new HashMap<UUID, ArrayList<TombBlock>>();
 
     // Players that are actually ghosts
-    public static Set<String> ghosts = new HashSet<String>();
+    public static Set<UUID> ghosts = new HashSet<UUID>();
 
-    public static HashMap<String, Boolean> playerRespawns = new HashMap<String, Boolean>();
-    public static HashMap<String, Location> playerLastDeathLocation = new HashMap<String, Location>();
+    public static HashMap<UUID, Boolean> playerRespawns = new HashMap<UUID, Boolean>();
+    public static HashMap<UUID, Location> playerLastDeathLocation = new HashMap<UUID, Location>();
 
     public static void loadAllData() {
         for (World world : Ghosts.p.getServer().getWorlds()) {
@@ -67,13 +67,14 @@ public class DatabaseManager {
                 String line = scanner.nextLine().trim();
                 String[] split = line.split(":");
                 //player
-                String playerName = split[0];
+                UUID playerUniqueId = UUID.fromString(split[0]);
 
-                if (playerName == null) {
+                if (playerUniqueId == null) {
                     Ghosts.p.debug("Invalid entry in database " + file.getName());
                     continue;
                 }
-                ghosts.add(playerName);
+
+                ghosts.add(playerUniqueId);
             }
             scanner.close();
         }
@@ -86,15 +87,11 @@ public class DatabaseManager {
         try {
             File file = new File(worldsDirectory + "ghosts.db");
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-            for (Iterator<String> iter = ghosts.iterator(); iter.hasNext();) {
-                String playerName = iter.next();
+            for (UUID playerUniqueId : ghosts) {
 
-                StringBuilder builder = new StringBuilder();
-
-                bw.append(playerName);
+                bw.append(playerUniqueId.toString());
                 bw.append(":");
-
-                bw.append(builder.toString());
+//                bw.append("");
                 bw.newLine();
             }
             bw.close();
@@ -135,19 +132,20 @@ public class DatabaseManager {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
                 String[] split = line.split(":");
-                //block:largeblock:sign:owner:level:time
+                //block:largeblock:sign:ownerName:level:time
                 Block block = readBlock(split[0]);
                 Block largeBlock = readBlock(split[1]);
                 Block signBlock = readBlock(split[2]);
-                String owner = split[3];
-                int level = Integer.valueOf(split[4]);
-                long time = Long.valueOf(split[5]);
+                String ownerUniqueId = split[3];
+                String ownerName = split[4];
+                int level = Integer.valueOf(split[5]);
+                long time = Long.valueOf(split[6]);
 
-                if (block == null || owner == null) {
+                if (block == null || ownerName == null) {
                     Ghosts.p.debug("Invalid entry in database " + file.getName());
                     continue;
                 }
-                TombBlock tombBlock = new TombBlock(block, largeBlock, signBlock, owner, level, time);
+                TombBlock tombBlock = new TombBlock(block, largeBlock, signBlock, UUID.fromString(ownerUniqueId), ownerName, level, time);
                 tombList.offer(tombBlock);
                 // Used for quick tombStone lookup
                 tombBlockList.put(block.getLocation(), tombBlock);
@@ -158,10 +156,10 @@ public class DatabaseManager {
                     tombBlockList.put(signBlock.getLocation(), tombBlock);
                 }
 
-                ArrayList<TombBlock> playerList = playerTombList.get(owner);
+                ArrayList<TombBlock> playerList = playerTombList.get(ownerUniqueId);
                 if (playerList == null) {
                     playerList = new ArrayList<TombBlock>();
-                    playerTombList.put(owner, playerList);
+                    playerTombList.put(UUID.fromString(ownerUniqueId), playerList);
                 }
                 playerList.add(tombBlock);
             }
@@ -178,14 +176,12 @@ public class DatabaseManager {
         try {
             File file = new File(worldDirectory + "tombList.db");
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-            for (Iterator<TombBlock> iter = tombList.iterator(); iter.hasNext();) {
-                TombBlock tombBlock = iter.next();
+
+            for (TombBlock tombBlock : tombList) {
                 // Skip not this world
                 if (!tombBlock.getBlock().getWorld().getName().equalsIgnoreCase(worldName)) {
                     continue;
                 }
-
-                StringBuilder builder = new StringBuilder();
 
                 bw.append(printBlock(tombBlock.getBlock()));
                 bw.append(":");
@@ -193,13 +189,15 @@ public class DatabaseManager {
                 bw.append(":");
                 bw.append(printBlock(tombBlock.getSign()));
                 bw.append(":");
+                bw.append(tombBlock.getOwnerUniqueId().toString());
+                bw.append(":");
                 bw.append(tombBlock.getOwnerName());
                 bw.append(":");
                 bw.append(Integer.toString(tombBlock.getOwnerLevel()));
                 bw.append(":");
                 bw.append(String.valueOf(tombBlock.getTime()));
 
-                bw.append(builder.toString());
+//                bw.append("");
                 bw.newLine();
             }
             bw.close();
@@ -230,13 +228,13 @@ public class DatabaseManager {
         return world.getBlockAt(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
     }
 
-    public static HashMap<String, ArrayList<TombBlock>> getTombstoneList() {
+    public static HashMap<UUID, ArrayList<TombBlock>> getTombstoneList() {
         return playerTombList;
     }
 
     public static Location getLastDeathLocation(Player player) {
-        if (playerLastDeathLocation.containsKey(player.getName())) {
-            return playerLastDeathLocation.get(player.getName());
+        if (playerLastDeathLocation.containsKey(player.getUniqueId())) {
+            return playerLastDeathLocation.get(player.getUniqueId());
         }
         return null;
     }

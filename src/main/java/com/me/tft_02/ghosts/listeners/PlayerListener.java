@@ -62,7 +62,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!tombBlock.getOwnerName().equals(player.getName())) {
+        if (!tombBlock.getOwnerUniqueId().equals(player.getUniqueId())) {
             event.setCancelled(true);
             Ghosts.p.debug(player.getName() + " is not the owner!");
             return;
@@ -124,7 +124,7 @@ public class PlayerListener implements Listener {
     private void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        if (!DatabaseManager.playerRespawns.containsKey(player.getName())) {
+        if (!DatabaseManager.playerRespawns.containsKey(player.getUniqueId())) {
             return;
         }
 
@@ -145,7 +145,7 @@ public class PlayerListener implements Listener {
 
         player.sendMessage(LocaleLoader.getString("Ghost.Respawn"));
         event.setRespawnLocation(respawnLocation);
-        DatabaseManager.playerRespawns.put(player.getName(), false);
+        DatabaseManager.playerRespawns.put(player.getUniqueId(), false);
 
         //        PlayerManager.enableDoubleJump(player);
 

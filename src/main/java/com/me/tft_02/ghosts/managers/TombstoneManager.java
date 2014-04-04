@@ -146,7 +146,7 @@ public class TombstoneManager {
         }
 
         // Create a TombBlock for this tombstone
-        TombBlock tombBlock = new TombBlock(smallChest.getBlock(), (largeChest != null) ? largeChest.getBlock() : null, signBlock, player.getName(), player.getLevel() + 1, (System.currentTimeMillis() / 1000));
+        TombBlock tombBlock = new TombBlock(smallChest.getBlock(), (largeChest != null) ? largeChest.getBlock() : null, signBlock, player.getUniqueId() ,player.getName(), player.getLevel() + 1, (System.currentTimeMillis() / 1000));
 
         // Add tombstone to list
         DatabaseManager.tombList.offer(tombBlock);
@@ -161,10 +161,10 @@ public class TombstoneManager {
         }
 
         // Add tombstone to player lookup list
-        ArrayList<TombBlock> pList = DatabaseManager.playerTombList.get(player.getName());
+        ArrayList<TombBlock> pList = DatabaseManager.playerTombList.get(player.getUniqueId());
         if (pList == null) {
             pList = new ArrayList<TombBlock>();
-            DatabaseManager.playerTombList.put(player.getName(), pList);
+            DatabaseManager.playerTombList.put(player.getUniqueId(), pList);
         }
         pList.add(tombBlock);
 
@@ -239,7 +239,7 @@ public class TombstoneManager {
     }
 
     public boolean destroyAllTombstones(OfflinePlayer offlinePlayer) {
-        ArrayList<TombBlock> tombstoneList = DatabaseManager.getTombstoneList().get(offlinePlayer.getName());
+        ArrayList<TombBlock> tombstoneList = DatabaseManager.getTombstoneList().get(offlinePlayer.getUniqueId());
         if (tombstoneList.isEmpty()) {
             return false;
         }
@@ -265,7 +265,7 @@ public class TombstoneManager {
         Block block = tombBlock.getBlock();
 
         if (!block.getChunk().load()) {
-            Ghosts.p.getLogger().severe("Error loading world chunk trying to remove tombstone at " + block.getX() + "," + block.getY() + "," + block.getZ() + " owned by " + tombBlock.getOwner() + ".");
+            Ghosts.p.getLogger().severe("Error loading world chunk trying to remove tombstone at " + block.getX() + "," + block.getY() + "," + block.getZ() + " owned by " + tombBlock.getOwnerName() + ".");
             return;
         }
 
@@ -281,7 +281,7 @@ public class TombstoneManager {
             return;
         }
 
-        OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwner());
+        OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwnerUniqueId());
         if (offlinePlayer.isOnline()) {
             offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Tombstone.Broken"));
         }
@@ -302,14 +302,14 @@ public class TombstoneManager {
         }
 
         // Remove just this tomb from tombList
-        ArrayList<TombBlock> tList = DatabaseManager.playerTombList.get(tombBlock.getOwner());
+        ArrayList<TombBlock> tList = DatabaseManager.playerTombList.get(tombBlock.getOwnerUniqueId());
         if (tList != null) {
             tList.remove(tombBlock);
             if (tList.size() == 0) {
                 // Player has no other tombs anymore
-                DatabaseManager.playerTombList.remove(tombBlock.getOwner());
+                DatabaseManager.playerTombList.remove(tombBlock.getOwnerUniqueId());
 
-                OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwner());
+                OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwnerUniqueId());
                 PlayerManager.resurrect(offlinePlayer);
             }
         }

@@ -120,8 +120,8 @@ public class EntityListener implements Listener {
         // GHOST MANAGER
         if (!Ghosts.p.getGhostManager().isGhost(player)) {
             Ghosts.p.getGhostManager().setGhost(player, true);
-            DatabaseManager.playerRespawns.put(player.getName(), true);
-            DatabaseManager.playerLastDeathLocation.put(player.getName(), player.getLocation());
+            DatabaseManager.playerRespawns.put(player.getUniqueId(), true);
+            DatabaseManager.playerLastDeathLocation.put(player.getUniqueId(), player.getLocation());
         }
     }
 }

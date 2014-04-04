@@ -1,5 +1,7 @@
 package com.me.tft_02.ghosts.datatypes;
 
+import java.util.UUID;
+
 import org.bukkit.block.Block;
 
 public class TombBlock {
@@ -7,14 +9,16 @@ public class TombBlock {
     private Block largeBlock;
     private Block sign;
     private long time;
-    private String owner;
+    private UUID ownerUniqueId;
+    private String ownerName;
     private int ownerLevel;
 
-    public TombBlock(Block block, Block largeBlock, Block sign, String owner, int ownerLevel, long time) {
+    public TombBlock(Block block, Block largeBlock, Block sign, UUID ownerUniqueId, String ownerName, int ownerLevel, long time) {
         this.block = block;
         this.largeBlock = largeBlock;
         this.sign = sign;
-        this.owner = owner;
+        this.ownerUniqueId = ownerUniqueId;
+        this.ownerName = ownerName;
         this.ownerLevel = ownerLevel;
         this.time = time;
     }
@@ -31,8 +35,16 @@ public class TombBlock {
         return sign;
     }
 
-    public String getOwner() {
-        return owner;
+    public UUID getOwnerUniqueId() {
+        return ownerUniqueId;
+    }
+
+    public void setOwnerUniqueId(UUID ownerUniqueId) {
+        this.ownerUniqueId = ownerUniqueId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
     }
 
     public int getOwnerLevel() {

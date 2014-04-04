@@ -99,7 +99,7 @@ public class GhostManager {
      * @return TRUE if it is, FALSE otherwise.
      */
     public boolean isGhost(Player player) {
-        return player != null && hasPlayer(player) && DatabaseManager.ghosts.contains(player.getName());
+        return player != null && hasPlayer(player) && DatabaseManager.ghosts.contains(player.getUniqueId());
     }
 
     /**
@@ -124,11 +124,11 @@ public class GhostManager {
         }
 
         if (isGhost) {
-            DatabaseManager.ghosts.add(player.getName());
+            DatabaseManager.ghosts.add(player.getUniqueId());
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 15));
         }
-        else if (!isGhost) {
-            DatabaseManager.ghosts.remove(player.getName());
+        else {
+            DatabaseManager.ghosts.remove(player.getUniqueId());
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
     }
@@ -154,7 +154,7 @@ public class GhostManager {
 
         // Remove all non-ghost players
         for (Iterator<OfflinePlayer> it = players.iterator(); it.hasNext();) {
-            if (!DatabaseManager.ghosts.contains(it.next().getName())) {
+            if (!DatabaseManager.ghosts.contains(it.next().getUniqueId())) {
                 it.remove();
             }
         }
@@ -172,7 +172,7 @@ public class GhostManager {
 
     private OfflinePlayer[] toArray(Set<OfflinePlayer> players) {
         if (players != null) {
-            return players.toArray(new OfflinePlayer[0]);
+            return players.toArray(new OfflinePlayer[players.size()]);
         }
         else {
             return EMPTY_PLAYERS;

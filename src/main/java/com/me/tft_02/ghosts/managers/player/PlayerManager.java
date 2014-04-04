@@ -29,7 +29,7 @@ public class PlayerManager {
             offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect"));
         }
 
-        return DatabaseManager.ghosts.remove(offlinePlayer.getName());
+        return DatabaseManager.ghosts.remove(offlinePlayer.getUniqueId());
     }
 
     public static void quickLoot(PlayerInteractEvent event, Player player, TombBlock tombBlock) {
