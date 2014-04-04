@@ -193,7 +193,7 @@ public class DatabaseManager {
                 bw.append(":");
                 bw.append(printBlock(tombBlock.getSign()));
                 bw.append(":");
-                bw.append(tombBlock.getOwner());
+                bw.append(tombBlock.getOwnerName());
                 bw.append(":");
                 bw.append(Integer.toString(tombBlock.getOwnerLevel()));
                 bw.append(":");

@@ -11,11 +11,13 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.runnables.player.UpdateInventoryTask;
 import com.me.tft_02.ghosts.util.Misc;
 
 public class PlayerManager {
@@ -23,14 +25,11 @@ public class PlayerManager {
     private static HashMap<String, Integer> lastSpook = new HashMap<String, Integer>();
 
     public static boolean resurrect(OfflinePlayer offlinePlayer) {
-        if (!DatabaseManager.ghosts.remove(offlinePlayer.getName())) {
-            return false;
-        }
-
         if (offlinePlayer.isOnline()) {
             offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect"));
         }
-        return true;
+
+        return DatabaseManager.ghosts.remove(offlinePlayer.getName());
     }
 
     public static void quickLoot(PlayerInteractEvent event, Player player, TombBlock tombBlock) {
@@ -41,35 +40,34 @@ public class PlayerManager {
 
         for (int cSlot = 0; cSlot < items.length; cSlot++) {
             ItemStack item = items[cSlot];
-            if (item == null) {
+            if (item == null || item.getType() == Material.AIR) {
                 continue;
             }
-            if (item.getType() == Material.AIR) {
-                continue;
-            }
+
             int slot = player.getInventory().firstEmpty();
             if (slot == -1) {
                 overflow = true;
                 break;
             }
+
             player.getInventory().setItem(slot, item);
             smallChest.getInventory().clear(cSlot);
         }
+
         if (largeChest != null) {
             items = largeChest.getInventory().getContents();
             for (int cSlot = 0; cSlot < items.length; cSlot++) {
                 ItemStack item = items[cSlot];
-                if (item == null) {
+                if (item == null || item.getType() == Material.AIR) {
                     continue;
                 }
-                if (item.getType() == Material.AIR) {
-                    continue;
-                }
+
                 int slot = player.getInventory().firstEmpty();
                 if (slot == -1) {
                     overflow = true;
                     break;
                 }
+
                 player.getInventory().setItem(slot, item);
                 largeChest.getInventory().clear(cSlot);
             }
@@ -87,7 +85,7 @@ public class PlayerManager {
         }
 
         // Manually update inventory for the time being.
-        player.updateInventory();
+        new UpdateInventoryTask(player).runTask(Ghosts.p);
     }
 
     public static void spook(Player player) {

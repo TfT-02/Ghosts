@@ -53,7 +53,7 @@ public class BlockListener implements Listener {
 
         TombstoneManager.removeTomb(tombBlock, true);
 
-        Player owner = Ghosts.p.getServer().getPlayer(tombBlock.getOwner());
+        Player owner = Ghosts.p.getServer().getPlayer(tombBlock.getOwnerName());
         if (owner != null) {
             owner.sendMessage(LocaleLoader.getString("Tombstone.Was_Destroyed", player.getName()));
         }

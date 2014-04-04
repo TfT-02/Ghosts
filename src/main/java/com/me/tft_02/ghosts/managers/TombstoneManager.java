@@ -141,8 +141,9 @@ public class TombstoneManager {
             }
         }
         // Don't remove a sign if they get a free one
-        if (Permissions.freesign(player))
+        if (Permissions.freesign(player)) {
             removeSignCount -= 1;
+        }
 
         // Create a TombBlock for this tombstone
         TombBlock tombBlock = new TombBlock(smallChest.getBlock(), (largeChest != null) ? largeChest.getBlock() : null, signBlock, player.getName(), player.getLevel() + 1, (System.currentTimeMillis() / 1000));

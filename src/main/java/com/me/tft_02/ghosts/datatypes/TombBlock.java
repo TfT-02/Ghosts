@@ -19,10 +19,6 @@ public class TombBlock {
         this.time = time;
     }
 
-    public long getTime() {
-        return time;
-    }
-
     public Block getBlock() {
         return block;
     }
@@ -41,5 +37,9 @@ public class TombBlock {
 
     public int getOwnerLevel() {
         return ownerLevel;
+    }
+
+    public long getTime() {
+        return time;
     }
 }

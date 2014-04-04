@@ -83,14 +83,12 @@ public class EntityListener implements Listener {
         Player player = (Player) shooter;
 
         for (LivingEntity entity : event.getAffectedEntities()) {
-            if (entity instanceof Player) {
-                Player target = (Player) entity;
+            if (!(entity instanceof Player) || player == entity) {
+                continue;
+            }
 
-                if (player != target) {
-                    if (Ghosts.p.getGhostManager().isGhost(player)) {
-                        event.setIntensity(target, 0);
-                    }
-                }
+            if (Ghosts.p.getGhostManager().isGhost(player)) {
+                event.setIntensity(entity, 0);
             }
         }
     }

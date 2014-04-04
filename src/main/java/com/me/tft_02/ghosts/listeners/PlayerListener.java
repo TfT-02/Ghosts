@@ -62,7 +62,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (!tombBlock.getOwner().equals(player.getName())) {
+        if (!tombBlock.getOwnerName().equals(player.getName())) {
             event.setCancelled(true);
             Ghosts.p.debug(player.getName() + " is not the owner!");
             return;
