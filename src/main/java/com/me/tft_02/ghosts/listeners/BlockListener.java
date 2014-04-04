@@ -26,6 +26,7 @@ public class BlockListener implements Listener {
 
         if (!BlockUtils.isTombStone(block.getLocation())) {
             if (Ghosts.p.getGhostManager().isGhost(player)) {
+                player.sendMessage(LocaleLoader.getString("Ghost.Block_Cannot_Break"));
                 event.setCancelled(true);
             }
             return;
