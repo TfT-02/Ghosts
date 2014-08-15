@@ -1,9 +1,13 @@
 package com.me.tft_02.ghosts.listeners;
 
+import java.util.List;
+
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -19,16 +23,20 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.items.ResurrectionScroll;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
+import com.me.tft_02.ghosts.managers.player.GhostManager;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.runnables.ghosts.ExplosionTrailTask;
 import com.me.tft_02.ghosts.runnables.ghosts.GroundExplosionTask;
 import com.me.tft_02.ghosts.runnables.ghosts.IgniteTask;
+import com.me.tft_02.ghosts.util.BlockUtils;
 import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.Permissions;
 
@@ -75,7 +83,48 @@ public class PlayerListener implements Listener {
     }
 
     /**
-     * Monitor PlayerInteractEntityEvent events.
+     * Monitor PlayerInteractEvents.
+     *
+     * @param event The event to monitor
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerInteractMonitor(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
+
+        switch (event.getAction()) {
+            case RIGHT_CLICK_BLOCK:
+                Block block = event.getClickedBlock();
+                BlockState blockState = block.getState();
+
+                /* ACTIVATION & ITEM CHECKS */
+                if (BlockUtils.canActivateAbilities(blockState)) {
+                    ResurrectionScroll.activationCheck(player);
+                }
+
+                break;
+
+            case RIGHT_CLICK_AIR:
+                /* ITEM CHECKS */
+                ResurrectionScroll.activationCheck(player);
+
+                break;
+
+            case LEFT_CLICK_AIR:
+            case LEFT_CLICK_BLOCK:
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Watch PlayerInteractEntityEvent events.
      * 
      * @param event The event to watch
      */
@@ -87,7 +136,10 @@ public class PlayerListener implements Listener {
         if (entity instanceof Player) {
             Player target = (Player) entity;
 
-            if (Ghosts.p.getGhostManager().isGhost(player) || Ghosts.p.getGhostManager().isGhost(target)) {
+            boolean resurrectionScroll = ResurrectionScroll.activationCheck(player, target);
+            GhostManager ghostManager = Ghosts.p.getGhostManager();
+
+            if (!resurrectionScroll && (ghostManager.isGhost(player) || ghostManager.isGhost(target))) {
                 event.setCancelled(true);
             }
         }
@@ -146,6 +198,15 @@ public class PlayerListener implements Listener {
         player.sendMessage(LocaleLoader.getString("Ghost.Respawn"));
         event.setRespawnLocation(respawnLocation);
         DatabaseManager.playerRespawns.put(player.getUniqueId(), false);
+
+        // Restore saved ghost items
+        if (DatabaseManager.playerGhostItems.containsKey(player.getUniqueId())) {
+            List<ItemStack> itemStacks = DatabaseManager.playerGhostItems.get(player.getUniqueId());
+            for (ItemStack itemStack : itemStacks) {
+                player.getInventory().addItem(itemStack);
+            }
+            DatabaseManager.playerGhostItems.remove(player.getUniqueId());
+        }
 
         //        PlayerManager.enableDoubleJump(player);
 

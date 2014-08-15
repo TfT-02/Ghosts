@@ -2,6 +2,8 @@ package com.me.tft_02.ghosts.config;
 
 import java.util.List;
 
+import org.bukkit.Material;
+
 public class Config extends AutoUpdateConfigLoader {
     private static Config instance;
 
@@ -64,6 +66,12 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getThunder() { return config.getBoolean("Respawn.Thunder", true); }
     public int getMinimumRange() { return config.getInt("Respawn.Minimum_Range", 40); }
     public int getMaximumRange() { return config.getInt("Respawn.Maximum_Range", 100); }
+
+    /* ITEMS */
+    public int getResurrectionScrollUseCost() { return config.getInt("Items.Resurrection_Scroll.Use_Cost", 1); }
+    public Material getResurrectionScrollItem() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.Item_Name", "PAPER")); }
+    public Material getResurrectionScrollIngredientEdges() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.IngredientEdges", "PAPER")); }
+    public Material getResurrectionScrollIngredientMiddle() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.IngredientMiddle", "GLOWSTONE_DUST")); }
 
     /* MISC SETTINGS */
     public String getDateFormat() { return config.getString("Misc.Date_Format", "MM/dd/yyyy"); }

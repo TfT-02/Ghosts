@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
@@ -32,6 +34,7 @@ public class DatabaseManager {
     public static Set<UUID> ghosts = new HashSet<UUID>();
 
     public static HashMap<UUID, Boolean> playerRespawns = new HashMap<UUID, Boolean>();
+    public static HashMap<UUID, List<ItemStack>> playerGhostItems = new HashMap<UUID, List<ItemStack>>();
     public static HashMap<UUID, Location> playerLastDeathLocation = new HashMap<UUID, Location>();
 
     public static void loadAllData() {

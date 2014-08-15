@@ -2,6 +2,7 @@ package com.me.tft_02.ghosts.managers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,8 +12,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.Ghosts;
@@ -28,8 +27,7 @@ import com.me.tft_02.ghosts.util.Permissions;
 
 public class TombstoneManager {
 
-    public static boolean createTombstone(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+    public static boolean createTombstone(Player player, List<ItemStack> drops) {
         Location location = player.getLocation();
         Block block = player.getWorld().getBlockAt(location);
 
@@ -52,7 +50,7 @@ public class TombstoneManager {
         // Check if the player has a chest.
         int playerChestCount = 0;
         int playerSignCount = 0;
-        for (ItemStack item : event.getDrops()) {
+        for (ItemStack item : drops) {
             if (item == null) {
                 continue;
             }
@@ -102,7 +100,7 @@ public class TombstoneManager {
         int maxSlot = smallChest.getInventory().getSize();
 
         // Check if they need a large chest.
-        if (event.getDrops().size() > maxSlot) {
+        if (drops.size() > maxSlot) {
             // If they are allowed, spawn a large chest to catch their entire inventory.
             if (largeBlock != null && Permissions.largechest(player)) {
                 removeChestCount = 2;
@@ -170,12 +168,13 @@ public class TombstoneManager {
 
         DatabaseManager.saveTombList(player.getWorld().getName());
 
-        // Next get the players inventory using the getDrops() method.
-        for (Iterator<ItemStack> iter = event.getDrops().listIterator(); iter.hasNext();) {
+        // Next get the players inventory using drops.
+        for (Iterator<ItemStack> iter = drops.listIterator(); iter.hasNext();) {
             ItemStack item = iter.next();
             if (item == null) {
                 continue;
             }
+
             // Take the chest(s)
             if (removeChestCount > 0 && item.getType() == Material.CHEST) {
                 if (item.getAmount() >= removeChestCount) {
@@ -221,15 +220,15 @@ public class TombstoneManager {
             }
         }
 
-        sendNotificationMessages(player, event);
+        sendNotificationMessages(player, drops);
         return true;
     }
 
-    private static void sendNotificationMessages(Player player, EntityDeathEvent event) {
+    private static void sendNotificationMessages(Player player, List<ItemStack> drops) {
         player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Stored"));
 
-        if (event.getDrops().size() > 0) {
-            player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Overflow", event.getDrops().size()));
+        if (drops.size() > 0) {
+            player.sendMessage(LocaleLoader.getString("Tombstone.Inventory_Overflow", drops.size()));
         }
 
         int breakTime = ((Config.getInstance().getLevelBasedTime() > 0) ? Math.min((player.getLevel() + 1) * Config.getInstance().getLevelBasedTime(), Config.getInstance().getTombRemoveTime()) : Config.getInstance().getTombRemoveTime());

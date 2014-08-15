@@ -1,5 +1,7 @@
 package com.me.tft_02.ghosts.listeners;
 
+import java.util.List;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,11 +13,13 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
 
 public class EntityListener implements Listener {
@@ -101,7 +105,10 @@ public class EntityListener implements Listener {
             return;
         }
 
-        if (event.getDrops().size() == 0) {
+        List<ItemStack> drops = event.getDrops();
+        drops = ItemUtils.saveGhostItems(player, drops);
+
+        if (drops.size() == 0) {
             return;
         }
 
@@ -113,9 +120,12 @@ public class EntityListener implements Listener {
         //            }
         //        }
 
-        if (!TombstoneManager.createTombstone(event)) {
+        if (!TombstoneManager.createTombstone(event.getEntity(), drops)) {
             return;
         }
+
+        // Tombstone succesfully created, clear drops
+        event.getDrops().clear();
 
         // GHOST MANAGER
         if (!Ghosts.p.getGhostManager().isGhost(player)) {

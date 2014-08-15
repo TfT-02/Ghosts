@@ -29,6 +29,47 @@ public class BlockUtils {
     }
 
     /**
+     * Check if a given block should allow for the activation of abilities
+     *
+     * @param blockState The {@link BlockState} of the block to check
+     * @return true if the block should allow ability activation, false otherwise
+     */
+    public static boolean canActivateAbilities(BlockState blockState) {
+        switch (blockState.getType()) {
+            case BED_BLOCK:
+            case BREWING_STAND:
+            case BOOKSHELF:
+            case BURNING_FURNACE:
+            case CAKE_BLOCK:
+            case CHEST:
+            case DISPENSER:
+            case ENCHANTMENT_TABLE:
+            case ENDER_CHEST:
+            case FENCE_GATE:
+            case FURNACE:
+            case IRON_DOOR_BLOCK:
+            case JUKEBOX:
+            case LEVER:
+            case NOTE_BLOCK:
+            case STONE_BUTTON:
+            case WOOD_BUTTON:
+            case TRAP_DOOR:
+            case WALL_SIGN:
+            case WOODEN_DOOR:
+            case WORKBENCH:
+            case BEACON:
+            case ANVIL:
+            case DROPPER:
+            case HOPPER:
+            case TRAPPED_CHEST:
+                return false;
+
+            default:
+                return true;
+        }
+    }
+
+    /**
      * Check if a given block cannot be replaced
      *
      * @param blockState The {@link BlockState} of the block to check

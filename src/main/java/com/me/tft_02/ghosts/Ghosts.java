@@ -10,6 +10,7 @@ import com.me.tft_02.ghosts.commands.GhostsCommand;
 import com.me.tft_02.ghosts.commands.ResurrectCommand;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.items.ResurrectionScroll;
 import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
@@ -50,6 +51,8 @@ public class Ghosts extends JavaPlugin {
         setupFilePaths();
 
         registerEvents();
+        registerCustomRecipes();
+
         getCommand("ghosts").setExecutor(new GhostsCommand());
         getCommand("resurrect").setExecutor(new ResurrectCommand());
 
@@ -113,6 +116,10 @@ public class Ghosts extends JavaPlugin {
         pluginManager.registerEvents(new PlayerListener(), this);
         pluginManager.registerEvents(new BlockListener(), this);
         pluginManager.registerEvents(new EntityListener(), this);
+    }
+
+    private void registerCustomRecipes() {
+        getServer().addRecipe(ResurrectionScroll.getResurrectionScrollRecipe());
     }
 
     /**
