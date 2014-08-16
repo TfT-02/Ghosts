@@ -64,12 +64,12 @@ Ghost:
         - SWIFTNESS
 
 Items:
-Resurrection_Scroll:
-    Use_Cost: 1
-    Item_Name: PAPER
+    Resurrection_Scroll:
+        Use_Cost: 1
+        Item_Name: PAPER
 
-    IngredientEdges: PAPER
-    IngredientMiddle: GLOWSTONE_DUST
+        IngredientEdges: PAPER
+        IngredientMiddle: GLOWSTONE_DUST
 
 Misc:
     Date_Format: MM/dd/yyyy
