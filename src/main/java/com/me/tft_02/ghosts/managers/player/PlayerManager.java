@@ -25,11 +25,17 @@ public class PlayerManager {
     private static HashMap<String, Integer> lastSpook = new HashMap<String, Integer>();
 
     public static boolean resurrect(OfflinePlayer offlinePlayer) {
-        if (offlinePlayer.isOnline()) {
-            offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect"));
+        return resurrect(offlinePlayer, null);
+    }
+
+    public static boolean resurrect(OfflinePlayer offlinePlayer, String notification) {
+        boolean success = DatabaseManager.ghosts.remove(offlinePlayer.getUniqueId());
+
+        if (success && offlinePlayer.isOnline()) {
+            offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect") + " " +  notification);
         }
 
-        return DatabaseManager.ghosts.remove(offlinePlayer.getUniqueId());
+        return success;
     }
 
     public static void quickLoot(PlayerInteractEvent event, Player player, TombBlock tombBlock) {

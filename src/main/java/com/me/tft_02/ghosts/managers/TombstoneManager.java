@@ -3,6 +3,7 @@ package com.me.tft_02.ghosts.managers;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -304,16 +305,17 @@ public class TombstoneManager {
             DatabaseManager.tombBlockList.remove(tombBlock.getLargeBlock().getLocation());
         }
 
-        // Remove just this tomb from tombList
-        ArrayList<TombBlock> tList = DatabaseManager.playerTombList.get(tombBlock.getOwnerUniqueId());
-        if (tList != null) {
-            tList.remove(tombBlock);
-            if (tList.size() == 0) {
-                // Player has no other tombs anymore
-                DatabaseManager.playerTombList.remove(tombBlock.getOwnerUniqueId());
+        UUID ownerUniqueId = tombBlock.getOwnerUniqueId();
+        ArrayList<TombBlock> tombList = DatabaseManager.playerTombList.get(ownerUniqueId);
 
-                OfflinePlayer offlinePlayer = Ghosts.p.getServer().getOfflinePlayer(tombBlock.getOwnerUniqueId());
-                PlayerManager.resurrect(offlinePlayer);
+        // Remove just this tomb from tombList
+        if (tombList != null) {
+            tombList.remove(tombBlock);
+            if (tombList.size() == 0) {
+                // Player has no other tombs anymore
+                DatabaseManager.playerTombList.remove(ownerUniqueId);
+
+                PlayerManager.resurrect(Ghosts.p.getServer().getOfflinePlayer(ownerUniqueId));
             }
         }
 
