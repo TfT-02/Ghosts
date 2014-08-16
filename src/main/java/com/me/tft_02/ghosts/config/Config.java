@@ -35,12 +35,12 @@ public class Config extends AutoUpdateConfigLoader {
     public List<String> getDisabledWorlds() { return config.getStringList("General.Disabled_In_Worlds"); }
 
     /* TOMBSTONE SETTINGS */
-    public boolean getPreventDestroy() { return config.getBoolean("Tombstones.Prevent_Destroy", true); }
-    public boolean getNoInterfere() { return config.getBoolean("Tombstones.No_Interfere", true); }
-    public boolean getVoidCheck() { return config.getBoolean("Tombstones.Void_Check", true); }
-    public boolean getCreeperProtection() { return config.getBoolean("Tombstones.Creeper_Protection", true); }
-
-    public boolean getUseTombstoneSign() { return config.getBoolean("Tombstones.Place_Sign", true); }
+    // General Tombstone Settings
+    public boolean getPreventDestroy() { return config.getBoolean("Tombstones.General.Prevent_Destroy", true); }
+    public boolean getNoInterfere() { return config.getBoolean("Tombstones.General.No_Interfere", true); }
+    public boolean getVoidCheck() { return config.getBoolean("Tombstones.General.Void_Check", true); }
+    public boolean getCreeperProtection() { return config.getBoolean("Tombstones.General.Creeper_Protection", true); }
+    public boolean getUseTombstoneSign() { return config.getBoolean("Tombstones.General.Place_Sign", true); }
 
     public String signMessage[] = new String[] {
             "{name}",

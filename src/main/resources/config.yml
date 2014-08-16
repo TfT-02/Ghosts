@@ -31,6 +31,18 @@ General:
         - worldName
 
 Tombstones:
+    General:
+        # Prevent players from destroying tombstones?
+        Prevent_Destroy: true
+        # Make sure no nearby chests are interfering with tombstones?
+        No_Interfere: true
+        # Check if tombstone would be placed inside the void?
+        Void_Check: true
+        # Protect tombstones from creeper explosions?
+        Creeper_Protection: true
+        # Place a sign on the tombstone?
+        Place_Sign: true
+
     Remove:
         # Remove tombstones after x seconds
         Time: 3600
