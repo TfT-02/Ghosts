@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.bukkit.Material;
 
+import com.me.tft_02.ghosts.datatypes.RecoveryType;
+import com.me.tft_02.ghosts.items.ResurrectionScroll.Tier;
+import com.me.tft_02.ghosts.util.StringUtils;
+
 public class Config extends AutoUpdateConfigLoader {
     private static Config instance;
 
@@ -48,6 +52,21 @@ public class Config extends AutoUpdateConfigLoader {
             "{date}",
             "{time}"
     };
+
+    // Losses Settings
+    public int getLossesVanillaXP() { return config.getInt("Tombstones.Losses.Vanilla_XP", 10); }
+    public int getLossesmcMMOXP() { return config.getInt("Tombstones.Losses.mcMMO_XP", 10); }
+    public int getLossesItems() { return config.getInt("Tombstones.Losses.Items", 100); }
+
+    // Recovery Settings
+    public int getRecoveryVanillaXP(RecoveryType recoveryType, Tier tier) { return config.getInt("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Vanilla_XP"); }
+    public int getRecoverymcMMOXP(RecoveryType recoveryType, Tier tier) { return config.getInt("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".mcMMO_XP"); }
+    public int getRecoveryItems(RecoveryType recoveryType, Tier tier) { return config.getInt("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Items"); }
+    public boolean getDestroyTomb(RecoveryType recoveryType, Tier tier) { return config.getBoolean("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Destroy_Tomb"); }
+
+    private String checkTier(RecoveryType recoveryType, Tier tier) {
+        return (recoveryType == RecoveryType.RESURRECTION_SCROLL) ? ".Tier_" + tier.toNumerical() : "";
+    }
 
     // Remove Settings
     public int getTombRemoveTime() { return config.getInt("Tombstones.Remove.Time", 3600); }

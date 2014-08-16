@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -15,14 +14,54 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
+import com.me.tft_02.ghosts.datatypes.RecoveryType;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
 
 public class ResurrectionScroll {
-    private static Location location;
-
     private ResurrectionScroll() {}
+
+    public enum Tier {
+        THREE(3),
+        TWO(2),
+        ONE(1);
+
+        int numerical;
+
+        private Tier(int numerical) {
+            this.numerical = numerical;
+        }
+
+        public int toNumerical() {
+            return numerical;
+        }
+
+        public static Tier fromNumerical(int numerical) {
+            for (Tier tier : Tier.values()) {
+                if (tier.toNumerical() == numerical) {
+                    return tier;
+                }
+            }
+            return null;
+        }
+
+        protected int getRecoveryVanillaXP() {
+            return Config.getInstance().getRecoveryVanillaXP(RecoveryType.RESURRECTION_SCROLL, this);
+        }
+
+        protected int getRecoverymcMMOXP() {
+            return Config.getInstance().getRecoverymcMMOXP(RecoveryType.RESURRECTION_SCROLL, this);
+        }
+
+        protected int getRecoveryItems() {
+            return Config.getInstance().getRecoveryItems(RecoveryType.RESURRECTION_SCROLL, this);
+        }
+
+        protected boolean getDestroyTomb() {
+            return Config.getInstance().getDestroyTomb(RecoveryType.RESURRECTION_SCROLL, this);
+        }
+    }
 
     public static void activationCheck(Player player) {
         activationCheck(player, null);

@@ -43,6 +43,44 @@ Tombstones:
         # Place a sign on the tombstone?
         Place_Sign: true
 
+    # Percentage amount of XP that is lost upon death. (10% default)
+    # Vanilla_XP: for vanilla Minecraft experience orbs/levels
+    # mcMMO_XP: for mcMMO levels and experience
+    # Items: Percentage of items stored in a tombstone (100% default)
+    Losses:
+        Vanilla_XP: 10
+        mcMMO_XP: 10
+        Items: 100
+
+    # When finding a tomb or using scrolls, how much of the lost
+    # experience and items should be recovered?
+    Recovery:
+        Find_Tomb:
+            Vanilla_XP: 75
+            mcMMO_XP: 75
+            Items: 98
+        Resurrection_Scroll:
+            Tier_1:
+                Vanilla_XP: 50
+                mcMMO_XP: 50
+                Items: 0
+                Destroy_Tomb: true
+            Tier_2:
+                Vanilla_XP: 50
+                mcMMO_XP: 50
+                Items: 80
+                Destroy_Tomb: true
+            Tier_3:
+                Vanilla_XP: 75
+                mcMMO_XP: 75
+                Items: 80
+                Destroy_Tomb: true
+        Give_Up:
+            Vanilla_XP: 0
+            mcMMO_XP: 0
+            Items: 0
+            Destroy_Tomb: true
+
     Remove:
         # Remove tombstones after x seconds
         Time: 3600
