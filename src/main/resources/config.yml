@@ -40,6 +40,7 @@ Tombstones:
         # player's level with Level_Based_Time.
         Level_Based_Time: 0
 
+        After_Quickloot: true
         When_Empty: true
         Keep_Until_Empty: false
 

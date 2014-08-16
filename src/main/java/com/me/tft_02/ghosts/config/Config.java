@@ -32,8 +32,6 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getPreferBeta() { return config.getBoolean("General.Prefer_Beta", false); }
     public boolean getVerboseLoggingEnabled() { return config.getBoolean("General.Verbose_Logging", false); }
     public boolean getConfigOverwriteEnabled() { return config.getBoolean("General.Config_Update_Overwrite", true); }
-
-    public boolean getDestroyQuickloot() { return config.getBoolean("Removal.Destroy_Quickloot", true); }
     public List<String> getDisabledWorlds() { return config.getStringList("General.Disabled_In_Worlds"); }
 
     /* TOMBSTONE SETTINGS */
@@ -54,6 +52,7 @@ public class Config extends AutoUpdateConfigLoader {
     // Remove Settings
     public int getTombRemoveTime() { return config.getInt("Tombstones.Remove.Time", 3600); }
     public int getLevelBasedTime() { return config.getInt("Tombstones.Remove.Level_Based_Time", 0); }
+    public boolean getDestroyQuickloot() { return config.getBoolean("Tombstones.Remove.After_Quickloot", true); }
     public boolean getRemoveWhenEmpty() { return config.getBoolean("Tombstones.Remove.When_Empty", true); }
     public boolean getKeepUntilEmpty() { return config.getBoolean("Tombstones.Remove.Keep_Until_Empty", false); }
 
