@@ -33,9 +33,8 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getVerboseLoggingEnabled() { return config.getBoolean("General.Verbose_Logging", false); }
     public boolean getConfigOverwriteEnabled() { return config.getBoolean("General.Config_Update_Overwrite", true); }
 
-    public List<String> disableInWorlds;
-
     public boolean getDestroyQuickloot() { return config.getBoolean("Removal.Destroy_Quickloot", true); }
+    public List<String> getDisabledWorlds() { return config.getStringList("General.Disabled_In_Worlds"); }
 
     /* TOMBSTONE SETTINGS */
     public boolean getPreventDestroy() { return config.getBoolean("Tombstones.Prevent_Destroy", true); }

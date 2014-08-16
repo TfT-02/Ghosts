@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import com.me.tft_02.ghosts.Ghosts;
+import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.util.ItemUtils;
@@ -105,20 +106,16 @@ public class EntityListener implements Listener {
             return;
         }
 
+        if (Config.getInstance().getDisabledWorlds().contains(player.getWorld().getName())) {
+            return;
+        }
+
         List<ItemStack> drops = event.getDrops();
         drops = ItemUtils.saveGhostItems(player, drops);
 
         if (drops.size() == 0) {
             return;
         }
-
-        //        for (String world : Ghosts.p.disableInWorlds) {
-        //            String curWorld = player.getWorld().getName();
-        //            if (world.equalsIgnoreCase(curWorld)) {
-        //                player.sendMessage("Ghosts disabled in " + curWorld + ". Inv dropped.");
-        //                return;
-        //            }
-        //        }
 
         if (!TombstoneManager.createTombstone(event.getEntity(), drops)) {
             return;

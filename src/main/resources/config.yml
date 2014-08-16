@@ -26,6 +26,10 @@ General:
     # Should Ghosts over-write configs to update, or make new ones ending in .new?
     Config_Update_Overwrite: true
 
+    # Ghosts will be disabled for worlds in this list.
+    Disabled_In_Worlds:
+        - worldName
+
 Tombstones:
     Remove:
         # Remove tombstones after x seconds
