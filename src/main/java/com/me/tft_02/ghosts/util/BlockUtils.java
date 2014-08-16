@@ -149,8 +149,11 @@ public class BlockUtils {
             if (line.length() > 15) {
                 line = line.substring(0, 15);
             }
+
             sign.setLine(x, line);
         }
+
+        sign.update(true);
     }
 
     /**

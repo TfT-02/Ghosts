@@ -274,6 +274,10 @@ public class TombstoneManager {
             tombBlock.getLargeBlock().setType(Material.AIR);
         }
 
+        if (tombBlock.getSign() != null) {
+            tombBlock.getSign().setType(Material.AIR);
+        }
+
         removeTomb(tombBlock, true);
 
         if (!notify) {
