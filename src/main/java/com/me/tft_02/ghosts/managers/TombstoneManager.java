@@ -160,12 +160,12 @@ public class TombstoneManager {
         }
 
         // Add tombstone to player lookup list
-        ArrayList<TombBlock> pList = DatabaseManager.playerTombList.get(player.getUniqueId());
-        if (pList == null) {
-            pList = new ArrayList<TombBlock>();
-            DatabaseManager.playerTombList.put(player.getUniqueId(), pList);
+        ArrayList<TombBlock> playerTombList = DatabaseManager.playerTombList.get(player.getUniqueId());
+        if (playerTombList == null) {
+            playerTombList = new ArrayList<TombBlock>();
+            DatabaseManager.playerTombList.put(player.getUniqueId(), playerTombList);
         }
-        pList.add(tombBlock);
+        playerTombList.add(tombBlock);
 
         DatabaseManager.saveTombList(player.getWorld().getName());
 

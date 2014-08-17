@@ -20,6 +20,7 @@ import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.managers.player.GhostManager;
 import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
 
@@ -106,7 +107,7 @@ public class EntityListener implements Listener {
             return;
         }
 
-        if (Config.getInstance().getDisabledWorlds().contains(player.getWorld().getName())) {
+        if (GhostManager.isDisabledInWorld(player.getWorld())) {
             return;
         }
 
@@ -130,7 +131,7 @@ public class EntityListener implements Listener {
         if (!Ghosts.p.getGhostManager().isGhost(player)) {
             Ghosts.p.getGhostManager().setGhost(player, true);
             DatabaseManager.playerRespawns.put(player.getUniqueId(), true);
-            DatabaseManager.playerLastDeathLocation.put(player.getUniqueId(), player.getLocation());
+            DatabaseManager.setLastDeathLocation(player);
         }
     }
 }

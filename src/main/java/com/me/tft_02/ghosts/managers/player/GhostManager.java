@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -14,6 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 
 public class GhostManager {
@@ -195,5 +197,9 @@ public class GhostManager {
         if (closed) {
             throw new IllegalStateException("Ghost factory has closed. Cannot reuse instances.");
         }
+    }
+
+    public static boolean isDisabledInWorld(World world) {
+        return Config.getInstance().getDisabledWorlds().contains(world.getName());
     }
 }

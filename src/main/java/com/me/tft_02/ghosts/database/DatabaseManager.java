@@ -33,6 +33,7 @@ public class DatabaseManager {
     // Players that are actually ghosts
     public static Set<UUID> ghosts = new HashSet<UUID>();
 
+    // Combine these into one GhostPlayer object and save that instead
     public static HashMap<UUID, Boolean> playerRespawns = new HashMap<UUID, Boolean>();
     public static HashMap<UUID, List<ItemStack>> playerGhostItems = new HashMap<UUID, List<ItemStack>>();
     public static HashMap<UUID, Location> playerLastDeathLocation = new HashMap<UUID, Location>();
@@ -235,6 +236,10 @@ public class DatabaseManager {
 
     public static HashMap<UUID, ArrayList<TombBlock>> getTombstoneList() {
         return playerTombList;
+    }
+
+    public static void setLastDeathLocation(Player player) {
+        playerLastDeathLocation.put(player.getUniqueId(), player.getLocation());
     }
 
     public static Location getLastDeathLocation(Player player) {
