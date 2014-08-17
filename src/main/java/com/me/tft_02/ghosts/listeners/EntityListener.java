@@ -124,6 +124,8 @@ public class EntityListener implements Listener {
         // Tombstone succesfully created, clear drops
         event.getDrops().clear();
 
+        TombstoneManager.loseAndSaveXP(player, event.getDroppedExp());
+
         // GHOST MANAGER
         if (!Ghosts.p.getGhostManager().isGhost(player)) {
             Ghosts.p.getGhostManager().setGhost(player, true);

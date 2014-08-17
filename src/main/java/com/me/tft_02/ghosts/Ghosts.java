@@ -37,6 +37,9 @@ public class Ghosts extends JavaPlugin {
     // Jar Stuff
     public static File ghosts;
 
+    // Dependencies
+    private boolean mcMMOEnabled = false;
+
     // Update Check
     public boolean updateAvailable;
 
@@ -61,6 +64,7 @@ public class Ghosts extends JavaPlugin {
         DatabaseManager.loadAllData();
 
         scheduleTasks();
+        setupMcMMO();
 
         checkForUpdates();
 
@@ -89,6 +93,17 @@ public class Ghosts extends JavaPlugin {
 
     public void debug(String message) {
         getLogger().info("[Debug] " + message);
+    }
+
+    private void setupMcMMO() {
+        if (getServer().getPluginManager().isPluginEnabled("mcMMO")) {
+            mcMMOEnabled = true;
+            debug("mcMMO found!");
+        }
+    }
+
+    public boolean isMcMMOEnabled() {
+        return mcMMOEnabled;
     }
 
     /**
