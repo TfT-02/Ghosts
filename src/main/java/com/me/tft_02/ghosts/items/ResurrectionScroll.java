@@ -46,15 +46,15 @@ public class ResurrectionScroll {
             return null;
         }
 
-        protected int getRecoveryVanillaXP() {
+        protected double getRecoveryVanillaXP() {
             return Config.getInstance().getRecoveryVanillaXP(RecoveryType.RESURRECTION_SCROLL, this);
         }
 
-        protected int getRecoverymcMMOXP() {
+        protected double getRecoverymcMMOXP() {
             return Config.getInstance().getRecoverymcMMOXP(RecoveryType.RESURRECTION_SCROLL, this);
         }
 
-        protected int getRecoveryItems() {
+        protected double getRecoveryItems() {
             return Config.getInstance().getRecoveryItems(RecoveryType.RESURRECTION_SCROLL, this);
         }
 

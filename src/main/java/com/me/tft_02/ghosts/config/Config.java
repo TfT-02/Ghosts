@@ -54,13 +54,14 @@ public class Config extends AutoUpdateConfigLoader {
     };
 
     // Losses Settings
-    public int getLossesVanillaXP() { return config.getInt("Tombstones.Losses.Vanilla_XP", 10); }
-    public int getLossesItems() { return config.getInt("Tombstones.Losses.Items", 100); }
+    public double getLossesVanillaXP() { return config.getDouble("Tombstones.Losses.Vanilla_XP", 10.0); }
+    public boolean getLossesOverrideKeepLevel() { return config.getBoolean("Tombstones.Losses.Override_KeepLevel", true); }
+    public double getLossesItems() { return config.getDouble("Tombstones.Losses.Items", 100); }
 
     // Recovery Settings
-    public int getRecoveryVanillaXP(RecoveryType recoveryType, Tier tier) { return config.getInt("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Vanilla_XP"); }
-    public int getRecoverymcMMOXP(RecoveryType recoveryType, Tier tier) { return config.getInt("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".mcMMO_XP"); }
-    public int getRecoveryItems(RecoveryType recoveryType, Tier tier) { return config.getInt("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Items"); }
+    public double getRecoveryVanillaXP(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Vanilla_XP"); }
+    public double getRecoverymcMMOXP(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".mcMMO_XP"); }
+    public double getRecoveryItems(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Items"); }
     public boolean getDestroyTomb(RecoveryType recoveryType, Tier tier) { return config.getBoolean("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Destroy_Tomb"); }
 
     private String checkTier(RecoveryType recoveryType, Tier tier) {
