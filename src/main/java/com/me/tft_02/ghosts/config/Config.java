@@ -55,7 +55,6 @@ public class Config extends AutoUpdateConfigLoader {
 
     // Losses Settings
     public int getLossesVanillaXP() { return config.getInt("Tombstones.Losses.Vanilla_XP", 10); }
-    public int getLossesmcMMOXP() { return config.getInt("Tombstones.Losses.mcMMO_XP", 10); }
     public int getLossesItems() { return config.getInt("Tombstones.Losses.Items", 100); }
 
     // Recovery Settings

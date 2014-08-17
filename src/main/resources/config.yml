@@ -45,11 +45,9 @@ Tombstones:
 
     # Percentage amount of XP that is lost upon death. (10% default)
     # Vanilla_XP: for vanilla Minecraft experience orbs/levels
-    # mcMMO_XP: for mcMMO levels and experience
     # Items: Percentage of items stored in a tombstone (100% default)
     Losses:
         Vanilla_XP: 10
-        mcMMO_XP: 10
         Items: 100
 
     # When finding a tomb or using scrolls, how much of the lost
