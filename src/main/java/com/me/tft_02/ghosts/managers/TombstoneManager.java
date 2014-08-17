@@ -269,14 +269,14 @@ public class TombstoneManager {
             return;
         }
 
+        if (tombBlock.getSign() != null) {
+            tombBlock.getSign().setType(Material.AIR);
+        }
+
         block.setType(Material.AIR);
 
         if (tombBlock.getLargeBlock() != null) {
             tombBlock.getLargeBlock().setType(Material.AIR);
-        }
-
-        if (tombBlock.getSign() != null) {
-            tombBlock.getSign().setType(Material.AIR);
         }
 
         removeTomb(tombBlock, true);
