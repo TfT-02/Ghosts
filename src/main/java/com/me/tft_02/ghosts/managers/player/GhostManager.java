@@ -62,7 +62,7 @@ public class GhostManager {
                         setGhost(player, isGhost(player));
                     }
                     else {
-                        DatabaseManager.ghosts.remove(member.getName());
+                        DatabaseManager.ghosts.remove(member.getUniqueId());
                         ghostTeam.removePlayer(member);
                     }
                 }

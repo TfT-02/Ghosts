@@ -139,7 +139,7 @@ public class DatabaseManager {
                 Block block = readBlock(split[0]);
                 Block largeBlock = readBlock(split[1]);
                 Block signBlock = readBlock(split[2]);
-                String ownerUniqueId = split[3];
+                String ownerUniqueIdString = split[3];
                 String ownerName = split[4];
                 int level = Integer.valueOf(split[5]);
                 long time = Long.valueOf(split[6]);
@@ -148,7 +148,9 @@ public class DatabaseManager {
                     Ghosts.p.debug("Invalid entry in database " + file.getName());
                     continue;
                 }
-                TombBlock tombBlock = new TombBlock(block, largeBlock, signBlock, UUID.fromString(ownerUniqueId), ownerName, level, time);
+
+                UUID ownerUniqueId = UUID.fromString(ownerUniqueIdString);
+                TombBlock tombBlock = new TombBlock(block, largeBlock, signBlock, ownerUniqueId, ownerName, level, time);
                 tombList.offer(tombBlock);
                 // Used for quick tombStone lookup
                 tombBlockList.put(block.getLocation(), tombBlock);
@@ -162,7 +164,7 @@ public class DatabaseManager {
                 ArrayList<TombBlock> playerList = playerTombList.get(ownerUniqueId);
                 if (playerList == null) {
                     playerList = new ArrayList<TombBlock>();
-                    playerTombList.put(UUID.fromString(ownerUniqueId), playerList);
+                    playerTombList.put(ownerUniqueId, playerList);
                 }
                 playerList.add(tombBlock);
             }
