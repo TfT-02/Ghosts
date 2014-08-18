@@ -13,6 +13,7 @@ import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.items.ResurrectionScroll;
 import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
+import com.me.tft_02.ghosts.listeners.InventoryListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
@@ -131,6 +132,7 @@ public class Ghosts extends JavaPlugin {
         pluginManager.registerEvents(new PlayerListener(), this);
         pluginManager.registerEvents(new BlockListener(), this);
         pluginManager.registerEvents(new EntityListener(), this);
+        pluginManager.registerEvents(new InventoryListener(), this);
     }
 
     private void registerCustomRecipes() {
