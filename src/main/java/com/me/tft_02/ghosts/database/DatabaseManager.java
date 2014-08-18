@@ -37,6 +37,8 @@ public class DatabaseManager {
     public static HashMap<UUID, Boolean> playerRespawns = new HashMap<UUID, Boolean>();
     public static HashMap<UUID, List<ItemStack>> playerGhostItems = new HashMap<UUID, List<ItemStack>>();
     public static HashMap<UUID, Location> playerLastDeathLocation = new HashMap<UUID, Location>();
+    public static HashMap<UUID, Integer> playerSavedLostVanillaXP = new HashMap<UUID, Integer>();
+    public static HashMap<UUID, Integer> playerSavedRemainingVanillaXP = new HashMap<UUID, Integer>();
 
     public static void loadAllData() {
         for (World world : Ghosts.p.getServer().getWorlds()) {
@@ -247,5 +249,27 @@ public class DatabaseManager {
             return playerLastDeathLocation.get(player.getUniqueId());
         }
         return null;
+    }
+
+    public static void setSavedLostVanillaXP(Player player, int amount) {
+        playerSavedLostVanillaXP.put(player.getUniqueId(), amount);
+    }
+
+    public static int getSavedLostVanillaXP(Player player) {
+        if (playerSavedLostVanillaXP.containsKey(player.getUniqueId())) {
+            return playerSavedLostVanillaXP.get(player.getUniqueId());
+        }
+        return 0;
+    }
+
+    public static void setSavedRemainingVanillaXP(Player player, int amount) {
+        playerSavedRemainingVanillaXP.put(player.getUniqueId(), amount);
+    }
+
+    public static int getSavedRemainingVanillaXP(Player player) {
+        if (playerSavedRemainingVanillaXP.containsKey(player.getUniqueId())) {
+            return playerSavedRemainingVanillaXP.get(player.getUniqueId());
+        }
+        return 0;
     }
 }

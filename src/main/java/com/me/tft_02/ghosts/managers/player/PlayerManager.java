@@ -14,10 +14,13 @@ import org.bukkit.inventory.ItemStack;
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.datatypes.RecoveryType;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
+import com.me.tft_02.ghosts.runnables.ghosts.SetXPTask;
 import com.me.tft_02.ghosts.runnables.player.UpdateInventoryTask;
+import com.me.tft_02.ghosts.util.ExperienceManager;
 import com.me.tft_02.ghosts.util.Misc;
 
 public class PlayerManager {
@@ -90,8 +93,39 @@ public class PlayerManager {
             }
         }
 
+        // Recover saved experience
+        PlayerManager.recoverLostXP(player, Config.getInstance().getRecoveryVanillaXP(RecoveryType.FIND_TOMB));
+
         // Manually update inventory for the time being.
         new UpdateInventoryTask(player).runTask(Ghosts.p);
+    }
+
+    public static void loseAndSaveXP(Player player) {
+        ExperienceManager manager = new ExperienceManager(player);
+        int currentExp = manager.getCurrentExp();
+        double percentageLost = Config.getInstance().getLossesVanillaXP();
+        int lostExperience = (int) Math.floor((currentExp * percentageLost * 0.01D));
+        int remainingExp = currentExp - lostExperience;
+
+        DatabaseManager.setSavedLostVanillaXP(player, lostExperience);
+        DatabaseManager.setSavedRemainingVanillaXP(player, remainingExp);
+        player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPLost", percentageLost));
+    }
+
+    public static void recoverRemainingXP(Player player) {
+        int remainingExp = DatabaseManager.getSavedRemainingVanillaXP(player);
+        new SetXPTask(player, remainingExp).runTaskLater(Ghosts.p, 1);
+        DatabaseManager.setSavedRemainingVanillaXP(player, 0);
+    }
+
+    public static void recoverLostXP(Player player, double percentage) {
+        ExperienceManager manager = new ExperienceManager(player);
+        int savedVanillaXP = DatabaseManager.getSavedLostVanillaXP(player);
+        int recoveredXP =  (int) Math.floor(savedVanillaXP * (percentage * 0.01D));
+
+        manager.changeExp(recoveredXP);
+        DatabaseManager.setSavedLostVanillaXP(player, 0);
+        player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPRecover", percentage));
     }
 
     public static void spook(Player player) {

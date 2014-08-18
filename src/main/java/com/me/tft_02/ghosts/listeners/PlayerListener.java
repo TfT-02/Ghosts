@@ -209,6 +209,9 @@ public class PlayerListener implements Listener {
             DatabaseManager.playerGhostItems.remove(player.getUniqueId());
         }
 
+        // Restore saved remaining vanilla XP
+        PlayerManager.recoverRemainingXP(player);
+
         //        PlayerManager.enableDoubleJump(player);
 
         if (Config.getInstance().getThunder()) {

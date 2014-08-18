@@ -137,6 +137,7 @@ public class Ghosts extends JavaPlugin {
 
     private void registerCustomRecipes() {
         getServer().addRecipe(ResurrectionScroll.getResurrectionScrollRecipe());
+        getServer().addRecipe(ResurrectionScroll.getResurrectionScrollUpgradeRecipe());
     }
 
     /**

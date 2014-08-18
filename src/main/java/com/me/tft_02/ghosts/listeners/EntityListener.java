@@ -21,6 +21,7 @@ import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
+import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
 
@@ -125,7 +126,13 @@ public class EntityListener implements Listener {
         // Tombstone succesfully created, clear drops
         event.getDrops().clear();
 
-        TombstoneManager.loseAndSaveXP(player, event.getDroppedExp());
+        // Handle vanilla xp drops
+        if (Config.getInstance().getLossesOverrideKeepLevel()) {
+            event.setKeepLevel(false);
+            event.setDroppedExp(0);
+        }
+
+        PlayerManager.loseAndSaveXP(player);
 
         // GHOST MANAGER
         if (!Ghosts.p.getGhostManager().isGhost(player)) {

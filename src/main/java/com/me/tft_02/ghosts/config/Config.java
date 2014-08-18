@@ -59,10 +59,15 @@ public class Config extends AutoUpdateConfigLoader {
     public double getLossesItems() { return config.getDouble("Tombstones.Losses.Items", 100); }
 
     // Recovery Settings
-    public double getRecoveryVanillaXP(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Vanilla_XP"); }
-    public double getRecoverymcMMOXP(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".mcMMO_XP"); }
-    public double getRecoveryItems(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Items"); }
-    public boolean getDestroyTomb(RecoveryType recoveryType, Tier tier) { return config.getBoolean("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType) + checkTier(recoveryType, tier) +".Destroy_Tomb"); }
+    public double getRecoveryVanillaXP(RecoveryType recoveryType) { return getRecoveryVanillaXP(recoveryType, null); }
+    public double getRecoverymcMMOXP(RecoveryType recoveryType) { return getRecoverymcMMOXP(recoveryType, null); }
+    public double getRecoveryItems(RecoveryType recoveryType) { return getRecoveryItems(recoveryType, null); }
+    public boolean getDestroyTomb(RecoveryType recoveryType){ return getDestroyTomb(recoveryType, null); }
+
+    public double getRecoveryVanillaXP(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType).replace(" ", "_") + checkTier(recoveryType, tier) + ".Vanilla_XP"); }
+    public double getRecoverymcMMOXP(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType).replace(" ", "_") + checkTier(recoveryType, tier) + ".mcMMO_XP"); }
+    public double getRecoveryItems(RecoveryType recoveryType, Tier tier) { return config.getDouble("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType).replace(" ", "_") + checkTier(recoveryType, tier) + ".Items"); }
+    public boolean getDestroyTomb(RecoveryType recoveryType, Tier tier) { return config.getBoolean("Tombstones.Recovery." + StringUtils.getPrettyRecoveryTypeString(recoveryType).replace(" ", "_") + checkTier(recoveryType, tier) +".Destroy_Tomb"); }
 
     private String checkTier(RecoveryType recoveryType, Tier tier) {
         return (recoveryType == RecoveryType.RESURRECTION_SCROLL) ? ".Tier_" + tier.toNumerical() : "";
@@ -89,6 +94,7 @@ public class Config extends AutoUpdateConfigLoader {
     public Material getResurrectionScrollItem() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.Item_Name", "PAPER")); }
     public Material getResurrectionScrollIngredientEdges() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.IngredientEdges", "PAPER")); }
     public Material getResurrectionScrollIngredientMiddle() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.IngredientMiddle", "GLOWSTONE_DUST")); }
+    public Material getResurrectionScrollIngredientUpgrade() { return Material.matchMaterial(config.getString("Items.Resurrection_Scroll.IngredientUpgrade", "DIAMOND")); }
 
     /* MISC SETTINGS */
     public String getDateFormat() { return config.getString("Misc.Date_Format", "MM/dd/yyyy"); }
