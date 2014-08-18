@@ -43,14 +43,13 @@ Tombstones:
         # Place a sign on the tombstone?
         Place_Sign: true
 
-    # Percentage amount of XP that is lost upon death. (10% default)
-    # Vanilla_XP: for vanilla Minecraft experience orbs/levels
+    # Vanilla_XP: Percentage amount of vanilla Minecraft experience orbs/levels that is lost upon death. (40% default)
     # Override_KeepLevel: Make sure experience is handled by Ghosts and not by another plugin
-    # Items: Percentage of items stored in a tombstone (100% default)
+    # Items: Percentage of items that is lost when storing them in a tombstone (0% default)
     Losses:
-        Vanilla_XP: 10
+        Vanilla_XP: 40
         Override_KeepLevel: true
-        Items: 100
+        Items: 0
 
     # When finding a tomb or using scrolls, how much of the lost
     # experience and items should be recovered?
