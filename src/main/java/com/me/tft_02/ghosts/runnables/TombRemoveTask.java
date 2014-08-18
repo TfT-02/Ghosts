@@ -27,6 +27,7 @@ public class TombRemoveTask extends BukkitRunnable {
 
                 if (!(blockState instanceof Chest)) {
                     destroyTombstone(iter, tombBlock);
+                    continue;
                 }
 
                 boolean isEmpty = true;
