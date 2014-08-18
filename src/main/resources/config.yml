@@ -45,24 +45,40 @@ Tombstones:
 
     # Vanilla_XP: Percentage amount of vanilla Minecraft experience orbs/levels that is lost upon death. (40% default)
     # Override_KeepLevel: Make sure experience is handled by Ghosts and not by another plugin
+    # Items: Percentage of items that is lost when storing them in a tombstone (0% default)
     Losses:
         Vanilla_XP: 40
         Override_KeepLevel: true
+        Items: 0
 
     # When finding a tomb or using scrolls, how much of the lost
     # experience and items should be recovered?
     Recovery:
         Find_Tomb:
             Vanilla_XP: 75
+            mcMMO_XP: 75
+            Items: 98
         Resurrection_Scroll:
             Tier_1:
                 Vanilla_XP: 50
+                mcMMO_XP: 50
+                Items: 0
+                Destroy_Tomb: true
             Tier_2:
                 Vanilla_XP: 50
+                mcMMO_XP: 50
+                Items: 80
+                Destroy_Tomb: true
             Tier_3:
                 Vanilla_XP: 75
+                mcMMO_XP: 75
+                Items: 80
+                Destroy_Tomb: true
         Give_Up:
             Vanilla_XP: 0
+            mcMMO_XP: 0
+            Items: 0
+            Destroy_Tomb: true
 
     Remove:
         # Remove tombstones after x seconds
@@ -91,6 +107,10 @@ Respawn:
     Set_On_Fire: true
     Explosion_Trail: false
     Explosion_On_Impact: false
+
+Ghost:
+    Potion_Effects:
+        - SWIFTNESS
 
 Items:
     Resurrection_Scroll:
