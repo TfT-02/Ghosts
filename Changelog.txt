@@ -6,5 +6,5 @@ Key:
   ! Change
   - Removal
 
-Version 0.0.1 | Tested on CB 1.7.5-R0.1
+Version 0.0.1 | Tested on CB 1.7.10-R0.1
  + First alpha release
