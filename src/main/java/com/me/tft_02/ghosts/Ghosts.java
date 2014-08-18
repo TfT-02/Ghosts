@@ -15,14 +15,13 @@ import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
 import com.me.tft_02.ghosts.listeners.InventoryListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
-import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
 import com.me.tft_02.ghosts.runnables.SaveTimerTask;
 import com.me.tft_02.ghosts.runnables.TombRemoveTask;
+import com.me.tft_02.ghosts.runnables.UpdaterResultAsyncTask;
 import com.me.tft_02.ghosts.util.LogFilter;
 import com.me.tft_02.ghosts.util.Misc;
 
-import net.gravitydevelopment.updater.ghosts.Updater;
 import org.mcstats.Metrics;
 
 public class Ghosts extends JavaPlugin {
@@ -153,21 +152,11 @@ public class Ghosts extends JavaPlugin {
             return;
         }
 
-        Updater updater = new Updater(this, 60787, ghosts, Updater.UpdateType.NO_DOWNLOAD, false);
+        new UpdaterResultAsyncTask(this).runTaskAsynchronously(Ghosts.p);
+    }
 
-        if (updater.getResult() != Updater.UpdateResult.UPDATE_AVAILABLE) {
-            this.updateAvailable = false;
-            return;
-        }
-
-        if (updater.getLatestType().equals("beta") && !Config.getInstance().getPreferBeta()) {
-            this.updateAvailable = false;
-            return;
-        }
-
-        this.updateAvailable = true;
-        getLogger().info(LocaleLoader.getString("UpdateChecker.Outdated"));
-        getLogger().info(LocaleLoader.getString("UpdateChecker.New_Available"));
+    public void setUpdateAvailable(boolean available) {
+        this.updateAvailable = available;
     }
 
     public GhostManager getGhostManager() {
