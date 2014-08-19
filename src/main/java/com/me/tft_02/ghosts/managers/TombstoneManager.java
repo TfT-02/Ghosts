@@ -168,14 +168,14 @@ public class TombstoneManager {
         playerTombList.add(tombBlock);
 
         DatabaseManager.saveTombList(player.getWorld().getName());
-        drops = handleItemLoss(drops);
+        drops = handleItemLoss(drops, Config.getInstance().getLossesItems());
         storeInventoryInTomb(drops, removeChestCount, removeSignCount, smallChest, largeChest, maxSlot);
 
         sendNotificationMessages(player, drops);
         return true;
     }
 
-    private static List<ItemStack> handleItemLoss(List<ItemStack> drops) {
+    private static List<ItemStack> handleItemLoss(List<ItemStack> drops, double percentage) {
         int itemCount = 0;
         int itemsLost = 0;
         int size = drops.size();
@@ -191,7 +191,7 @@ public class TombstoneManager {
             itemCount += itemStack.getAmount();
         }
 
-        int lose = (int) Math.floor(itemCount * Config.getInstance().getLossesItems() * 0.01D);
+        int lose = (int) Math.floor(itemCount * percentage * 0.01D);
         List<Integer> removeIndexes = new ArrayList<Integer>();
 
         for (int i = 0; i < lose; i++) {

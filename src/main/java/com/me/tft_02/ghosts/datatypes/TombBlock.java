@@ -39,10 +39,6 @@ public class TombBlock {
         return ownerUniqueId;
     }
 
-    public void setOwnerUniqueId(UUID ownerUniqueId) {
-        this.ownerUniqueId = ownerUniqueId;
-    }
-
     public String getOwnerName() {
         return ownerName;
     }

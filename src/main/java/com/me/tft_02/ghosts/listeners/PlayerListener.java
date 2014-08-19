@@ -80,7 +80,6 @@ public class PlayerListener implements Listener {
         event.setCancelled(false); //TODO Add config option; override ?
         Ghosts.p.getGhostManager().setGhost(player, false);
         PlayerManager.quickLoot(event, player, tombBlock);
-        player.setFireTicks(0);
     }
 
     /**

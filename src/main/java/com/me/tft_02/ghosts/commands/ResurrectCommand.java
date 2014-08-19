@@ -25,9 +25,8 @@ public class ResurrectCommand implements CommandExecutor {
     }
 
     private boolean resurrect(CommandSender sender) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(LocaleLoader.getString("Commands.Usage.1", "/resurrect", "[player]"));
-            return false;
+        if (CommandUtils.noConsoleUsage(sender)) {
+            return true;
         }
 
         Player player = (Player) sender;
@@ -40,7 +39,7 @@ public class ResurrectCommand implements CommandExecutor {
             return true;
         }
 
-        sender.sendMessage(LocaleLoader.getString("Commands.Usage.1", "/resurrect", "[player]"));
+        sender.sendMessage(LocaleLoader.getString("Commands.Usage.1", "resurrect", "[player]"));
         return false;
     }
 

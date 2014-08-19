@@ -28,14 +28,16 @@ public class PlayerManager {
     private static HashMap<String, Integer> lastSpook = new HashMap<String, Integer>();
 
     public static boolean resurrect(OfflinePlayer offlinePlayer) {
-        return resurrect(offlinePlayer, null);
+        return resurrect(offlinePlayer, "");
     }
 
     public static boolean resurrect(OfflinePlayer offlinePlayer, String notification) {
         boolean success = DatabaseManager.ghosts.remove(offlinePlayer.getUniqueId());
 
         if (success && offlinePlayer.isOnline()) {
-            offlinePlayer.getPlayer().sendMessage(LocaleLoader.getString("Commands.Resurrect") + " " +  notification);
+            Player player = offlinePlayer.getPlayer();
+            player.sendMessage(LocaleLoader.getString("Commands.Resurrect") + " " + notification);
+            player.setFireTicks(0);
         }
 
         return success;
