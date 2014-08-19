@@ -7,6 +7,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.me.tft_02.ghosts.commands.GhostsCommand;
+import com.me.tft_02.ghosts.commands.GiveUpCommand;
 import com.me.tft_02.ghosts.commands.ResurrectCommand;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
@@ -56,8 +57,7 @@ public class Ghosts extends JavaPlugin {
         registerEvents();
         registerCustomRecipes();
 
-        getCommand("ghosts").setExecutor(new GhostsCommand());
-        getCommand("resurrect").setExecutor(new ResurrectCommand());
+        registerCommands();
 
         ghostManager = new GhostManager(this);
 
@@ -137,6 +137,12 @@ public class Ghosts extends JavaPlugin {
     private void registerCustomRecipes() {
         getServer().addRecipe(ResurrectionScroll.getResurrectionScrollRecipe());
         getServer().addRecipe(ResurrectionScroll.getResurrectionScrollUpgradeRecipe());
+    }
+
+    private void registerCommands() {
+        getCommand("ghosts").setExecutor(new GhostsCommand());
+        getCommand("resurrect").setExecutor(new ResurrectCommand());
+        getCommand("giveup").setExecutor(new GiveUpCommand());
     }
 
     /**

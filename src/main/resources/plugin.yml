@@ -17,6 +17,9 @@ commands:
     resurrect:
         description: Usage /resurrect
         permission-message: You don't have <permission>
+    giveup:
+        description: Usage /giveup
+        permission-message: You don't have <permission>
 
 permissions:
     ghosts.*:
@@ -46,16 +49,20 @@ permissions:
         description: Implies all default ghosts.commands permissions.
         children:
             ghosts.commands.general: true
-            ghosts.commands.resurrect: true
+            ghosts.commands.giveup: true
     ghosts.commands.defaultsop:
         description: Implies all default op ghosts.commands permissions.
         children:
+            ghosts.commands.resurrect: true
             ghosts.commands.resurrect.others: true
     ghosts.commands.general:
          default: true
          description: Allows access to the general command
-    ghosts.commands.resurrect:
+    ghosts.commands.giveup:
          default: true
+         description: Allows access to the giveup command
+    ghosts.commands.resurrect:
+         default: false
          description: Allows access to the resurrect command
     ghosts.commands.resurrect.others:
          default: false

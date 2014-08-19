@@ -295,35 +295,57 @@ public class TombstoneManager {
         }
     }
 
-    public boolean destroyAllTombstones(OfflinePlayer offlinePlayer) {
+    public static boolean destroyAllTombstones(OfflinePlayer offlinePlayer, boolean dropContents, boolean notify) {
         ArrayList<TombBlock> tombstoneList = DatabaseManager.getTombstoneList().get(offlinePlayer.getUniqueId());
         if (tombstoneList.isEmpty()) {
             return false;
         }
 
+        ArrayList<TombBlock> toDestroy = new ArrayList<TombBlock>();
+
         for (TombBlock tombBlock : tombstoneList) {
-            TombstoneManager.destroyTombstone(tombBlock);
+            toDestroy.add(tombBlock);
         }
+
+        for (TombBlock tombBlock : toDestroy) {
+            TombstoneManager.destroyTombstone(tombBlock, dropContents);
+        }
+
+        if (notify && offlinePlayer.isOnline()) {
+            ((Player) offlinePlayer).sendMessage(LocaleLoader.getString("Tombstone.Broken.All"));
+        }
+
         return true;
     }
 
-    public void destroyTombstone(Location location) {
-        destroyTombstone(DatabaseManager.tombBlockList.get(location));
+    public void destroyTombstone(Location location, boolean dropContents) {
+        destroyTombstone(DatabaseManager.tombBlockList.get(location), dropContents);
     }
 
-    public static void destroyTombstone(TombBlock tombBlock) {
-        destroyTombstone(tombBlock, false);
+    public static void destroyTombstone(TombBlock tombBlock, boolean dropContents) {
+        destroyTombstone(tombBlock, dropContents, false);
     }
 
     /**
      * Destroy a tombstone
      */
-    public static void destroyTombstone(TombBlock tombBlock, boolean notify) {
+    public static void destroyTombstone(TombBlock tombBlock, boolean dropContents, boolean notify) {
         Block block = tombBlock.getBlock();
+        Block largeBlock = tombBlock.getLargeBlock();
 
         if (!block.getChunk().load()) {
             Ghosts.p.getLogger().severe("Error loading world chunk trying to remove tombstone at " + block.getX() + "," + block.getY() + "," + block.getZ() + " owned by " + tombBlock.getOwnerName() + ".");
             return;
+        }
+
+        // Empty chest
+        if (!dropContents) {
+            if (block.getState() instanceof Chest) {
+                ((Chest) block.getState()).getInventory().clear();
+            }
+            if (largeBlock != null && largeBlock.getState() instanceof Chest) {
+                ((Chest) largeBlock.getState()).getInventory().clear();
+            }
         }
 
         if (tombBlock.getSign() != null) {
@@ -332,8 +354,8 @@ public class TombstoneManager {
 
         block.setType(Material.AIR);
 
-        if (tombBlock.getLargeBlock() != null) {
-            tombBlock.getLargeBlock().setType(Material.AIR);
+        if (largeBlock != null) {
+            largeBlock.setType(Material.AIR);
         }
 
         removeTomb(tombBlock, true);

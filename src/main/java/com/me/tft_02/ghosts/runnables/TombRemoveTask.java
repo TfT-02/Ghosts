@@ -79,7 +79,7 @@ public class TombRemoveTask extends BukkitRunnable {
     }
 
     private void destroyTombstone(Iterator<TombBlock> iter, TombBlock tombBlock) {
-        TombstoneManager.destroyTombstone(tombBlock);
+        TombstoneManager.destroyTombstone(tombBlock, false);
         iter.remove();
     }
 }

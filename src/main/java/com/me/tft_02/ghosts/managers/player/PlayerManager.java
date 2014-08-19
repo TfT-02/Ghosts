@@ -91,7 +91,7 @@ public class PlayerManager {
             event.setCancelled(true);
 
             if (Config.getInstance().getDestroyQuickloot()) {
-                TombstoneManager.destroyTombstone(tombBlock);
+                TombstoneManager.destroyTombstone(tombBlock, false);
             }
         }
 

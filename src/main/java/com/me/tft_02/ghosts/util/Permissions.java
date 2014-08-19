@@ -51,4 +51,8 @@ public class Permissions {
     public static boolean ressurectScrollOthers(Permissible permissible) {
         return permissible.hasPermission("ghosts.items.ressurectscroll.others");
     }
+
+    public static boolean giveUp(Permissible permissible) {
+        return permissible.hasPermission("ghosts.commands.giveup");
+    }
 }

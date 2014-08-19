@@ -17,6 +17,7 @@ import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.datatypes.RecoveryType;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
+import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
@@ -134,6 +135,12 @@ public class ResurrectionScroll {
 
         // Recover saved experience
         PlayerManager.recoverLostXP(player, Config.getInstance().getRecoveryVanillaXP(RecoveryType.RESURRECTION_SCROLL, tier));
+
+        // Destroy tombstone if enabled
+        if (Config.getInstance().getDestroyTomb(RecoveryType.RESURRECTION_SCROLL, tier)) {
+            TombstoneManager.destroyAllTombstones(player, false, true);
+        }
+
         return true;
     }
 
