@@ -129,4 +129,8 @@ public class Misc {
     public static boolean cooldownOver(long deactivatedTimeStamp, int cooldown) {
         return (((System.currentTimeMillis() / TIME_CONVERSION_FACTOR) + cooldown) < deactivatedTimeStamp);
     }
+
+    public static Random getRandom() {
+        return random;
+    }
 }

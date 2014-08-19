@@ -56,7 +56,7 @@ public class Config extends AutoUpdateConfigLoader {
     // Losses Settings
     public double getLossesVanillaXP() { return config.getDouble("Tombstones.Losses.Vanilla_XP", 10.0); }
     public boolean getLossesOverrideKeepLevel() { return config.getBoolean("Tombstones.Losses.Override_KeepLevel", true); }
-    public double getLossesItems() { return config.getDouble("Tombstones.Losses.Items", 100); }
+    public double getLossesItems() { return config.getDouble("Tombstones.Losses.Items", 0); }
 
     // Recovery Settings
     public double getRecoveryVanillaXP(RecoveryType recoveryType) { return getRecoveryVanillaXP(recoveryType, null); }

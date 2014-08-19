@@ -97,7 +97,6 @@ public class TombstoneManager {
 
         Chest smallChest = (Chest) state;
         Chest largeChest = null;
-        int slot = 0;
         int maxSlot = smallChest.getInventory().getSize();
 
         // Check if they need a large chest.
@@ -139,6 +138,7 @@ public class TombstoneManager {
                 }
             }
         }
+
         // Don't remove a sign if they get a free one
         if (Permissions.freesign(player)) {
             removeSignCount -= 1;
@@ -168,6 +168,66 @@ public class TombstoneManager {
         playerTombList.add(tombBlock);
 
         DatabaseManager.saveTombList(player.getWorld().getName());
+        drops = handleItemLoss(drops);
+        storeInventoryInTomb(drops, removeChestCount, removeSignCount, smallChest, largeChest, maxSlot);
+
+        sendNotificationMessages(player, drops);
+        return true;
+    }
+
+    private static List<ItemStack> handleItemLoss(List<ItemStack> drops) {
+        int itemCount = 0;
+        int itemsLost = 0;
+        int size = drops.size();
+        List<Integer> dontRemove = new ArrayList<Integer>();
+
+        for (ItemStack itemStack : drops) {
+            if (itemStack.getType() == Material.CHEST || itemStack.getType() == Material.SIGN) {
+                size -= 1;
+                dontRemove.add(drops.indexOf(itemStack));
+                continue;
+            }
+
+            itemCount += itemStack.getAmount();
+        }
+
+        int lose = (int) Math.floor(itemCount * Config.getInstance().getLossesItems() * 0.01D);
+        List<Integer> removeIndexes = new ArrayList<Integer>();
+
+        for (int i = 0; i < lose; i++) {
+            int randomIndex = Misc.getRandom().nextInt(size - 1);
+            boolean check = false;
+
+            while (!check) {
+                if (dontRemove.contains(randomIndex)) {
+                    randomIndex = Misc.getRandom().nextInt(size - 1);
+                } else {
+                    check = true;
+                }
+            }
+
+            removeIndexes.add(randomIndex);
+        }
+
+        for (int index : removeIndexes) {
+            ItemStack itemStack = drops.get(index);
+
+            itemsLost++;
+
+            if (itemStack.getAmount() > 0) {
+                itemStack.setAmount(itemStack.getAmount() - 1);
+                continue;
+            }
+
+            drops.remove(itemStack);
+        }
+        Ghosts.p.debug("Lost " + itemsLost + "items.");
+
+        return drops;
+    }
+
+    private static void storeInventoryInTomb(List<ItemStack> drops, int removeChestCount, int removeSignCount, Chest smallChest, Chest largeChest, int maxSlot) {
+        int slot = 0;
 
         // Next get the players inventory using drops.
         for (Iterator<ItemStack> iter = drops.listIterator(); iter.hasNext();) {
@@ -220,9 +280,6 @@ public class TombstoneManager {
                 break;
             }
         }
-
-        sendNotificationMessages(player, drops);
-        return true;
     }
 
     private static void sendNotificationMessages(Player player, List<ItemStack> drops) {
