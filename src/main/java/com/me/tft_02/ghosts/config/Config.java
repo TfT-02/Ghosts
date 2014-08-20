@@ -30,6 +30,7 @@ public class Config extends AutoUpdateConfigLoader {
 
     /* GENERAL SETTINGS */
     public String getLocale() { return config.getString("General.Locale", "en_us"); }
+    public boolean getShowProfileLoadedMessage() { return config.getBoolean("General.Show_Profile_Loaded", true); }
     public int getSaveInterval() { return config.getInt("General.Save_Interval", 10); }
     public boolean getStatsTrackingEnabled() { return config.getBoolean("General.Stats_Tracking", true); }
     public boolean getUpdateCheckEnabled() { return config.getBoolean("General.Update_Check", true); }
@@ -37,6 +38,21 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getVerboseLoggingEnabled() { return config.getBoolean("General.Verbose_Logging", false); }
     public boolean getConfigOverwriteEnabled() { return config.getBoolean("General.Config_Update_Overwrite", true); }
     public List<String> getDisabledWorlds() { return config.getStringList("General.Disabled_In_Worlds"); }
+
+    /* Database Purging */
+    public int getPurgeInterval() { return config.getInt("Database_Purging.Purge_Interval", -1); }
+    public int getOldUsersCutoff() { return config.getInt("Database_Purging.Old_User_Cutoff", 6); }
+
+    /* mySQL */
+    public boolean getUseMySQL() { return config.getBoolean("MySQL.Enabled", false); }
+//    public String getMySQLTablePrefix() { return config.getString("MySQL.Database.TablePrefix", "ghosts_"); }
+//    public String getMySQLDatabaseName() { return getStringIncludingInts("MySQL.Database.Name"); }
+//    public String getMySQLUserName() { return getStringIncludingInts("MySQL.Database.User_Name"); }
+//    public int getMySQLServerPort() { return config.getInt("MySQL.Server.Port", 3306); }
+//    public String getMySQLServerName() { return config.getString("MySQL.Server.Address", "localhost"); }
+//    public String getMySQLUserPassword() { return getStringIncludingInts("MySQL.Database.User_Password"); }
+//    public int getMySQLMaxConnections() { return config.getInt("MySQL.Database.MaxConnections", 30); }
+//    public int getMySQLMaxPoolSize() { return config.getInt("MySQL.Database.MaxPoolSize", 20); }
 
     /* TOMBSTONE SETTINGS */
     // General Tombstone Settings

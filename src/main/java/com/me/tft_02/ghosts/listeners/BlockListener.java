@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.database.TombstoneDatabase;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
@@ -34,7 +34,7 @@ public class BlockListener implements Listener {
 
         if (block.getType() == Material.WALL_SIGN) {
             org.bukkit.material.Sign signData = (org.bukkit.material.Sign) block.getState().getData();
-            TombBlock tBlock = DatabaseManager.tombBlockList.get(block.getRelative(signData.getAttachedFace()).getLocation());
+            TombBlock tBlock = TombstoneDatabase.tombBlockList.get(block.getRelative(signData.getAttachedFace()).getLocation());
             if (tBlock == null) {
                 return;
             }
@@ -50,7 +50,7 @@ public class BlockListener implements Listener {
             return;
         }
 
-        TombBlock tombBlock = DatabaseManager.tombBlockList.get(block.getLocation());
+        TombBlock tombBlock = TombstoneDatabase.tombBlockList.get(block.getLocation());
 
         TombstoneManager.removeTomb(tombBlock, true);
 

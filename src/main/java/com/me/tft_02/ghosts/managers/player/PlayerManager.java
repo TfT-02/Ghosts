@@ -13,15 +13,17 @@ import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.datatypes.RecoveryType;
+import com.me.tft_02.ghosts.datatypes.StatsType;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.datatypes.player.GhostPlayer;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.runnables.ghosts.SetXPTask;
 import com.me.tft_02.ghosts.runnables.player.UpdateInventoryTask;
 import com.me.tft_02.ghosts.util.ExperienceManager;
 import com.me.tft_02.ghosts.util.Misc;
+import com.me.tft_02.ghosts.util.player.UserManager;
 
 public class PlayerManager {
 
@@ -32,7 +34,7 @@ public class PlayerManager {
     }
 
     public static boolean resurrect(OfflinePlayer offlinePlayer, String notification) {
-        boolean success = DatabaseManager.ghosts.remove(offlinePlayer.getUniqueId());
+        boolean success = GhostManager.ghosts.remove(offlinePlayer.getUniqueId());
 
         if (success && offlinePlayer.isOnline()) {
             Player player = offlinePlayer.getPlayer();
@@ -100,6 +102,8 @@ public class PlayerManager {
 
         // Manually update inventory for the time being.
         new UpdateInventoryTask(player).runTask(Ghosts.p);
+
+        UserManager.getPlayer(player).increaseStats(StatsType.FIND_TOMB);
     }
 
     public static void loseAndSaveXP(Player player) {
@@ -109,24 +113,29 @@ public class PlayerManager {
         int lostExperience = (int) Math.floor((currentExp * percentageLost * 0.01D));
         int remainingExp = currentExp - lostExperience;
 
-        DatabaseManager.setSavedLostVanillaXP(player, lostExperience);
-        DatabaseManager.setSavedRemainingVanillaXP(player, remainingExp);
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+        ghostPlayer.setSavedLostVanillaXP(lostExperience);
+        ghostPlayer.setSavedRemainingVanillaXP(remainingExp);
+
         player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPLost", percentageLost));
     }
 
     public static void recoverRemainingXP(Player player) {
-        int remainingExp = DatabaseManager.getSavedRemainingVanillaXP(player);
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+
+        int remainingExp = ghostPlayer.getSavedRemainingVanillaXP();
         new SetXPTask(player, remainingExp).runTaskLater(Ghosts.p, 1);
-        DatabaseManager.setSavedRemainingVanillaXP(player, 0);
+        ghostPlayer.setSavedRemainingVanillaXP(0);
     }
 
     public static void recoverLostXP(Player player, double percentage) {
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
         ExperienceManager manager = new ExperienceManager(player);
-        int savedVanillaXP = DatabaseManager.getSavedLostVanillaXP(player);
+        int savedVanillaXP = ghostPlayer.getSavedLostVanillaXP();
         int recoveredXP =  (int) Math.floor(savedVanillaXP * (percentage * 0.01D));
 
         manager.changeExp(recoveredXP);
-        DatabaseManager.setSavedLostVanillaXP(player, 0);
+        ghostPlayer.setSavedLostVanillaXP(0);
         player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPRecover", percentage));
     }
 

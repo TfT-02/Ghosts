@@ -20,6 +20,9 @@ commands:
     giveup:
         description: Usage /giveup
         permission-message: You don't have <permission>
+    ghstats:
+        description: Usage /ghstats
+        permission-message: You don't have <permission>
 
 permissions:
     ghosts.*:

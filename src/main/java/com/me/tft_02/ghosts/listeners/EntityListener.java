@@ -18,12 +18,14 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.datatypes.StatsType;
+import com.me.tft_02.ghosts.datatypes.player.GhostPlayer;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
+import com.me.tft_02.ghosts.util.player.UserManager;
 
 public class EntityListener implements Listener {
 
@@ -112,8 +114,16 @@ public class EntityListener implements Listener {
             return;
         }
 
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+
+        if (!UserManager.hasPlayerDataKey(player)) {
+            return;
+        }
+
+        ghostPlayer.increaseStats(StatsType.DEATHS);
+
         List<ItemStack> drops = event.getDrops();
-        drops = ItemUtils.saveGhostItems(player, drops);
+        drops = ItemUtils.saveGhostItems(ghostPlayer, drops);
 
         if (drops.size() == 0) {
             return;
@@ -137,8 +147,8 @@ public class EntityListener implements Listener {
         // GHOST MANAGER
         if (!Ghosts.p.getGhostManager().isGhost(player)) {
             Ghosts.p.getGhostManager().setGhost(player, true);
-            DatabaseManager.playerRespawns.put(player.getUniqueId(), true);
-            DatabaseManager.setLastDeathLocation(player);
+            ghostPlayer.setRespawn(true);
+            ghostPlayer.setLastDeathLocation(player.getLocation());
         }
     }
 }

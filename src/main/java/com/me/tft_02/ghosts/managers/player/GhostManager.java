@@ -3,6 +3,7 @@ package com.me.tft_02.ghosts.managers.player;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -16,7 +17,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
 
 public class GhostManager {
     /**
@@ -32,6 +32,9 @@ public class GhostManager {
     // Task that must be cleaned up
     private BukkitTask task;
     private boolean closed;
+
+    // Players that are actually ghosts
+    public static Set<UUID> ghosts = new HashSet<UUID>();
 
     public GhostManager(Plugin plugin) {
         // Initialize
@@ -64,7 +67,7 @@ public class GhostManager {
                         setGhost(player, isGhost(player));
                     }
                     else {
-                        DatabaseManager.ghosts.remove(member.getUniqueId());
+                        ghosts.remove(member.getUniqueId());
                         ghostTeam.removePlayer(member);
                     }
                 }
@@ -101,7 +104,7 @@ public class GhostManager {
      * @return TRUE if it is, FALSE otherwise.
      */
     public boolean isGhost(Player player) {
-        return player != null && hasPlayer(player) && DatabaseManager.ghosts.contains(player.getUniqueId());
+        return player != null && hasPlayer(player) && ghosts.contains(player.getUniqueId());
     }
 
     /**
@@ -126,11 +129,11 @@ public class GhostManager {
         }
 
         if (isGhost) {
-            DatabaseManager.ghosts.add(player.getUniqueId());
+            ghosts.add(player.getUniqueId());
             player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 15));
         }
         else {
-            DatabaseManager.ghosts.remove(player.getUniqueId());
+            ghosts.remove(player.getUniqueId());
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
         }
     }
@@ -156,7 +159,7 @@ public class GhostManager {
 
         // Remove all non-ghost players
         for (Iterator<OfflinePlayer> it = players.iterator(); it.hasNext();) {
-            if (!DatabaseManager.ghosts.contains(it.next().getUniqueId())) {
+            if (!ghosts.contains(it.next().getUniqueId())) {
                 it.remove();
             }
         }

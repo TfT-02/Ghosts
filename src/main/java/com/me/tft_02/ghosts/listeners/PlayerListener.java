@@ -27,8 +27,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.database.TombstoneDatabase;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
+import com.me.tft_02.ghosts.datatypes.player.GhostPlayer;
 import com.me.tft_02.ghosts.items.ResurrectionScroll;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
@@ -36,9 +37,11 @@ import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.runnables.ghosts.ExplosionTrailTask;
 import com.me.tft_02.ghosts.runnables.ghosts.GroundExplosionTask;
 import com.me.tft_02.ghosts.runnables.ghosts.IgniteTask;
+import com.me.tft_02.ghosts.runnables.player.PlayerProfileLoadingTask;
 import com.me.tft_02.ghosts.util.BlockUtils;
 import com.me.tft_02.ghosts.util.Misc;
 import com.me.tft_02.ghosts.util.Permissions;
+import com.me.tft_02.ghosts.util.player.UserManager;
 
 public class PlayerListener implements Listener {
 
@@ -65,7 +68,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        TombBlock tombBlock = DatabaseManager.tombBlockList.get(block.getLocation());
+        TombBlock tombBlock = TombstoneDatabase.tombBlockList.get(block.getLocation());
         if (tombBlock == null || !(tombBlock.getBlock().getState() instanceof Chest)) {
             return;
         }
@@ -145,14 +148,35 @@ public class PlayerListener implements Listener {
         }
     }
 
+    /**
+     * Monitor PlayerJoinEvents.
+     * <p>
+     * These events are monitored for the purpose of initializing player
+     * variables, as well as handling the MOTD display and other important
+     * join messages.
+     *
+     * @param event The event to monitor
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Ghosts.p.getGhostManager().addPlayer(player);
 
         //        if (Ghosts.p.getGhostManager().isGhost(player)) {
         //            PlayerManager.enableDoubleJump(player);
         //        }
+
+        if (Misc.isNPCEntity(player)) {
+            return;
+        }
+
+        // 1 Tick delay to ensure the player is marked as online before we begin loading
+        new PlayerProfileLoadingTask(player).runTaskLaterAsynchronously(Ghosts.p, 1);
+
+        if (Permissions.updateNotifications(player) && Ghosts.p.isUpdateAvailable()) {
+            player.sendMessage(LocaleLoader.getString("UpdateChecker.Outdated"));
+            player.sendMessage(LocaleLoader.getString("UpdateChecker.New_Available"));
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -166,17 +190,40 @@ public class PlayerListener implements Listener {
         }
     }
 
+    /**
+     * Monitor PlayerQuitEvents.
+     * <p>
+     * These events are monitored for the purpose of resetting player
+     * variables and other garbage collection tasks that must take place when
+     * a player exits the server.
+     *
+     * @param event The event to monitor
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Ghosts.p.getGhostManager().removePlayer(player);
+
+        if (!UserManager.hasPlayerDataKey(player)) {
+            return;
+        }
+
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+        ghostPlayer.getProfile().scheduleAsyncSave();
+        UserManager.remove(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        if (!DatabaseManager.playerRespawns.containsKey(player.getUniqueId())) {
+        if (!UserManager.hasPlayerDataKey(player)) {
+            return;
+        }
+
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+
+        if (!ghostPlayer.getRespawn()) {
             return;
         }
 
@@ -186,7 +233,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        Location location = DatabaseManager.getLastDeathLocation(player);
+        Location location = ghostPlayer.getLastDeathLocation();
         if (location == null) {
             return;
         }
@@ -197,15 +244,15 @@ public class PlayerListener implements Listener {
 
         player.sendMessage(LocaleLoader.getString("Ghost.Respawn"));
         event.setRespawnLocation(respawnLocation);
-        DatabaseManager.playerRespawns.put(player.getUniqueId(), false);
+        ghostPlayer.setRespawn(false);
 
         // Restore saved ghost items
-        if (DatabaseManager.playerGhostItems.containsKey(player.getUniqueId())) {
-            List<ItemStack> itemStacks = DatabaseManager.playerGhostItems.get(player.getUniqueId());
-            for (ItemStack itemStack : itemStacks) {
+        List<ItemStack> playerGhostItems = ghostPlayer.getPlayerGhostItems();
+        if (!playerGhostItems.isEmpty()) {
+            for (ItemStack itemStack : playerGhostItems) {
                 player.getInventory().addItem(itemStack);
             }
-            DatabaseManager.playerGhostItems.remove(player.getUniqueId());
+            playerGhostItems.clear();
         }
 
         // Restore saved remaining vanilla XP

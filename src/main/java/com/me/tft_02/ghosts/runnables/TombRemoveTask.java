@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.database.TombstoneDatabase;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.util.Misc;
@@ -19,7 +19,7 @@ public class TombRemoveTask extends BukkitRunnable {
     @Override
     public void run() {
         long currentTime = System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR;
-        for (Iterator<TombBlock> iter = DatabaseManager.tombList.iterator(); iter.hasNext(); ) {
+        for (Iterator<TombBlock> iter = TombstoneDatabase.tombList.iterator(); iter.hasNext(); ) {
             TombBlock tombBlock = iter.next();
 
             if (Config.getInstance().getKeepUntilEmpty() || Config.getInstance().getRemoveWhenEmpty()) {

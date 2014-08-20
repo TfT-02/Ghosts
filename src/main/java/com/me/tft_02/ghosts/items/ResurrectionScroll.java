@@ -16,11 +16,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.datatypes.RecoveryType;
+import com.me.tft_02.ghosts.datatypes.StatsType;
+import com.me.tft_02.ghosts.datatypes.player.GhostPlayer;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.managers.player.PlayerManager;
 import com.me.tft_02.ghosts.util.ItemUtils;
 import com.me.tft_02.ghosts.util.Permissions;
+import com.me.tft_02.ghosts.util.player.UserManager;
 
 public class ResurrectionScroll {
     private ResurrectionScroll() {}
@@ -139,6 +142,19 @@ public class ResurrectionScroll {
         // Destroy tombstone if enabled
         if (Config.getInstance().getDestroyTomb(RecoveryType.RESURRECTION_SCROLL, tier)) {
             TombstoneManager.destroyAllTombstones(player, false, true);
+        }
+
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+        switch (tier) {
+            case THREE:
+                ghostPlayer.increaseStats(StatsType.RESURRECTION_SCROLLS_USED_T3);
+                break;
+            case TWO:
+                ghostPlayer.increaseStats(StatsType.RESURRECTION_SCROLLS_USED_T2);
+                break;
+            case ONE:
+                ghostPlayer.increaseStats(StatsType.RESURRECTION_SCROLLS_USED_T1);
+                break;
         }
 
         return true;

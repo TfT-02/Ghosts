@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 
 import com.me.tft_02.ghosts.config.Config;
@@ -128,6 +130,10 @@ public class Misc {
 
     public static boolean cooldownOver(long deactivatedTimeStamp, int cooldown) {
         return (((System.currentTimeMillis() / TIME_CONVERSION_FACTOR) + cooldown) < deactivatedTimeStamp);
+    }
+
+    public static boolean isNPCEntity(Entity entity) {
+        return (entity == null || entity.hasMetadata("NPC") || entity instanceof NPC);
     }
 
     public static Random getRandom() {

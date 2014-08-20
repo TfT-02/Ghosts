@@ -55,4 +55,8 @@ public class Permissions {
     public static boolean giveUp(Permissible permissible) {
         return permissible.hasPermission("ghosts.commands.giveup");
     }
+
+    public static boolean updateNotifications(Permissible permissible) {
+        return permissible.hasPermission("ghosts.tools.updatecheck");
+    }
 }

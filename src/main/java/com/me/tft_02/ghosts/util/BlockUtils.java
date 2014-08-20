@@ -13,7 +13,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.database.TombstoneDatabase;
 
 public class BlockUtils {
     private BlockUtils() {}
@@ -25,7 +25,7 @@ public class BlockUtils {
      * @return true if the block is a tombstone, false otherwise
      */
     public static boolean isTombStone(Location location) {
-        return DatabaseManager.tombBlockList.get(location) != null;
+        return TombstoneDatabase.tombBlockList.get(location) != null;
     }
 
     /**

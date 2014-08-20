@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
-import com.me.tft_02.ghosts.database.DatabaseManager;
+import com.me.tft_02.ghosts.database.TombstoneDatabase;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.events.tomb.TombCreateEvent;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
@@ -148,26 +148,26 @@ public class TombstoneManager {
         TombBlock tombBlock = new TombBlock(smallChest.getBlock(), (largeChest != null) ? largeChest.getBlock() : null, signBlock, player.getUniqueId() ,player.getName(), player.getLevel() + 1, (System.currentTimeMillis() / 1000));
 
         // Add tombstone to list
-        DatabaseManager.tombList.offer(tombBlock);
+        TombstoneDatabase.tombList.offer(tombBlock);
 
         // Add tombstone blocks to tombBlockList
-        DatabaseManager.tombBlockList.put(tombBlock.getBlock().getLocation(), tombBlock);
+        TombstoneDatabase.tombBlockList.put(tombBlock.getBlock().getLocation(), tombBlock);
         if (tombBlock.getLargeBlock() != null) {
-            DatabaseManager.tombBlockList.put(tombBlock.getLargeBlock().getLocation(), tombBlock);
+            TombstoneDatabase.tombBlockList.put(tombBlock.getLargeBlock().getLocation(), tombBlock);
         }
         if (tombBlock.getSign() != null) {
-            DatabaseManager.tombBlockList.put(tombBlock.getSign().getLocation(), tombBlock);
+            TombstoneDatabase.tombBlockList.put(tombBlock.getSign().getLocation(), tombBlock);
         }
 
         // Add tombstone to player lookup list
-        ArrayList<TombBlock> playerTombList = DatabaseManager.playerTombList.get(player.getUniqueId());
+        ArrayList<TombBlock> playerTombList = TombstoneDatabase.playerTombList.get(player.getUniqueId());
         if (playerTombList == null) {
             playerTombList = new ArrayList<TombBlock>();
-            DatabaseManager.playerTombList.put(player.getUniqueId(), playerTombList);
+            TombstoneDatabase.playerTombList.put(player.getUniqueId(), playerTombList);
         }
         playerTombList.add(tombBlock);
 
-        DatabaseManager.saveTombList(player.getWorld().getName());
+        TombstoneDatabase.saveTombList(player.getWorld());
         drops = handleItemLoss(drops, Config.getInstance().getLossesItems());
         storeInventoryInTomb(drops, removeChestCount, removeSignCount, smallChest, largeChest, maxSlot);
 
@@ -195,12 +195,12 @@ public class TombstoneManager {
         List<Integer> removeIndexes = new ArrayList<Integer>();
 
         for (int i = 0; i < lose; i++) {
-            int randomIndex = Misc.getRandom().nextInt(size - 1);
+            int randomIndex = Misc.getRandom().nextInt(size);
             boolean check = false;
 
             while (!check) {
                 if (dontRemove.contains(randomIndex)) {
-                    randomIndex = Misc.getRandom().nextInt(size - 1);
+                    randomIndex = Misc.getRandom().nextInt(size);
                 } else {
                     check = true;
                 }
@@ -296,7 +296,7 @@ public class TombstoneManager {
     }
 
     public static boolean destroyAllTombstones(OfflinePlayer offlinePlayer, boolean dropContents, boolean notify) {
-        ArrayList<TombBlock> tombstoneList = DatabaseManager.getTombstoneList().get(offlinePlayer.getUniqueId());
+        ArrayList<TombBlock> tombstoneList = TombstoneDatabase.getTombstoneList().get(offlinePlayer.getUniqueId());
         if (tombstoneList.isEmpty()) {
             return false;
         }
@@ -319,7 +319,7 @@ public class TombstoneManager {
     }
 
     public void destroyTombstone(Location location, boolean dropContents) {
-        destroyTombstone(DatabaseManager.tombBlockList.get(location), dropContents);
+        destroyTombstone(TombstoneDatabase.tombBlockList.get(location), dropContents);
     }
 
     public static void destroyTombstone(TombBlock tombBlock, boolean dropContents) {
@@ -379,31 +379,31 @@ public class TombstoneManager {
             return;
         }
 
-        DatabaseManager.tombBlockList.remove(tombBlock.getBlock().getLocation());
+        TombstoneDatabase.tombBlockList.remove(tombBlock.getBlock().getLocation());
         if (tombBlock.getLargeBlock() != null) {
-            DatabaseManager.tombBlockList.remove(tombBlock.getLargeBlock().getLocation());
+            TombstoneDatabase.tombBlockList.remove(tombBlock.getLargeBlock().getLocation());
         }
 
         UUID ownerUniqueId = tombBlock.getOwnerUniqueId();
-        ArrayList<TombBlock> tombList = DatabaseManager.playerTombList.get(ownerUniqueId);
+        ArrayList<TombBlock> tombList = TombstoneDatabase.playerTombList.get(ownerUniqueId);
 
         // Remove just this tomb from tombList
         if (tombList != null) {
             tombList.remove(tombBlock);
             if (tombList.size() == 0) {
                 // Player has no other tombs anymore
-                DatabaseManager.playerTombList.remove(ownerUniqueId);
+                TombstoneDatabase.playerTombList.remove(ownerUniqueId);
 
                 PlayerManager.resurrect(Ghosts.p.getServer().getOfflinePlayer(ownerUniqueId));
             }
         }
 
         if (removeList) {
-            DatabaseManager.tombList.remove(tombBlock);
+            TombstoneDatabase.tombList.remove(tombBlock);
         }
 
         if (tombBlock.getBlock() != null) {
-            DatabaseManager.saveTombList(tombBlock.getBlock().getWorld().getName());
+            TombstoneDatabase.saveTombList(tombBlock.getBlock().getWorld());
         }
     }
 }
