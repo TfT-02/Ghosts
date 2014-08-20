@@ -21,7 +21,7 @@ import com.me.tft_02.ghosts.items.ResurrectionScroll;
 import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
 import com.me.tft_02.ghosts.listeners.InventoryListener;
-import com.me.tft_02.ghosts.listeners.McMMOListener;
+import com.me.tft_02.ghosts.hooks.McMMOListener;
 import com.me.tft_02.ghosts.listeners.PlayerListener;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
 import com.me.tft_02.ghosts.runnables.SaveTimerTask;

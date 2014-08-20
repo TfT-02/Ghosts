@@ -1,4 +1,4 @@
-package com.me.tft_02.ghosts.listeners;
+package com.me.tft_02.ghosts.hooks;
 
 import java.util.HashMap;
 
