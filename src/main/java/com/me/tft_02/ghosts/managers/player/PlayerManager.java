@@ -117,7 +117,9 @@ public class PlayerManager {
         ghostPlayer.setSavedLostVanillaXP(lostExperience);
         ghostPlayer.setSavedRemainingVanillaXP(remainingExp);
 
-        player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPLost", percentageLost));
+        if (lostExperience > 0) {
+            player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPLost", percentageLost));
+        }
     }
 
     public static void recoverRemainingXP(Player player) {
@@ -136,7 +138,10 @@ public class PlayerManager {
 
         manager.changeExp(recoveredXP);
         ghostPlayer.setSavedLostVanillaXP(0);
-        player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPRecover", percentage));
+
+        if (recoveredXP > 0) {
+            player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPRecover", percentage));
+        }
     }
 
     public static void spook(Player player) {
