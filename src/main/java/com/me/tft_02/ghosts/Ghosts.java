@@ -17,6 +17,7 @@ import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.database.DatabaseManager;
 import com.me.tft_02.ghosts.database.DatabaseManagerFactory;
 import com.me.tft_02.ghosts.database.TombstoneDatabase;
+import com.me.tft_02.ghosts.hooks.HeroesListener;
 import com.me.tft_02.ghosts.items.ResurrectionScroll;
 import com.me.tft_02.ghosts.listeners.BlockListener;
 import com.me.tft_02.ghosts.listeners.EntityListener;
@@ -51,6 +52,7 @@ public class Ghosts extends JavaPlugin {
 
     // Dependencies
     private boolean mcMMOEnabled = false;
+    private boolean heroesEnabled = false;
 
     // Update Check
     public boolean updateAvailable;
@@ -82,6 +84,7 @@ public class Ghosts extends JavaPlugin {
 
             TombstoneDatabase.loadAllData();
             setupMcMMO();
+            setupHeroes();
 
             for (Player player : getServer().getOnlinePlayers()) {
                 new PlayerProfileLoadingTask(player).runTaskLaterAsynchronously(Ghosts.p, 1); // 1 Tick delay to ensure the player is marked as online before we begin loading
@@ -160,6 +163,19 @@ public class Ghosts extends JavaPlugin {
 
     public boolean isMcMMOEnabled() {
         return mcMMOEnabled;
+    }
+
+    private void setupHeroes() {
+        PluginManager pluginManager = getServer().getPluginManager();
+        if (pluginManager.isPluginEnabled("Heroes")) {
+            heroesEnabled = true;
+            debug("Heroes found!");
+            pluginManager.registerEvents(new HeroesListener(), this);
+        }
+    }
+
+    public boolean isHeroesEnabled() {
+        return heroesEnabled;
     }
 
     /**
