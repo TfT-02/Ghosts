@@ -1,7 +1,6 @@
 package com.me.tft_02.ghosts.database;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.me.tft_02.ghosts.config.Config;

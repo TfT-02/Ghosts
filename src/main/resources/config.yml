@@ -33,6 +33,32 @@ General:
     Disabled_In_Worlds:
         - worldName
 
+#
+#  Settings for using a mySQL database
+###
+MySQL:
+    Enabled: false
+    Database:
+        User_Name: UserName
+        User_Password: UserPassword
+        Name: DataBaseName
+        TablePrefix: ghosts_
+        # This setting is the max simultaneous mysql connections allowed at a time, needs to be
+        # high enough to support multiple player logins in quick succession
+        MaxConnections:
+            Misc: 30
+            Load: 30
+            Save: 30
+        # This setting is the max size of the pool of cached connections that we hold available
+        # at any given time
+        MaxPoolSize:
+            Misc: 10
+            Load: 20
+            Save: 20
+    Server:
+        Port: 3306
+        Address: localhost
+
 Tombstones:
     General:
         # Prevent players from destroying tombstones?

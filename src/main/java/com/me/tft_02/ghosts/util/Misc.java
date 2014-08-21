@@ -10,7 +10,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 
+import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
+import com.me.tft_02.ghosts.runnables.player.PlayerProfileLoadingTask;
+import com.me.tft_02.ghosts.util.player.UserManager;
 
 public class Misc {
     private static Random random = new Random();
@@ -134,6 +137,21 @@ public class Misc {
 
     public static boolean isNPCEntity(Entity entity) {
         return (entity == null || entity.hasMetadata("NPC") || entity instanceof NPC);
+    }
+
+    public static void profileCleanup(String playerName) {
+        Player player = Ghosts.p.getServer().getPlayerExact(playerName);
+
+        if (player != null) {
+            UserManager.remove(player);
+            new PlayerProfileLoadingTask(player).runTaskLaterAsynchronously(Ghosts.p, 1); // 1 Tick delay to ensure the player is marked as online before we begin loading
+        }
+    }
+
+    public static void printProgress(int convertedUsers, int progressInterval, long startMillis) {
+        if ((convertedUsers % progressInterval) == 0) {
+            Ghosts.p.getLogger().info(String.format("Conversion progress: %d users at %.2f users/second", convertedUsers, convertedUsers / (double) ((System.currentTimeMillis() - startMillis) / TIME_CONVERSION_FACTOR)));
+        }
     }
 
     public static Random getRandom() {

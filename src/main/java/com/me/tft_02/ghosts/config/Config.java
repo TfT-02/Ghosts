@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bukkit.Material;
 
+import com.me.tft_02.ghosts.database.SQLDatabaseManager.PoolIdentifier;
 import com.me.tft_02.ghosts.datatypes.RecoveryType;
 import com.me.tft_02.ghosts.items.ResurrectionScroll.Tier;
 import com.me.tft_02.ghosts.util.StringUtils;
@@ -45,14 +46,27 @@ public class Config extends AutoUpdateConfigLoader {
 
     /* mySQL */
     public boolean getUseMySQL() { return config.getBoolean("MySQL.Enabled", false); }
-//    public String getMySQLTablePrefix() { return config.getString("MySQL.Database.TablePrefix", "ghosts_"); }
-//    public String getMySQLDatabaseName() { return getStringIncludingInts("MySQL.Database.Name"); }
-//    public String getMySQLUserName() { return getStringIncludingInts("MySQL.Database.User_Name"); }
-//    public int getMySQLServerPort() { return config.getInt("MySQL.Server.Port", 3306); }
-//    public String getMySQLServerName() { return config.getString("MySQL.Server.Address", "localhost"); }
-//    public String getMySQLUserPassword() { return getStringIncludingInts("MySQL.Database.User_Password"); }
-//    public int getMySQLMaxConnections() { return config.getInt("MySQL.Database.MaxConnections", 30); }
-//    public int getMySQLMaxPoolSize() { return config.getInt("MySQL.Database.MaxPoolSize", 20); }
+    public String getMySQLTablePrefix() { return config.getString("MySQL.Database.TablePrefix", "ghosts_"); }
+    public String getMySQLDatabaseName() { return getStringIncludingInts("MySQL.Database.Name"); }
+    public String getMySQLUserName() { return getStringIncludingInts("MySQL.Database.User_Name"); }
+    public int getMySQLServerPort() { return config.getInt("MySQL.Server.Port", 3306); }
+    public String getMySQLServerName() { return config.getString("MySQL.Server.Address", "localhost"); }
+    public String getMySQLUserPassword() { return getStringIncludingInts("MySQL.Database.User_Password"); }
+    public int getMySQLMaxConnections(PoolIdentifier identifier) { return config.getInt("MySQL.Database.MaxConnections." + StringUtils.getCapitalized(identifier.toString()), 30); }
+    public int getMySQLMaxPoolSize(PoolIdentifier identifier) { return config.getInt("MySQL.Database.MaxPoolSize." + StringUtils.getCapitalized(identifier.toString()), 10); }
+
+    private String getStringIncludingInts(String key) {
+        String str = config.getString(key);
+
+        if (str == null) {
+            str = String.valueOf(config.getInt(key));
+        }
+
+        if (str.equals("0")) {
+            str = "No value set for '" + key + "'";
+        }
+        return str;
+    }
 
     /* TOMBSTONE SETTINGS */
     // General Tombstone Settings

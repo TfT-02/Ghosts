@@ -200,15 +200,15 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
                         writer.append(StringUtils.sterilizeMcMMOXP(profile.getSavedLostMcMMOXP())).append(":");
                         writer.append(profile.getStats(StatsType.DEATHS)).append(":");
                         writer.append(profile.getStats(StatsType.FIND_TOMB)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_T1)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_T2)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_T3)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T1)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T2)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T3)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_RECEIVED_T1)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_RECEIVED_T2)).append(":");
-                        writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_RECEIVED_T3)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_USED_T1)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_USED_T2)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_USED_T3)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_USED_OTHERS_T1)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_USED_OTHERS_T2)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_USED_OTHERS_T3)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_RECEIVED_T1)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_RECEIVED_T2)).append(":");
+                        writer.append(profile.getStats(StatsType.RESS_SCROLL_RECEIVED_T3)).append(":");
                         writer.append(profile.getStats(StatsType.GIVEN_UP)).append(":");
                         writer.append(System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR).append(":");
                         writer.append("\r\n");
@@ -263,15 +263,15 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
                 out.append("null:"); // savedLostMcMMOXP
                 out.append("0:"); // DEATHS
                 out.append("0:"); // FIND_TOMB
-                out.append("0:"); // RESURRECTION_SCROLLS_USED_T1
-                out.append("0:"); // RESURRECTION_SCROLLS_USED_T2
-                out.append("0:"); // RESURRECTION_SCROLLS_USED_T3
-                out.append("0:"); // RESURRECTION_SCROLLS_USED_OTHERS_T1
-                out.append("0:"); // RESURRECTION_SCROLLS_USED_OTHERS_T2
-                out.append("0:"); // RESURRECTION_SCROLLS_USED_OTHERS_T3
-                out.append("0:"); // RESURRECTION_SCROLLS_RECEIVED_T1
-                out.append("0:"); // RESURRECTION_SCROLLS_RECEIVED_T2
-                out.append("0:"); // RESURRECTION_SCROLLS_RECEIVED_T3
+                out.append("0:"); // RESS_SCROLL_USED_T1
+                out.append("0:"); // RESS_SCROLL_USED_T2
+                out.append("0:"); // RESS_SCROLL_USED_T3
+                out.append("0:"); // RESS_SCROLL_USED_OTHERS_T1
+                out.append("0:"); // RESS_SCROLL_USED_OTHERS_T2
+                out.append("0:"); // RESS_SCROLL_USED_OTHERS_T3
+                out.append("0:"); // RESS_SCROLL_RECEIVED_T1
+                out.append("0:"); // RESS_SCROLL_RECEIVED_T2
+                out.append("0:"); // RESS_SCROLL_RECEIVED_T3
                 out.append("0:"); // GIVEN_UP
                 out.append(String.valueOf(System.currentTimeMillis() / Misc.TIME_CONVERSION_FACTOR)).append(":"); // LastLogin
 
@@ -582,15 +582,15 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
 
         stats.put(StatsType.DEATHS, Integer.valueOf(character[8]));
         stats.put(StatsType.FIND_TOMB, Integer.valueOf(character[9]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T1, Integer.valueOf(character[10]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T2, Integer.valueOf(character[11]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T3, Integer.valueOf(character[12]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T1, Integer.valueOf(character[13]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T2, Integer.valueOf(character[14]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T3, Integer.valueOf(character[15]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T1, Integer.valueOf(character[16]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T2, Integer.valueOf(character[17]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T3, Integer.valueOf(character[18]));
+        stats.put(StatsType.RESS_SCROLL_USED_T1, Integer.valueOf(character[10]));
+        stats.put(StatsType.RESS_SCROLL_USED_T2, Integer.valueOf(character[11]));
+        stats.put(StatsType.RESS_SCROLL_USED_T3, Integer.valueOf(character[12]));
+        stats.put(StatsType.RESS_SCROLL_USED_OTHERS_T1, Integer.valueOf(character[13]));
+        stats.put(StatsType.RESS_SCROLL_USED_OTHERS_T2, Integer.valueOf(character[14]));
+        stats.put(StatsType.RESS_SCROLL_USED_OTHERS_T3, Integer.valueOf(character[15]));
+        stats.put(StatsType.RESS_SCROLL_RECEIVED_T1, Integer.valueOf(character[16]));
+        stats.put(StatsType.RESS_SCROLL_RECEIVED_T2, Integer.valueOf(character[17]));
+        stats.put(StatsType.RESS_SCROLL_RECEIVED_T3, Integer.valueOf(character[18]));
         stats.put(StatsType.GIVEN_UP, Integer.valueOf(character[19]));
 
         return stats;

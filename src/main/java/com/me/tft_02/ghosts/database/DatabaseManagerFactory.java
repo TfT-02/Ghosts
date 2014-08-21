@@ -1,6 +1,5 @@
 package com.me.tft_02.ghosts.database;
 
-
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.datatypes.database.DatabaseType;
@@ -24,8 +23,7 @@ public class DatabaseManagerFactory {
             Ghosts.p.debug("Falling back on " + (Config.getInstance().getUseMySQL() ? "SQL" : "Flatfile") + " database");
         }
 
-        return new FlatfileDatabaseManager();
-//        return Config.getInstance().getUseMySQL() ? new SQLDatabaseManager() : new FlatfileDatabaseManager();
+        return Config.getInstance().getUseMySQL() ? new SQLDatabaseManager() : new FlatfileDatabaseManager();
     }
 
     /**
@@ -63,8 +61,8 @@ public class DatabaseManagerFactory {
             case FLATFILE:
                 return new FlatfileDatabaseManager();
 
-//            case SQL:
-//                return new SQLDatabaseManager();
+            case SQL:
+                return new SQLDatabaseManager();
 
             case CUSTOM:
                 try {

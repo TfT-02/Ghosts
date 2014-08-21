@@ -147,13 +147,13 @@ public class ResurrectionScroll {
         GhostPlayer ghostPlayer = UserManager.getPlayer(player);
         switch (tier) {
             case THREE:
-                ghostPlayer.increaseStats(StatsType.RESURRECTION_SCROLLS_USED_T3);
+                ghostPlayer.increaseStats(StatsType.RESS_SCROLL_USED_T3);
                 break;
             case TWO:
-                ghostPlayer.increaseStats(StatsType.RESURRECTION_SCROLLS_USED_T2);
+                ghostPlayer.increaseStats(StatsType.RESS_SCROLL_USED_T2);
                 break;
             case ONE:
-                ghostPlayer.increaseStats(StatsType.RESURRECTION_SCROLLS_USED_T1);
+                ghostPlayer.increaseStats(StatsType.RESS_SCROLL_USED_T1);
                 break;
         }
 
