@@ -221,7 +221,7 @@ public class TombstoneManager {
 
             drops.remove(itemStack);
         }
-        Ghosts.p.debug("Lost " + itemsLost + "items.");
+        Ghosts.p.debug("Lost " + itemsLost + " items.");
 
         return drops;
     }
