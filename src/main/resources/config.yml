@@ -45,6 +45,10 @@ Tombstones:
         Creeper_Protection: true
         # Place a sign on the tombstone?
         Place_Sign: true
+        # Message which will be put on the sign, new lines get split at |
+        # {name} : Player name, {date} : current date, {time} : current time
+        # 4 lines limit, 15 characters max
+        Sign_Message: {name}|RIP|{date}|{time}
 
     # Vanilla_XP: Percentage amount of vanilla Minecraft experience orbs/levels that is lost upon death. (40% default)
     # Override_KeepLevel: Make sure experience is handled by Ghosts and not by another plugin

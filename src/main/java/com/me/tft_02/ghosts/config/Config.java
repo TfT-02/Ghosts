@@ -61,13 +61,7 @@ public class Config extends AutoUpdateConfigLoader {
     public boolean getVoidCheck() { return config.getBoolean("Tombstones.General.Void_Check", true); }
     public boolean getCreeperProtection() { return config.getBoolean("Tombstones.General.Creeper_Protection", true); }
     public boolean getUseTombstoneSign() { return config.getBoolean("Tombstones.General.Place_Sign", true); }
-
-    public String signMessage[] = new String[] {
-            "{name}",
-            "RIP",
-            "{date}",
-            "{time}"
-    };
+    public String[] getSignMessage() { return (config.getString("Tombstones.General.Sign_Message", "{name}|RIP|{date}|{time}")).split("[|]"); }
 
     // Losses Settings
     public double getLossesVanillaXP() { return config.getDouble("Tombstones.Losses.Vanilla_XP", 10.0); }

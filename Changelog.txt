@@ -11,6 +11,7 @@ Version 0.1.0 | Tested on CB 1.7.10-R0.1
  + Added /giveup command
  + Added Destroy_Tomb setting when giving up or when using a Scroll of Resurrection
  + Added mcMMO XP recovery
+ + Added config option for text on signs
  = Fixed bug where tombstones would get removed but an error was thrown
  = Fixed bug where the Updater was running on the main thread.
  ! Changed Vanilla XP loss messages, they are now only shown if XP was lost

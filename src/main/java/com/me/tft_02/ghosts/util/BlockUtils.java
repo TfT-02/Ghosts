@@ -141,7 +141,7 @@ public class BlockUtils {
         final Sign sign = (Sign) signBlock.getState();
 
         for (int x = 0; x < 4; x++) {
-            String line = Config.getInstance().signMessage[x];
+            String line = Config.getInstance().getSignMessage()[x];
             line = line.replace("{name}", name);
             line = line.replace("{date}", date);
             line = line.replace("{time}", time);
