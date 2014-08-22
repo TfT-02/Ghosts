@@ -137,7 +137,7 @@ public class ResurrectionScroll {
         PlayerManager.resurrect(player);
 
         // Recover saved experience
-        PlayerManager.recoverLostXP(player, Config.getInstance().getRecoveryVanillaXP(RecoveryType.RESURRECTION_SCROLL, tier));
+        PlayerManager.recoverLostXP(player, RecoveryType.RESURRECTION_SCROLL, tier);
 
         // Destroy tombstone if enabled
         if (Config.getInstance().getDestroyTomb(RecoveryType.RESURRECTION_SCROLL, tier)) {

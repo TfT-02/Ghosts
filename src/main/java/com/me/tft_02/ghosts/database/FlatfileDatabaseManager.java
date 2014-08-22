@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -196,8 +197,7 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
                         writer.append(StringUtils.sterilizeLocation(profile.getLastDeathLocation())).append(":");
                         writer.append(profile.getSavedLostVanillaXP()).append(":");
                         writer.append(profile.getSavedRemainingVanillaXP()).append(":");
-                        writer.append(profile.getSavedLostMcMMOXP()).append(":");
-                        writer.append(profile.getSavedRemainingMcMMOXP()).append(":");
+                        writer.append(StringUtils.sterilizeMcMMOXP(profile.getSavedLostMcMMOXP())).append(":");
                         writer.append(profile.getStats(StatsType.DEATHS)).append(":");
                         writer.append(profile.getStats(StatsType.FIND_TOMB)).append(":");
                         writer.append(profile.getStats(StatsType.RESURRECTION_SCROLLS_USED_T1)).append(":");
@@ -260,8 +260,7 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
                 out.append("null:"); // lastDeathLocation
                 out.append("0:"); // savedLostVanillaXP
                 out.append("0:"); // savedRemainingVanillaXP
-                out.append("0:"); // savedLostMcMMOXP
-                out.append("0:"); // savedRemainingMcMMOXP
+                out.append("null:"); // savedLostMcMMOXP
                 out.append("0:"); // DEATHS
                 out.append("0:"); // FIND_TOMB
                 out.append("0:"); // RESURRECTION_SCROLLS_USED_T1
@@ -464,7 +463,7 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
                         String oldVersion = null;
 
                         // If they're valid, rewrite them to the file.
-                        if (character.length == 22) {
+                        if (character.length == 21) {
                             writer.append(line).append("\r\n");
                             continue;
                         }
@@ -490,12 +489,12 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
                             if (newCharacter[i].isEmpty() && !(i == 41)) {
                                 corrupted = true;
 
-                                if (newCharacter.length != 22) {
+                                if (newCharacter.length != 21) {
                                     newCharacter = (String[]) ArrayUtils.remove(newCharacter, i);
                                 }
                             }
 
-                            if (!StringUtils.isInt(newCharacter[i]) && !(i == 0 || i == 1 || i == 2 || i == 3 || i == 4)) {
+                            if (!StringUtils.isInt(newCharacter[i]) && !(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 7)) {
                                 corrupted = true;
                                 newCharacter[i] = "0";
                             }
@@ -572,28 +571,27 @@ public final class FlatfileDatabaseManager implements DatabaseManager {
         Location lastDeathLocation = StringUtils.deSterilizeLocation(character[4]);
         int savedLostVanillaXP = Integer.valueOf(character[5]);
         int savedRemainingVanillaXP = Integer.valueOf(character[6]);
-        int savedLostMcMMOXP = Integer.valueOf(character[7]);
-        int savedRemainingMcMMOXP = Integer.valueOf(character[8]);
+        HashMap<String, Integer> savedLostMcMMOXP = StringUtils.deSterilizeMcMMOXP(character[7]);
         Map<StatsType, Integer> stats = getStatsMapFromLine(character);
 
-        return new PlayerProfile(uuid, character[1], isGhost, respawn, lastDeathLocation, savedLostVanillaXP, savedRemainingVanillaXP, savedLostMcMMOXP, savedRemainingMcMMOXP, stats);
+        return new PlayerProfile(uuid, character[1], isGhost, respawn, lastDeathLocation, savedLostVanillaXP, savedRemainingVanillaXP, savedLostMcMMOXP, stats);
     }
 
     private Map<StatsType, Integer> getStatsMapFromLine(String[] character) {
         Map<StatsType, Integer> stats = new EnumMap<StatsType, Integer>(StatsType.class);
 
-        stats.put(StatsType.DEATHS, Integer.valueOf(character[9]));
-        stats.put(StatsType.FIND_TOMB, Integer.valueOf(character[10]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T1, Integer.valueOf(character[11]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T2, Integer.valueOf(character[12]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T3, Integer.valueOf(character[13]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T1, Integer.valueOf(character[14]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T2, Integer.valueOf(character[15]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T3, Integer.valueOf(character[16]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T1, Integer.valueOf(character[17]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T2, Integer.valueOf(character[18]));
-        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T3, Integer.valueOf(character[19]));
-        stats.put(StatsType.GIVEN_UP, Integer.valueOf(character[20]));
+        stats.put(StatsType.DEATHS, Integer.valueOf(character[8]));
+        stats.put(StatsType.FIND_TOMB, Integer.valueOf(character[9]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T1, Integer.valueOf(character[10]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T2, Integer.valueOf(character[11]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_USED_T3, Integer.valueOf(character[12]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T1, Integer.valueOf(character[13]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T2, Integer.valueOf(character[14]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_USED_OTHERS_T3, Integer.valueOf(character[15]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T1, Integer.valueOf(character[16]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T2, Integer.valueOf(character[17]));
+        stats.put(StatsType.RESURRECTION_SCROLLS_RECEIVED_T3, Integer.valueOf(character[18]));
+        stats.put(StatsType.GIVEN_UP, Integer.valueOf(character[19]));
 
         return stats;
     }

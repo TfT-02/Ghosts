@@ -1,6 +1,7 @@
 package com.me.tft_02.ghosts.datatypes.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -98,6 +99,18 @@ public class GhostPlayer {
 
     public void setSavedRemainingVanillaXP(int savedRemainingVanillaXP) {
         profile.setSavedRemainingVanillaXP(savedRemainingVanillaXP);
+    }
+
+    public HashMap<String, Integer> getSavedLostMcMMOXP() {
+        return profile.getSavedLostMcMMOXP();
+    }
+
+    public void setSavedLostMcMMOXP(HashMap<String, Integer> lostMcMMOXP) {
+        profile.setSavedLostMcMMOXP(lostMcMMOXP);
+    }
+
+    public void clearSavedLostMcMMOXP() {
+        profile.clearSavedLostMcMMOXP();
     }
 
     public void increaseStats(StatsType statsType) {

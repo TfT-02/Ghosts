@@ -155,9 +155,20 @@ public class Ghosts extends JavaPlugin {
     private void setupMcMMO() {
         PluginManager pluginManager = getServer().getPluginManager();
         if (pluginManager.isPluginEnabled("mcMMO")) {
-            mcMMOEnabled = true;
-            debug("mcMMO found!");
-            pluginManager.registerEvents(new McMMOListener(), this);
+            // Check mcMMO version v1.5.01-b3605, which has
+            // .getLevelChanged() and .getExperienceChanged in McMMOPlayerDeathPenaltyEvent
+            String[] versionSplit = pluginManager.getPlugin("mcMMO").getDescription().getVersion().replace("SNAPSHOT-", "").split("-b");
+            int version = Integer.parseInt(versionSplit[0].replaceAll("[.]", ""));
+            debug("Detected mcMMO version " + versionSplit[0] + " build " + versionSplit[1]);
+
+            if (version > 1501 || (!versionSplit[1].equals("${BUILD_NUMBER}") && Integer.parseInt(versionSplit[1]) >= 3605)) {
+                mcMMOEnabled = true;
+                debug("Hooked into mcMMO successfully!");
+                pluginManager.registerEvents(new McMMOListener(), this);
+            }
+            else {
+                this.getLogger().warning("Ghosts does not support this version of mcMMO!");
+            }
         }
     }
 

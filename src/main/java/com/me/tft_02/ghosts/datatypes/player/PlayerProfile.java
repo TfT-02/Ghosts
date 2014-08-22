@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 
+import com.gmail.nossr50.api.SkillAPI;
+
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.datatypes.StatsType;
 import com.me.tft_02.ghosts.managers.player.GhostManager;
@@ -22,8 +24,7 @@ public class PlayerProfile {
     Location lastDeathLocation;
     int savedLostVanillaXP;
     int savedRemainingVanillaXP;
-    int savedLostMcMMOXP;
-    int savedRemainingMcMMOXP;
+    HashMap<String, Integer> savedLostMcMMOXP = new HashMap<String, Integer>();
     Map<StatsType, Integer> stats = new HashMap<StatsType, Integer>();
 
     public PlayerProfile(UUID uuid, String playerName) {
@@ -35,8 +36,12 @@ public class PlayerProfile {
         lastDeathLocation = null;
         savedLostVanillaXP = 0;
         savedRemainingVanillaXP = 0;
-        savedLostMcMMOXP = 0;
-        savedRemainingMcMMOXP = 0;
+
+        if (Ghosts.p.isMcMMOEnabled()) {
+            for (String skillName : SkillAPI.getNonChildSkills()) {
+                savedLostMcMMOXP.put(skillName, 0);
+            }
+        }
 
         for (StatsType statsType : StatsType.values()) {
             stats.put(statsType, 0);
@@ -48,7 +53,7 @@ public class PlayerProfile {
         this.loaded = isLoaded;
     }
 
-    public PlayerProfile(UUID uuid, String playerName, boolean isGhost, boolean respawn, Location lastDeathLocation, int savedLostVanillaXP, int savedRemainingVanillaXP, int savedLostMcMMOXP, int savedRemainingMcMMOXP, Map<StatsType, Integer> stats) {
+    public PlayerProfile(UUID uuid, String playerName, boolean isGhost, boolean respawn, Location lastDeathLocation, int savedLostVanillaXP, int savedRemainingVanillaXP, HashMap<String, Integer> savedLostMcMMOXP, Map<StatsType, Integer> stats) {
         this.playerName = playerName;
         this.uuid = uuid;
 
@@ -58,7 +63,6 @@ public class PlayerProfile {
         this.savedLostVanillaXP = savedLostVanillaXP;
         this.savedRemainingVanillaXP = savedRemainingVanillaXP;
         this.savedLostMcMMOXP = savedLostMcMMOXP;
-        this.savedRemainingMcMMOXP = savedRemainingMcMMOXP;
         this.stats = stats;
 
         loaded = true;
@@ -75,7 +79,7 @@ public class PlayerProfile {
 
         // TODO should this part be synchronized?
         isGhost = GhostManager.ghosts.contains(uuid);
-        PlayerProfile profileCopy = new PlayerProfile(uuid, playerName, isGhost, respawn, lastDeathLocation, savedLostVanillaXP, savedRemainingVanillaXP, savedLostMcMMOXP, savedRemainingMcMMOXP, stats);
+        PlayerProfile profileCopy = new PlayerProfile(uuid, playerName, isGhost, respawn, lastDeathLocation, savedLostVanillaXP, savedRemainingVanillaXP, savedLostMcMMOXP, stats);
         changed = !Ghosts.getDatabaseManager().saveUser(profileCopy);
 
         if (changed) {
@@ -145,24 +149,22 @@ public class PlayerProfile {
         this.savedRemainingVanillaXP = savedRemainingVanillaXP;
     }
 
-    public int getSavedLostMcMMOXP() {
+    public HashMap<String, Integer> getSavedLostMcMMOXP() {
         return savedLostMcMMOXP;
     }
 
-    public void setSavedLostMcMMOXP(int savedLostMcMMOXP) {
+    public void setSavedLostMcMMOXP(HashMap<String, Integer> savedLostMcMMOXP) {
         changed = true;
 
         this.savedLostMcMMOXP = savedLostMcMMOXP;
     }
 
-    public int getSavedRemainingMcMMOXP() {
-        return savedRemainingMcMMOXP;
-    }
-
-    public void setSavedRemainingMcMMOXP(int savedRemainingMcMMOXP) {
+    public void clearSavedLostMcMMOXP() {
         changed = true;
 
-        this.savedRemainingMcMMOXP = savedRemainingMcMMOXP;
+        for (String skillName : SkillAPI.getNonChildSkills()) {
+            savedLostMcMMOXP.put(skillName, 0);
+        }
     }
 
     public void increaseStats(StatsType statsType) {

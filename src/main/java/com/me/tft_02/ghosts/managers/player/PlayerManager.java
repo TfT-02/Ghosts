@@ -11,12 +11,15 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.nossr50.api.ExperienceAPI;
+
 import com.me.tft_02.ghosts.Ghosts;
 import com.me.tft_02.ghosts.config.Config;
 import com.me.tft_02.ghosts.datatypes.RecoveryType;
 import com.me.tft_02.ghosts.datatypes.StatsType;
 import com.me.tft_02.ghosts.datatypes.TombBlock;
 import com.me.tft_02.ghosts.datatypes.player.GhostPlayer;
+import com.me.tft_02.ghosts.items.ResurrectionScroll.Tier;
 import com.me.tft_02.ghosts.locale.LocaleLoader;
 import com.me.tft_02.ghosts.managers.TombstoneManager;
 import com.me.tft_02.ghosts.runnables.ghosts.SetXPTask;
@@ -98,7 +101,7 @@ public class PlayerManager {
         }
 
         // Recover saved experience
-        PlayerManager.recoverLostXP(player, Config.getInstance().getRecoveryVanillaXP(RecoveryType.FIND_TOMB));
+        PlayerManager.recoverLostXP(player, RecoveryType.FIND_TOMB);
 
         // Manually update inventory for the time being.
         new UpdateInventoryTask(player).runTask(Ghosts.p);
@@ -118,7 +121,7 @@ public class PlayerManager {
         ghostPlayer.setSavedRemainingVanillaXP(remainingExp);
 
         if (lostExperience > 0) {
-            player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPLost", percentageLost));
+            player.sendMessage(LocaleLoader.getString("Player.Death.XPLost.Vanilla", percentageLost));
         }
     }
 
@@ -130,7 +133,23 @@ public class PlayerManager {
         ghostPlayer.setSavedRemainingVanillaXP(0);
     }
 
-    public static void recoverLostXP(Player player, double percentage) {
+    public static void recoverLostXP(Player player, RecoveryType recoveryType) {
+        recoverLostVanillaXP(player, Config.getInstance().getRecoveryVanillaXP(recoveryType));
+
+        if (Ghosts.p.isMcMMOEnabled()) {
+            recoverLostMcMMOXP(player, Config.getInstance().getRecoverymcMMOXP(recoveryType));
+        }
+    }
+
+    public static void recoverLostXP(Player player, RecoveryType recoveryType, Tier tier) {
+        recoverLostVanillaXP(player, Config.getInstance().getRecoveryVanillaXP(recoveryType, tier));
+
+        if (Ghosts.p.isMcMMOEnabled()) {
+            recoverLostMcMMOXP(player, Config.getInstance().getRecoverymcMMOXP(recoveryType, tier));
+        }
+    }
+
+    public static void recoverLostVanillaXP(Player player, double percentage) {
         GhostPlayer ghostPlayer = UserManager.getPlayer(player);
         ExperienceManager manager = new ExperienceManager(player);
         int savedVanillaXP = ghostPlayer.getSavedLostVanillaXP();
@@ -140,7 +159,25 @@ public class PlayerManager {
         ghostPlayer.setSavedLostVanillaXP(0);
 
         if (recoveredXP > 0) {
-            player.sendMessage(LocaleLoader.getString("Player.Death.VanillaXPRecover", percentage));
+            player.sendMessage(LocaleLoader.getString("Player.Death.XPRecover.Vanilla", percentage));
+        }
+    }
+
+    public static void recoverLostMcMMOXP(Player player, double percentage) {
+        GhostPlayer ghostPlayer = UserManager.getPlayer(player);
+        HashMap<String, Integer> savedLostMcMMOXP = ghostPlayer.getSavedLostMcMMOXP();
+        boolean recovered = false;
+
+        for (String skilltype : savedLostMcMMOXP.keySet()) {
+            int recoveredXP = (int) Math.floor(savedLostMcMMOXP.get(skilltype) * (percentage * 0.01D));
+            ExperienceAPI.addXP(player, skilltype, recoveredXP, "UNKNOWN", true);
+            recovered = recoveredXP > 0;
+        }
+
+        ghostPlayer.clearSavedLostMcMMOXP();
+
+        if (recovered) {
+            player.sendMessage(LocaleLoader.getString("Player.Death.XPRecover.mcMMO", percentage));
         }
     }
 
