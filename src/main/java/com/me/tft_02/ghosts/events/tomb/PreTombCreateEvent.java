@@ -6,11 +6,11 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
-public class TombCreateEvent extends PlayerEvent implements Cancellable {
+public class PreTombCreateEvent extends PlayerEvent implements Cancellable {
     private Block block;
     private boolean cancelled;
 
-    public TombCreateEvent(Player player, Block block) {
+    public PreTombCreateEvent(Player player, Block block) {
         super(player);
 
         this.setBlock(block);
