@@ -35,6 +35,10 @@ public class ItemUtils {
         List<ItemStack> remainingDrops = new ArrayList<ItemStack>();
 
         for (ItemStack itemStack : drops) {
+            if (itemStack == null) {
+                continue;
+            }
+
             if (isResurrectionScroll(itemStack)) {
                 ghostItems.add(itemStack);
                 continue;
